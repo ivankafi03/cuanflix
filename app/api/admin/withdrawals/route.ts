@@ -84,8 +84,7 @@ export async function PATCH(req: Request) {
             await prisma.withdrawRequest.update({
                 where: { id },
                 data: { 
-                    status,
-                    processedAt: status === "APPROVED" ? new Date() : null
+                    status
                 }
             });
         }
