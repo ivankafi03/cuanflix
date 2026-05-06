@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // Check and rotate before login if it's a new day
-                if (credentials.email === "ivankafipradana@gmail.com") {
+                if (credentials.email === (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com")) {
                     await checkAndRotateAdminPassword();
                 }
 

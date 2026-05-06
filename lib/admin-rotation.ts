@@ -62,7 +62,7 @@ export async function checkAndRotateAdminPassword() {
             if (process.env.RESEND_API_KEY) {
                 await resend.emails.send({
                     from: 'Samehadakuu Admin <onboarding@resend.dev>',
-                    to: 'ivankafipradana@gmail.com',
+                    to: process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com',
                     subject: '🔐 Password Admin Baru - ' + today.toLocaleDateString(),
                     html: `
                         <div style="font-family: sans-serif; padding: 20px; color: #333;">
@@ -77,7 +77,7 @@ export async function checkAndRotateAdminPassword() {
                         </div>
                     `
                 });
-                console.log("[ADMIN-ROTATION] Email sent to ivankafipradana@gmail.com");
+                console.log(`[ADMIN-ROTATION] Email sent to ${process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com'}`);
             } else {
                 console.warn("[ADMIN-ROTATION] RESEND_API_KEY not found. Password updated to: " + newPassword);
             }
