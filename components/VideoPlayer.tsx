@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Loader2, Play } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Play, X } from "lucide-react";
 import { VideoServer } from "@/lib/anime";
+import AdUnit from "@/components/ads/AdUnit";
 
 interface VideoPlayerProps {
     servers: VideoServer[];
@@ -12,8 +13,49 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
+    const [showAdOverlay, setShowAdOverlay] = useState(false);
+    const [countdown, setCountdown] = useState(8);
+    const adContainerRef = useRef<HTMLDivElement>(null);
+    const adLoaded = useRef(false);
+
+    // Countdown timer for interstitial ad
+    useEffect(() => {
+        if (!showAdOverlay) return;
+        if (countdown <= 0) {
+            setShowAdOverlay(false);
+            setIsStarted(true);
+            if (onPlay) onPlay();
+            return;
+        }
+        const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+        return () => clearTimeout(timer);
+    }, [showAdOverlay, countdown, onPlay]);
+
+    // Load ad into overlay when it appears
+    useEffect(() => {
+        if (!showAdOverlay || adLoaded.current || !adContainerRef.current) return;
+        adLoaded.current = true;
+
+        (window as any).atOptions = {
+            key: "f16bab575f321c24cf6f7e82f039c85f",
+            format: "iframe",
+            height: 250,
+            width: 300,
+            params: {},
+        };
+        const script = document.createElement("script");
+        script.src = "https://www.highperformanceformat.com/f16bab575f321c24cf6f7e82f039c85f/invoke.js";
+        script.async = true;
+        adContainerRef.current.appendChild(script);
+    }, [showAdOverlay]);
 
     const handleStart = () => {
+        setCountdown(8);
+        setShowAdOverlay(true);
+    };
+
+    const skipAd = () => {
+        setShowAdOverlay(false);
         setIsStarted(true);
         if (onPlay) onPlay();
     };
@@ -28,6 +70,31 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
 
     return (
         <div className="flex flex-col gap-4">
+            {/* Pre-play Interstitial Ad Overlay */}
+            {showAdOverlay && (
+                <div className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
+                    <div className="text-center mb-2">
+                        <p className="text-zinc-400 text-sm">Video akan dimulai dalam</p>
+                        <p className="text-white text-5xl font-black mt-1">{countdown}</p>
+                        <p className="text-zinc-500 text-xs mt-1">detik</p>
+                    </div>
+
+                    {/* Ad inside overlay */}
+                    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-3 overflow-hidden">
+                        <p className="text-zinc-600 text-[10px] uppercase tracking-widest text-center mb-2">Iklan</p>
+                        <div ref={adContainerRef} className="flex items-center justify-center min-w-[300px] min-h-[250px]" />
+                    </div>
+
+                    <button
+                        onClick={skipAd}
+                        className="flex items-center gap-2 text-zinc-400 hover:text-white text-sm transition-colors border border-white/10 hover:border-white/30 px-5 py-2.5 rounded-xl"
+                    >
+                        <X className="w-4 h-4" />
+                        Lewati Iklan ({countdown}s)
+                    </button>
+                </div>
+            )}
+
             {/* Player Container */}
             <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/5 shadow-2xl group/player">
                 {!isStarted ? (
@@ -73,6 +140,16 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                             {server.name}
                         </button>
                     ))}
+                </div>
+            </div>
+
+            {/* Banner iklan di bawah player */}
+            <div className="w-full flex justify-center py-2">
+                <div className="hidden md:block">
+                    <AdUnit type="leaderboard" />
+                </div>
+                <div className="block md:hidden">
+                    <AdUnit type="mobile" />
                 </div>
             </div>
         </div>
