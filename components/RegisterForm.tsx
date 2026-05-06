@@ -129,7 +129,7 @@ export default function RegisterForm() {
                     </div>
 
                     <Turnstile
-                        siteKey="1x00000000000000000000AA"
+                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
                         onVerify={(token) => setTurnstileToken(token)}
                     />
 
