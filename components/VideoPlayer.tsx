@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Play, X } from "lucide-react";
 import { VideoServer } from "@/lib/anime";
+import { useSession } from "next-auth/react";
 import AdUnit from "@/components/ads/AdUnit";
 
 interface VideoPlayerProps {
@@ -11,6 +12,8 @@ interface VideoPlayerProps {
 }
 
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
+    const { data: session } = useSession();
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [showAdOverlay, setShowAdOverlay] = useState(false);
@@ -50,6 +53,12 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     }, [showAdOverlay]);
 
     const handleStart = () => {
+        // Admin langsung nonton tanpa iklan
+        if (isAdmin) {
+            setIsStarted(true);
+            if (onPlay) onPlay();
+            return;
+        }
         setCountdown(5);
         setShowAdOverlay(true);
     };

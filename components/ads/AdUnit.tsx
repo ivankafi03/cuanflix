@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useSession } from "next-auth/react";
 
 type AdType = "leaderboard" | "rectangle" | "mobile";
 
@@ -28,13 +29,15 @@ const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> 
 };
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
+    const { data: session } = useSession();
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
     const containerRef = useRef<HTMLDivElement>(null);
     const loaded = useRef(false);
 
     const config = AD_CONFIG[type];
 
     useEffect(() => {
-        if (loaded.current || !containerRef.current) return;
+        if (isAdmin || loaded.current || !containerRef.current) return;
         loaded.current = true;
 
         // Set atOptions
@@ -54,11 +57,13 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     }, [config.key, config.height, config.width]);
 
     return (
+        isAdmin ? null : (
         <div
             className={`overflow-hidden flex items-center justify-center ${className}`}
             style={{ minWidth: config.width, minHeight: config.height }}
         >
             <div ref={containerRef} />
         </div>
+        )
     );
 }
