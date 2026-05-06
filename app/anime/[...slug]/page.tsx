@@ -147,10 +147,10 @@ export default async function AnimeDetailPrettyPage({
                         <div className="flex md:hidden gap-2">
                             <Link
                                 href={watchUrl}
-                                className="flex-1 bg-primary text-white py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 text-sm"
+                                className="flex-1 bg-primary text-white py-2.5 rounded-xl font-bold flex items-center justify-center"
+                                title="Nonton Sekarang"
                             >
-                                <Play className="w-3.5 h-3.5 fill-current" />
-                                Nonton
+                                <Play className="w-5 h-5 fill-current" />
                             </Link>
                             <WatchlistButton
                                 anime={{ id: path, title: anime.title, image: anime.image, type: anime.status, href: url }}
