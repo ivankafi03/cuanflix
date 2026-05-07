@@ -23,9 +23,14 @@ export default function WatchPageClient({ servers, videoId, children, sidebar }:
     const [isWatching, setIsWatching] = useState(false);
 
     return (
-        <div className="flex flex-col lg:flex-row gap-5">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-5">
             {/* Main Video Area */}
-            <div className="flex-1 flex flex-col gap-5">
+            <div className="flex-1 flex flex-col gap-4">
+                {/* Top Banner - Exactly aligned with Player */}
+                <div className="w-full flex justify-center pb-1">
+                    <AdUnit type="leaderboard" className="!justify-center" />
+                </div>
+
                 {/* Watch earning — only active when user has clicked Play */}
                 {isWatching && <WatchEarningManager videoId={videoId} />}
 
@@ -35,7 +40,7 @@ export default function WatchPageClient({ servers, videoId, children, sidebar }:
                 />
 
                 {/* Bottom Banner - Below Player */}
-                <div className="w-full flex justify-center py-2">
+                <div className="w-full flex justify-center pt-1">
                     <AdUnit type="leaderboard" className="!justify-center" />
                 </div>
 
@@ -46,7 +51,7 @@ export default function WatchPageClient({ servers, videoId, children, sidebar }:
 
             {/* Sidebar Area */}
             {sidebar && (
-                <div className="lg:w-96 flex flex-col gap-6">
+                <div className="lg:w-80 flex flex-col gap-4 shrink-0">
                     {sidebar}
                 </div>
             )}
