@@ -263,7 +263,6 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                                     </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
 
                         <button
