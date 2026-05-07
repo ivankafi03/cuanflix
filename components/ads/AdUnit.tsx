@@ -32,25 +32,33 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     // ── HOOK 2: inject ad script (runs only when shouldRender is true) ─
     useEffect(() => {
         if (!shouldRender || loaded.current || !containerRef.current) return;
-        loaded.current = true;
+        
+        // Small random delay to prevent atOptions collision if multiple units mount at once
+        const delay = Math.floor(Math.random() * 500);
+        const timer = setTimeout(() => {
+            if (!containerRef.current) return;
+            loaded.current = true;
 
-        // Detect if mobile to use mobile size instead of leaderboard
-        const isMobile = window.innerWidth < 768;
-        const finalKey = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.key : config.key;
-        const finalWidth = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.width : config.width;
-        const finalHeight = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.height : config.height;
+            // Detect if mobile to use mobile size instead of leaderboard
+            const isMobile = window.innerWidth < 768;
+            const finalKey = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.key : config.key;
+            const finalWidth = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.width : config.width;
+            const finalHeight = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.height : config.height;
 
-        (window as any).atOptions = {
-            key: finalKey,
-            format: "iframe",
-            height: finalHeight,
-            width: finalWidth,
-            params: {},
-        };
-        const script = document.createElement("script");
-        script.src   = `https://www.highperformanceformat.com/${finalKey}/invoke.js`;
-        script.async = true;
-        containerRef.current.appendChild(script);
+            (window as any).atOptions = {
+                key: finalKey,
+                format: "iframe",
+                height: finalHeight,
+                width: finalWidth,
+                params: {},
+            };
+            const script = document.createElement("script");
+            script.src   = `https://www.highperformanceformat.com/${finalKey}/invoke.js`;
+            script.async = true;
+            containerRef.current.appendChild(script);
+        }, delay);
+
+        return () => clearTimeout(timer);
     }, [shouldRender, config.key, config.height, config.width, type]);
 
     // ── Conditional render AFTER all hooks ───────────────────────────

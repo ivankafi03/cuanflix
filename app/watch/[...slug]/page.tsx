@@ -102,7 +102,7 @@ export default async function WatchPrettyPage({
                 videoUrl={`/watch/${path}`}
             />
 
-            <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-20 md:pt-24 flex flex-col gap-4">
+            <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-[80px] md:pt-[100px] flex flex-col gap-4">
                 
 
 
