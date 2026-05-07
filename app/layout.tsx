@@ -85,8 +85,8 @@ export default async function RootLayout({
             {children}
           </main>
           <ChatWidget />
+          <AdScripts />
         </Providers>
-        <AdScripts />
       </body>
     </html>
   );
