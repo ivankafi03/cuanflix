@@ -143,15 +143,10 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                             </p>
                             <button 
                                 onClick={handleStart}
-                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex flex-col items-center gap-2 group"
+                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group"
                             >
-                                <div className="flex items-center gap-3">
-                                    <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
-                                    {clickCount < 3 ? `Unlock Video (${3 - clickCount} clicks left)` : "Start Video"}
-                                </div>
-                                {clickCount < 3 && (
-                                    <span className="text-[9px] opacity-50 font-medium normal-case">Click to unlock player</span>
-                                )}
+                                <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
+                                Start Video
                             </button>
                         </div>
                     </div>
