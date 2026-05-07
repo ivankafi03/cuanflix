@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Send, User, ShieldCheck, Loader2, ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useWidget } from "./WidgetContext";
+import { usePathname } from "next/navigation";
 
 interface Message {
     id: string;
@@ -18,6 +19,7 @@ interface Message {
 }
 
 export default function ChatWidget() {
+    const pathname = usePathname();
     const { data: session } = useSession();
     const isSuspended = (session?.user as any)?.isSuspended;
     const { rewardVisible } = useWidget();
