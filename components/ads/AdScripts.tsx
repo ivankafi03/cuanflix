@@ -12,8 +12,8 @@ export default function AdScripts() {
 
     // Daftar halaman yang TIDAK boleh ada iklan
     const hideAdsOn = [
-        "/auth/login",
-        "/auth/register",
+        "/auth",
+        "/api/auth",
         "/admin",
         "/dashboard"
     ];
@@ -24,6 +24,9 @@ export default function AdScripts() {
     // Keamanan brutal: Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan dari DOM
     useEffect(() => {
         if (isAdmin || isAuthPage) {
+            // Tambahkan class admin-page ke body untuk mengaktifkan CSS Nuklir
+            document.body.classList.add('admin-page');
+
             // Hapus script-script iklan jika ada yang tersisa
             const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"]');
             adScripts.forEach(s => s.remove());
@@ -35,6 +38,9 @@ export default function AdScripts() {
             // Hapus Histats jika ada
             const histats = document.querySelectorAll('script[src*="histats"]');
             histats.forEach(h => h.remove());
+        } else {
+            // Hapus class admin-page jika sudah di halaman biasa agar iklan pengunjung muncul lagi
+            document.body.classList.remove('admin-page');
         }
     }, [pathname, isAdmin, isAuthPage]);
 
