@@ -83,8 +83,8 @@ export default function AdminMembersClient() {
     const handleDelete = (userId: string, name: string) => {
         setConfirmModal({
             isOpen: true,
-            title: "Hapus Member?",
-            message: `APAKAH ANDA YAKIN? Menghapus ${name} akan menghilangkan semua data balance, history, dan referral secara PERMANEN.`,
+            title: "Delete Member?",
+            message: `ARE YOU SURE? Deleting ${name} will PERMANENTLY remove all balance, history, and referral data.`,
             variant: "danger",
             onConfirm: async () => {
                 try {
@@ -106,7 +106,7 @@ export default function AdminMembersClient() {
 
     const handlePasswordChange = async () => {
         if (passwordModal.newPassword.length < 6) {
-            showToast("Password minimal 6 karakter", "error");
+            showToast("Password must be at least 6 characters", "error");
             return;
         }
 
@@ -122,11 +122,11 @@ export default function AdminMembersClient() {
             });
 
             if (res.ok) {
-                showToast(`Password ${passwordModal.userName} berhasil diubah`, "success");
+                showToast(`Password for ${passwordModal.userName} changed successfully`, "success");
                 setPasswordModal({ ...passwordModal, isOpen: false, newPassword: "", isSubmitting: false });
             } else {
                 const data = await res.json();
-                showToast(data.error || "Gagal mengubah password", "error");
+                showToast(data.error || "Failed to change password", "error");
                 setPasswordModal(prev => ({ ...prev, isSubmitting: false }));
             }
         } catch (err) {
@@ -314,18 +314,18 @@ export default function AdminMembersClient() {
                                 <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/10 mb-2">
                                     <Key className="w-6 h-6 text-blue-400" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Ganti Password</h3>
+                                <h3 className="text-xl font-bold text-white tracking-tight">Change Password</h3>
                                 <p className="text-sm text-zinc-500 font-medium leading-relaxed">
-                                    Masukkan password baru untuk <span className="text-white font-bold">{passwordModal.userName}</span>.
+                                    Enter a new password for <span className="text-white font-bold">{passwordModal.userName}</span>.
                                 </p>
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Password Baru</label>
+                                <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">New Password</label>
                                 <input
                                     type="text"
                                     autoFocus
-                                    placeholder="MINIMAL 6 KARAKTER..."
+                                    placeholder="AT LEAST 6 CHARACTERS..."
                                     value={passwordModal.newPassword}
                                     onChange={(e) => setPasswordModal({ ...passwordModal, newPassword: e.target.value })}
                                     className="w-full bg-white/[0.02] border border-white/5 rounded-2xl px-6 py-4 text-sm font-semibold text-white placeholder:text-zinc-800 focus:outline-none focus:border-blue-500/50 transition-all"
@@ -337,7 +337,7 @@ export default function AdminMembersClient() {
                                     onClick={() => setPasswordModal({ ...passwordModal, isOpen: false })}
                                     className="flex-1 px-6 py-4 rounded-2xl text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
                                 >
-                                    Batal
+                                    Cancel
                                 </button>
                                 <button
                                     onClick={handlePasswordChange}
@@ -347,7 +347,7 @@ export default function AdminMembersClient() {
                                     {passwordModal.isSubmitting ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
                                     ) : (
-                                        "Simpan Password"
+                                        "Save Password"
                                     )}
                                 </button>
                             </div>

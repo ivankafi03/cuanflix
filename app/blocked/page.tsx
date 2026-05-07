@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Akses Diblokir - Samehadakuu",
+    title: "Access Blocked - Samehadakuu",
     robots: { index: false, follow: false }
 };
 
@@ -20,13 +20,13 @@ export default function BlockedPage() {
                 {/* Text */}
                 <div className="flex flex-col gap-3">
                     <h1 className="text-2xl font-black text-white tracking-tight">
-                        Akses Diblokir
+                        Access Blocked
                     </h1>
                     <p className="text-zinc-400 text-sm leading-relaxed">
-                        Alamat IP Anda telah diblokir dari mengakses platform ini karena melanggar ketentuan penggunaan.
+                        Your IP address has been blocked from accessing this platform for violating our terms of service.
                     </p>
                     <p className="text-zinc-600 text-xs">
-                        Jika Anda merasa ini adalah kesalahan, hubungi administrator.
+                        If you believe this is a mistake, please contact the administrator.
                     </p>
                 </div>
 

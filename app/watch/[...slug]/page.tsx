@@ -25,11 +25,11 @@ export async function generateMetadata({
     const watchData = await getWatchPageData(url);
 
     // Guess a readable title from the slug, or use watchData.title if available
-    const title = watchData?.title || path.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || "Tonton Anime";
+    const title = watchData?.title || path.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || "Watch Anime";
 
     return {
-        title: `${title} Subtitle Indonesia - Samehadakuu`,
-        description: `Nonton streaming anime ${title} subtitle Indonesia kualitas HD gratis tanpa ribet di Samehadakuu.`,
+        title: `Watch ${title} Online - Samehadakuu`,
+        description: `Stream ${title} in HD quality for free on Samehadakuu. High speed servers and premium experience.`,
     };
 }
 
@@ -78,11 +78,11 @@ export default async function WatchPrettyPage({
                         <Info className="w-10 h-10 text-primary" />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-2xl font-bold text-white">Video Tidak Tersedia</h2>
-                        <p className="text-zinc-400">Maaf, kami tidak dapat menemukan server video untuk episode ini. Episode mungkin sedang diperbarui atau dihapus.</p>
+                        <h2 className="text-2xl font-bold text-white">Video Not Available</h2>
+                        <p className="text-zinc-400">Sorry, we couldn't find any video servers for this episode. It might be under maintenance or removed.</p>
                     </div>
                     <Link href="/" className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:scale-105 transition-all">
-                        Kembali ke Beranda
+                        Back to Home
                     </Link>
                 </div>
             </div>
@@ -112,15 +112,15 @@ export default async function WatchPrettyPage({
                                 <Sparkles className="w-4 h-4 text-primary" />
                                 <span className="text-primary font-black tracking-widest text-[10px] uppercase">Exclusive Access</span>
                             </div>
-                            <h2 className="text-xl md:text-2xl font-black text-white leading-tight">Dapatkan Saldo Setiap Menit</h2>
-                            <p className="text-zinc-500 font-medium text-sm max-w-xl">Nonton anime favoritmu dan kumpulkan rupiah secara otomatis.</p>
+                            <h2 className="text-xl md:text-2xl font-black text-white leading-tight">Get Rewards Every Minute</h2>
+                            <p className="text-zinc-500 font-medium text-sm max-w-xl">Watch your favorite anime and earn rewards automatically while you watch.</p>
                         </div>
                         <div className="flex items-center gap-3 relative z-10 w-full md:w-auto">
                             <Link href="/auth/login" className="flex-1 md:flex-none px-6 py-3 bg-primary text-black rounded-xl font-black text-xs hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20 text-center uppercase tracking-wider">
                                 Login
                             </Link>
                             <Link href="/auth/register" className="flex-1 md:flex-none px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-black text-xs hover:bg-white/10 transition-all text-center uppercase tracking-wider">
-                                Daftar
+                                Register
                             </Link>
                         </div>
                     </div>
@@ -133,19 +133,19 @@ export default async function WatchPrettyPage({
                         <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex flex-col p-6">
                             <h3 className="font-bold text-white flex items-center gap-2 mb-4">
                                 <List className="w-5 h-5 text-primary" />
-                                Informasi Streaming
+                                Streaming Info
                             </h3>
                             <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-                                Anda sedang menikmati tayangan anime dengan kualitas HD terbaik dari server kami.
+                                You are watching with the best HD quality available from our premium servers.
                             </p>
                             <div className="flex flex-col gap-2">
                                 <div className="flex justify-between text-xs py-2 border-b border-white/5">
-                                    <span className="text-zinc-500">Kualitas</span>
+                                    <span className="text-zinc-500">Quality</span>
                                     <span className="text-white font-bold">Multi (360p - 1080p)</span>
                                 </div>
                                 <div className="flex justify-between text-xs py-2 border-b border-white/5">
                                     <span className="text-zinc-500">Server</span>
-                                    <span className="text-white font-bold">{watchData.servers.length} Tersedia</span>
+                                    <span className="text-white font-bold">{watchData.servers.length} Available</span>
                                 </div>
                             </div>
                             <ReportButton />
@@ -177,7 +177,7 @@ export default async function WatchPrettyPage({
                                 <Info className="w-4 h-4 text-primary" />
                             </div>
                             <p className="text-[11px] text-zinc-400 font-medium leading-relaxed">
-                                <span className="text-white font-black uppercase tracking-tighter">Member Tips:</span> Gunakan server cadangan jika player loading lama. Reward tetap dihitung otomatis.
+                                <span className="text-white font-black uppercase tracking-tighter">Member Tips:</span> Switch servers if the player takes too long to load. Rewards are still counted automatically.
                             </p>
                         </div>
                     </div>

@@ -84,9 +84,9 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <MessageSquare className="w-5 h-5 text-primary" />
-                        <h2 className="text-sm font-black text-white uppercase tracking-widest">Diskusi Komunitas</h2>
+                        <h2 className="text-sm font-black text-white uppercase tracking-widest">Community Discussion</h2>
                     </div>
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{comments.length} Komentar</span>
+                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{comments.length} Comments</span>
                 </div>
 
                 {/* Comment Form */}
@@ -95,7 +95,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                         <textarea
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="Tulis pendapatmu tentang episode ini..."
+                            placeholder="Write your thoughts about this episode..."
                             className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-primary/50 min-h-[100px] transition-all"
                         />
                         <div className="flex justify-end">
@@ -105,24 +105,24 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                 className="flex items-center gap-2 px-6 py-2.5 bg-primary text-black font-black text-[10px] uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                             >
                                 <Send className="w-3.5 h-3.5" />
-                                {submitting ? "Mengirim..." : "Kirim Komentar"}
+                                {submitting ? "Sending..." : "Post Comment"}
                             </button>
                         </div>
                     </form>
                 ) : (
                     <div className="bg-white/5 border border-white/5 border-dashed rounded-xl p-6 text-center">
-                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Login untuk ikut berdiskusi</p>
+                        <p className="text-xs text-zinc-500 font-bold uppercase tracking-widest">Login to join the discussion</p>
                     </div>
                 )}
 
                 {/* Comments List */}
                 <div className="flex flex-col gap-5 mt-2">
                     {loading ? (
-                        <div className="py-10 text-center text-zinc-600 animate-pulse font-black text-[10px] uppercase tracking-[0.2em]">Memuat Diskusi...</div>
+                        <div className="py-10 text-center text-zinc-600 animate-pulse font-black text-[10px] uppercase tracking-[0.2em]">Loading Discussion...</div>
                     ) : comments.length === 0 ? (
                         <div className="py-10 flex flex-col items-center justify-center border-2 border-dashed border-white/5 rounded-xl opacity-30 text-center gap-3">
                             <MessageSquare className="w-8 h-8" />
-                            <p className="text-[10px] uppercase font-black tracking-widest">Belum ada komentar. Jadi yang pertama!</p>
+                            <p className="text-[10px] uppercase font-black tracking-widest">No comments yet. Be the first to start!</p>
                         </div>
                     ) : (
                         comments.map((comment) => (
@@ -188,9 +188,9 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                 </div>
 
                                 <div className="flex flex-col gap-2">
-                                    <h3 className="text-xl font-black text-white uppercase tracking-wider">Hapus Komentar?</h3>
+                                    <h3 className="text-xl font-black text-white uppercase tracking-wider">Delete Comment?</h3>
                                     <p className="text-zinc-500 text-sm leading-relaxed">
-                                        Tindakan ini tidak dapat dibatalkan. Komentar kamu akan dihapus selamanya dari diskusi ini.
+                                        This action cannot be undone. Your comment will be permanently removed from this discussion.
                                     </p>
                                 </div>
 
@@ -199,13 +199,13 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                         onClick={confirmDelete}
                                         className="w-full py-4 bg-red-600 hover:bg-red-500 text-white font-black text-xs uppercase tracking-[0.3em] rounded-2xl transition-all shadow-lg shadow-red-600/20 active:scale-95"
                                     >
-                                        Ya, Hapus Permanen
+                                        Yes, Delete Permanently
                                     </button>
                                     <button
                                         onClick={() => setDeleteId(null)}
                                         className="w-full py-4 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white font-black text-xs uppercase tracking-[0.3em] rounded-2xl transition-all active:scale-95"
                                     >
-                                        Batalkan
+                                        Cancel
                                     </button>
                                 </div>
                             </div>

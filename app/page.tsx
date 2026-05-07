@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col pb-20">
-      <h1 className="sr-only">Samehadakuu - Tempat Nonton Anime Subtitle Indonesia Gratis Kualitas HD</h1>
+      <h1 className="sr-only">Samehadakuu - Watch Anime Online Free with HD Quality</h1>
 
       <Suspense fallback={<div className="h-[62vh] md:h-[80vh] bg-zinc-900 animate-pulse" />}>
         <HeroSection />
@@ -21,7 +21,7 @@ export default async function Home() {
 
       <main className="max-w-7xl mx-auto px-6 w-full flex flex-col gap-16 mt-12">
         <Suspense fallback={<div className="h-72 bg-zinc-900/50 animate-pulse rounded-xl" />}>
-          <LatestAnimeContent title="Rilis Terbaru" />
+          <LatestAnimeContent title="Latest Releases" />
         </Suspense>
 
         <Suspense fallback={<div className="h-72 bg-zinc-900/50 animate-pulse rounded-xl" />}>
@@ -31,12 +31,12 @@ export default async function Home() {
         {/* CTA — lebih natural, kurang salesy */}
         <section className="border border-white/8 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 bg-zinc-900/30">
           <div className="flex flex-col gap-3 max-w-lg">
-            <span className="text-primary text-sm font-medium">Program Earning</span>
+            <span className="text-primary text-sm font-medium">Earning Program</span>
             <h2 className="text-2xl md:text-3xl font-bold text-white leading-snug">
-              Nonton Anime, Dapat Penghasilan
+              Watch Anime, Get Paid
             </h2>
             <p className="text-zinc-400 leading-relaxed">
-              Setiap menit yang kamu habiskan menonton di Samehadakuu tercatat sebagai poin yang bisa kamu cairkan. Sudah lebih dari 12.000 member aktif.
+              Every minute you spend watching on Samehadakuu counts as points that you can withdraw. Join over 12,000 active members.
             </p>
           </div>
           <div className="flex flex-col gap-3 shrink-0">
@@ -44,13 +44,13 @@ export default async function Home() {
               href="/auth/register"
               className="bg-primary hover:bg-primary/90 text-white px-8 py-3.5 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap text-center"
             >
-              Daftar Gratis
+              Register Free
             </Link>
             <Link
               href="/auth/login"
               className="text-center text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
             >
-              Sudah punya akun? Masuk
+              Already have an account? Login
             </Link>
           </div>
         </section>
@@ -84,7 +84,7 @@ export default async function Home() {
               Same<span className="text-primary">hadakuu</span>
             </span>
             <span className="text-zinc-700">·</span>
-            <span>© 2024. Dibuat untuk komunitas anime Indonesia.</span>
+            <span>© 2024. Built for the global anime community.</span>
           </div>
           <div className="flex items-center gap-5">
             <a href={telegramLink} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1.5">
@@ -93,8 +93,8 @@ export default async function Home() {
               </svg>
               Telegram
             </a>
-            <a href="#" className="hover:text-zinc-300 transition-colors">Privasi</a>
-            <a href="#" className="hover:text-zinc-300 transition-colors">Ketentuan</a>
+            <a href="#" className="hover:text-zinc-300 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-zinc-300 transition-colors">Terms</a>
           </div>
         </div>
       </footer>
@@ -116,17 +116,17 @@ async function LatestAnimeContent({ title = "Rilis Terbaru" }: { title?: string 
 async function OngoingAnimeContent() {
   const data = await getOngoingAnime();
   const latestData = mapAnimeList(data);
-  return <AnimeSection title="Sedang Tayang" data={latestData} href="/anime/ongoing" />;
+  return <AnimeSection title="Ongoing Anime" data={latestData} href="/anime/ongoing" />;
 }
 
 async function MovieAnimeContent() {
   const data = await getMovieAnime();
   const latestData = mapAnimeList(data);
-  return <AnimeSection title="Anime Movie" data={latestData} href="/anime/movies" />;
+  return <AnimeSection title="Anime Movies" data={latestData} href="/anime/movies" />;
 }
 
 async function TrendingAnimeContent() {
   const data = await getPopularAnime();
   const trendingData = mapAnimeList(data);
-  return <AnimeSection title="Trending Pekan Ini" data={trendingData} href="/anime/popular" />;
+  return <AnimeSection title="Trending This Week" data={trendingData} href="/anime/popular" />;
 }

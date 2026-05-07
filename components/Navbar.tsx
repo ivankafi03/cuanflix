@@ -10,7 +10,6 @@ import { twMerge } from "tailwind-merge";
 import { useSession, signOut } from "next-auth/react";
 import { LogOut, User, LayoutDashboard, Settings } from "lucide-react";
 import MaintenanceBanner from "./MaintenanceBanner";
-import Logo from "./Logo";
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));

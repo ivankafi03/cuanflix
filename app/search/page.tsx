@@ -21,15 +21,15 @@ export default async function SearchPage({
         <div className="flex flex-col gap-12 pb-20 pt-24">
             <main className="max-w-7xl mx-auto px-6 w-full flex flex-col gap-12">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-bold text-white">Hasil Pencarian</h1>
+                    <h1 className="text-3xl font-bold text-white">Search Results</h1>
                     <p className="text-zinc-400">
-                        Menampilkan hasil untuk: <span className="text-primary font-bold">"{query}"</span>
+                        Showing results for: <span className="text-primary font-bold">"{query}"</span>
                     </p>
                 </div>
 
                 {mappedData.length > 0 ? (
                     <AnimeSection
-                        title={`Hasil ditemukan (${mappedData.length})`}
+                        title={`Found (${mappedData.length})`}
                         data={mappedData}
                     />
                 ) : (
@@ -38,8 +38,8 @@ export default async function SearchPage({
                             <span className="text-4xl text-zinc-600">🔍</span>
                         </div>
                         <div>
-                            <p className="text-white text-xl font-bold">Maaf, anime tidak ditemukan.</p>
-                            <p className="text-zinc-500">Coba gunakan kata kunci lain.</p>
+                            <p className="text-white text-xl font-bold">Sorry, no anime found.</p>
+                            <p className="text-zinc-500">Try using different keywords.</p>
                         </div>
                     </div>
                 )}

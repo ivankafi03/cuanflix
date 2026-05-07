@@ -20,19 +20,19 @@ export default function GoRedirectClient() {
     const [countdown, setCountdown] = useState(10);
     const [canSkip, setCanSkip] = useState(false);
     
-    const isAdmin = (session?.user as any)?.role === "ADMIN" || pathname.startsWith("/admin");
+    const isMemberOrAdmin = !!session?.user || pathname.startsWith("/admin");
     const adRef1 = useRef<HTMLDivElement>(null);
     const adRef2 = useRef<HTMLDivElement>(null);
     const adsLoaded = useRef(false);
 
     // Klik 1 sudah terjadi (user mengklik episode) → buka Direct Link otomatis saat halaman ini dimuat
     useEffect(() => {
-        if (isAdmin) {
+        if (isMemberOrAdmin) {
             router.push(destination);
             return;
         }
         openAd();
-    }, [isAdmin, destination, router]);
+    }, [isMemberOrAdmin, destination, router]);
 
     // Load AdsTerra banner ads
     useEffect(() => {

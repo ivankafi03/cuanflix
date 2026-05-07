@@ -15,11 +15,11 @@ export default function AdminNav() {
     const pathname = usePathname();
 
     const tabs = [
-        { id: "overview", label: "Statistik", icon: BarChart3, href: "/admin" },
-        { id: "payouts", label: "Pembayaran", icon: Banknote, href: "/admin/payouts" },
-        { id: "members", label: "Member", icon: Users, href: "/admin/members" },
+        { id: "overview", label: "Overview", icon: BarChart3, href: "/admin" },
+        { id: "payouts", label: "Payouts", icon: Banknote, href: "/admin/payouts" },
+        { id: "members", label: "Members", icon: Users, href: "/admin/members" },
         { id: "chat", label: "Chat", icon: MessageSquare, href: "/admin/chat" },
-        { id: "settings", label: "Konfigurasi", icon: AdminSettingsIcon, href: "/admin/settings" }
+        { id: "settings", label: "Settings", icon: AdminSettingsIcon, href: "/admin/settings" }
     ];
 
     // Workaround for Lucide icon naming conflict or just use Settings

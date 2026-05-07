@@ -44,13 +44,13 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                 body: JSON.stringify(payload)
             });
             if (res.ok) {
-                showToast("Settings berhasil disimpan!", "success");
+                showToast("Settings saved successfully!", "success");
             } else {
                 const err = await res.json().catch(() => ({}));
-                showToast(`Gagal: ${err?.error || res.statusText}`, "error");
+                showToast(`Failed: ${err?.error || res.statusText}`, "error");
             }
         } catch (err) {
-            showToast("Network error — cek koneksi", "error");
+            showToast("Network error — check your connection", "error");
         } finally {
             setSaving(false);
         }
@@ -188,7 +188,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                                         className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all"
                                     />
                                 </div>
-                                <p className="text-[10px] text-zinc-600 font-medium px-2 italic">* Link ini akan muncul di footer dan dashboard member.</p>
+                                <p className="text-[10px] text-zinc-600 font-medium px-2 italic">* This link will appear in the footer and member dashboard.</p>
                             </div>
                         </div>
 
@@ -249,7 +249,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                             <AlertCircle className="w-4 h-4 text-blue-500" />
                             <h3 className="text-[10px] font-bold text-white ">Protocol Intelligence</h3>
                          </div>
-                         <p className="text-sm text-zinc-500 font-bold leading-relaxed ">Semua perubahan pada rates akan dicatat dalam audit log. System secara otomatis akan menghentikan distribusi pembayaran jika skim rate diatur di atas 80%.</p>
+                         <p className="text-sm text-zinc-500 font-bold leading-relaxed ">All changes to rates will be recorded in the audit log. The system will automatically stop payment distributions if the skim rate is set above 80%.</p>
                     </div>
                 </div>
             </div>

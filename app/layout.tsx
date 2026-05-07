@@ -73,11 +73,11 @@ export default async function RootLayout({
 
   // Cek apakah user adalah admin — jika iya, sembunyikan semua iklan
   const session = await getServerSession(authOptions);
-  const isAdmin = (session?.user as any)?.role === "ADMIN";
+  const isMemberOrAdmin = !!session?.user;
 
   return (
     <html lang="id" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative ${isAdmin ? 'admin-page' : ''}`} suppressHydrationWarning>
+      <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative ${isMemberOrAdmin ? 'admin-page' : ''}`} suppressHydrationWarning>
         <div className="fixed inset-0 bg-dot-grid opacity-20 pointer-events-none z-[-1]" />
         <Providers>
           <Navbar />

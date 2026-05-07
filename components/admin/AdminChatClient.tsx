@@ -31,10 +31,10 @@ export default function AdminChatClient() {
             const res = await fetch(`/api/chat?id=${deleteTarget}`, { method: "DELETE" });
             if (res.ok) {
                 setMessages(prev => prev.filter(m => m.id !== deleteTarget));
-                showToast("Pesan berhasil dihapus", "success");
+                showToast("Message deleted successfully", "success");
             }
         } catch {
-            showToast("Gagal menghapus pesan", "error");
+            showToast("Failed to delete message", "error");
         } finally {
             setDeleteTarget(null);
         }
@@ -49,12 +49,12 @@ export default function AdminChatClient() {
                 body: JSON.stringify({ userId: banTarget.id, action: "suspend" }),
             });
             if (res.ok) {
-                showToast(`${banTarget.name} telah disuspend`, "success");
+                showToast(`${banTarget.name} has been suspended`, "success");
             } else {
-                showToast("Gagal mensuspend pengguna", "error");
+                showToast("Failed to suspend user", "error");
             }
         } catch {
-            showToast("Terjadi kesalahan", "error");
+            showToast("An error occurred", "error");
         } finally {
             setBanTarget(null);
         }
@@ -63,8 +63,8 @@ export default function AdminChatClient() {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-                <h2 className="text-xl font-bold text-white">Moderasi Chat</h2>
-                <p className="text-sm text-zinc-500">Kelola pesan dari pengguna di seluruh platform.</p>
+                <h2 className="text-xl font-bold text-white">Chat Moderation</h2>
+                <p className="text-sm text-zinc-500">Manage user messages across the platform.</p>
             </div>
 
             <div className="bg-[#111113] border border-zinc-800 rounded-2xl overflow-hidden">
@@ -72,9 +72,9 @@ export default function AdminChatClient() {
                 <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
                     <div className="flex items-center gap-2">
                         <MessageSquare className="w-4 h-4 text-zinc-500" />
-                        <span className="text-sm font-medium text-white">Semua Pesan</span>
+                        <span className="text-sm font-medium text-white">All Messages</span>
                     </div>
-                    <span className="text-xs text-zinc-500">{messages.length} pesan</span>
+                    <span className="text-xs text-zinc-500">{messages.length} messages</span>
                 </div>
 
                 {/* Message list */}
@@ -82,12 +82,12 @@ export default function AdminChatClient() {
                     {loading ? (
                         <div className="py-16 flex flex-col items-center justify-center gap-3 opacity-30">
                             <Loader2 className="w-7 h-7 animate-spin" />
-                            <p className="text-sm text-zinc-500">Memuat pesan...</p>
+                            <p className="text-sm text-zinc-500">Loading messages...</p>
                         </div>
                     ) : messages.length === 0 ? (
                         <div className="py-16 flex flex-col items-center justify-center gap-3 opacity-30">
                             <MessageSquare className="w-10 h-10 text-zinc-600" />
-                            <p className="text-sm text-zinc-500">Belum ada pesan.</p>
+                            <p className="text-sm text-zinc-500">No messages yet.</p>
                         </div>
                     ) : (
                         messages.map((msg, idx) => (
@@ -103,7 +103,7 @@ export default function AdminChatClient() {
                                         <div className="flex items-center gap-2">
                                             <span className="text-sm font-medium text-white">{msg.user?.name}</span>
                                             <span className="text-xs text-zinc-600">
-                                                {new Date(msg.createdAt).toLocaleString("id-ID", {
+                                                {new Date(msg.createdAt).toLocaleString("en-US", {
                                                     day: "numeric",
                                                     month: "short",
                                                     hour: "2-digit",
@@ -120,14 +120,14 @@ export default function AdminChatClient() {
                                     <button
                                         onClick={() => setDeleteTarget(msg.id)}
                                         className="p-2 rounded-lg hover:bg-red-500/10 text-zinc-600 hover:text-red-400 transition-colors"
-                                        title="Hapus pesan"
+                                        title="Delete message"
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
                                     <button
                                         onClick={() => setBanTarget({ id: msg.user?.id, name: msg.user?.name })}
                                         className="p-2 rounded-lg hover:bg-orange-500/10 text-zinc-600 hover:text-orange-400 transition-colors"
-                                        title="Suspend pengguna ini"
+                                        title="Suspend this user"
                                     >
                                         <UserX className="w-4 h-4" />
                                     </button>
@@ -143,8 +143,8 @@ export default function AdminChatClient() {
                 isOpen={!!deleteTarget}
                 onClose={() => setDeleteTarget(null)}
                 onConfirm={handleConfirmDelete}
-                title="Hapus Pesan?"
-                message="Pesan ini akan dihapus permanen dan tidak dapat dikembalikan."
+                title="Delete Message?"
+                message="This message will be permanently deleted and cannot be recovered."
             />
 
             {/* Confirm ban user */}
@@ -153,7 +153,7 @@ export default function AdminChatClient() {
                 onClose={() => setBanTarget(null)}
                 onConfirm={handleConfirmBan}
                 title={`Suspend ${banTarget?.name}?`}
-                message="Pengguna ini akan disuspend dan tidak bisa login ke platform. Kamu bisa membatalkannya di halaman Member."
+                message="This user will be suspended and won't be able to login to the platform. You can revert this in the Members page."
                 confirmText="Suspend"
             />
         </div>

@@ -48,27 +48,27 @@ export default function WatchlistPage() {
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl font-bold text-white flex items-center gap-3">
                         <Bookmark className="w-8 h-8 text-primary" />
-                        Daftar Nonton Saya
+                        My Watchlist
                     </h1>
-                    <p className="text-zinc-400">Tersimpan di perangkat kamu ({watchlist.length} anime)</p>
+                    <p className="text-zinc-400">Saved on your device ({watchlist.length} anime)</p>
                 </div>
                 {watchlist.length > 0 && (
                     <button
                         onClick={async () => {
                             const ok = await confirm(
-                                "Kosongkan Daftar?",
-                                "Semua anime yang kamu simpan akan dihapus permanen dari perangkat ini."
+                                "Clear Watchlist?",
+                                "All saved anime will be permanently removed from this device."
                             );
                             if (ok) {
                                 localStorage.setItem("watchlist", "[]");
                                 setWatchlist([]);
                                 window.dispatchEvent(new Event("storage"));
-                                showToast("Daftar putar berhasil dikosongkan.", "info");
+                                showToast("Watchlist cleared successfully.", "info");
                             }
                         }}
                         className="text-xs font-bold text-zinc-500 hover:text-red-500 transition-colors uppercase tracking-wider px-2 py-1 hover:bg-red-500/5 rounded-lg"
                     >
-                        Kosongkan Daftar
+                        Clear Watchlist
                     </button>
                 )}
             </div>
@@ -94,16 +94,16 @@ export default function WatchlistPage() {
                         <Bookmark className="w-10 h-10 text-zinc-600" />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <p className="text-white text-xl font-bold">Belum ada anime yang tersimpan.</p>
+                        <p className="text-white text-xl font-bold">No saved anime yet.</p>
                         <p className="text-zinc-500 max-w-xs">
-                            Cari anime favoritmu dan klik tombol "Daftar Putar" untuk menyimpannya di sini.
+                            Find your favorite anime and click "Add to Watchlist" to save them here.
                         </p>
                     </div>
                     <Link
                         href="/"
                         className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-bold transition-all"
                     >
-                        Cari Anime
+                        Find Anime
                     </Link>
                 </div>
             )}

@@ -32,7 +32,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
 
     const handleSubmit = async () => {
         if (!method || !accountNumber || !accountName || amount < minWithdrawal) {
-            showToast("Harap isi semua data dengan benar", "error");
+            showToast("Please fill all data correctly", "error");
             return;
         }
 
@@ -45,23 +45,23 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
             });
 
             if (res.ok) {
-                showToast("Pengajuan penarikan berhasil!", "success");
+                showToast("Withdrawal request sent successfully!", "success");
                 onSuccess();
                 setStep(3);
             } else {
                 const data = await res.json();
-                showToast(data.error || "Gagal menarik saldo", "error");
+                showToast(data.error || "Failed to withdraw balance", "error");
             }
         } catch (err) {
-            showToast("Kesalahan jaringan", "error");
+            showToast("Network error", "error");
         } finally {
             setLoading(false);
         }
     };
 
     const getPlaceholder = () => {
-        if (method === "BANK") return "Bank + Rek (Contoh: BCA 123456789)";
-        return "Contoh: 08123456789";
+        if (method === "BANK") return "Bank + Acc No (Ex: BCA 123456789)";
+        return "Example: 08123456789";
     };
 
     return (
@@ -116,7 +116,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                             {balance < minWithdrawal ? (
                                 <div className="p-4 bg-red-500/5 border border-red-500/10 rounded-2xl">
                                     <p className="text-[8px] text-red-500/80 font-black uppercase tracking-widest text-center leading-relaxed">
-                                        Saldo Belum Cukup <br />
+                                        Insufficient Balance <br />
                                         <span className="text-[9px] mt-1 block">Min: ${minWithdrawal.toFixed(2)}</span>
                                     </p>
                                 </div>
@@ -147,10 +147,10 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                             </div>
 
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1">Account Name</label>
+                                <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest ml-1">Account Holder Name</label>
                                 <input
                                     type="text"
-                                    placeholder="Nama Sesuai Rekening"
+                                    placeholder="Name as per Account"
                                     value={accountName}
                                     onChange={(e) => setAccountName(e.target.value)}
                                     className="w-full bg-[#111113] border border-white/10 rounded-xl p-4 text-white text-[11px] font-black uppercase focus:outline-none focus:border-primary/50 transition-all"
@@ -180,7 +180,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                             </div>
 
                             <div className="flex gap-3 mt-4">
-                                <button onClick={() => setStep(1)} className="flex-1 py-4 bg-white/5 text-zinc-500 font-black text-[9px] uppercase tracking-widest rounded-2xl">Batal</button>
+                                <button onClick={() => setStep(1)} className="flex-1 py-4 bg-white/5 text-zinc-500 font-black text-[9px] uppercase tracking-widest rounded-2xl">Cancel</button>
                                 <button
                                     onClick={handleSubmit}
                                     disabled={loading || !accountNumber || !accountName || amount < minWithdrawal}
@@ -201,8 +201,8 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                             <div className="flex flex-col items-center text-center gap-2">
                                 <h4 className="text-xl font-black text-white tracking-tight uppercase">Success!</h4>
                                 <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-[0.2em] max-w-[240px] leading-relaxed">
-                                    Request Berhasil Dikirim <br />
-                                    <span className="font-medium lowercase text-[9px] mt-1 block">Tunggu proses admin 1-24 jam.</span>
+                                    Request Sent Successfully <br />
+                                    <span className="font-medium lowercase text-[9px] mt-1 block">Please wait for admin processing (1-24 hours).</span>
                                 </p>
                             </div>
                             <button onClick={onClose} className="w-full py-4.5 bg-white text-black font-black text-xs uppercase tracking-[0.4em] rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all mt-4">OK</button>

@@ -10,7 +10,7 @@ export default async function AnimeListPage() {
         <div className="flex flex-col gap-12 pb-20 pt-24">
             <main className="max-w-7xl mx-auto px-6 w-full flex flex-col gap-12">
                 <AnimeSection
-                    title="Daftar Anime Lengkap"
+                    title="All Anime List"
                     data={mappedData}
                 />
             </main>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -238,11 +238,11 @@ export default function MemberDashboard({ user }: { user: any }) {
             {/* Tab Switcher */}
             <div className="flex border-b border-white/5 overflow-x-auto no-scrollbar">
                 {[
-                    { id: "overview", label: "Ringkasan", icon: LayoutDashboard },
-                    { id: "watch", label: "Nonton", icon: Play },
-                    { id: "share", label: "Bagikan", icon: Share2 },
+                    { id: "overview", label: "Overview", icon: LayoutDashboard },
+                    { id: "watch", label: "Watch", icon: Play },
+                    { id: "share", label: "Share", icon: Share2 },
                     { id: "leaderboard", label: "Ranking", icon: Trophy },
-                    { id: "payouts", label: "Penarikan", icon: Banknote }
+                    { id: "payouts", label: "Payouts", icon: Banknote }
                 ].map((tab) => (
                     <button
                         key={tab.id}
@@ -264,8 +264,8 @@ export default function MemberDashboard({ user }: { user: any }) {
                     <div className="flex flex-col gap-4">
                         {/* Welcome Space */}
                         <div className="flex flex-col gap-0.5">
-                            <h2 className="text-base font-bold text-white">Selamat Datang, {user?.name?.split(' ')[0] || 'Member'}!</h2>
-                            <p className="text-xs text-zinc-400">{activeTab === 'overview' ? 'Ringkasan statistik pertumbuhan Anda hari ini.' : `Analitik ${activeTab}.`}</p>
+                            <h2 className="text-base font-bold text-white">Welcome, {user?.name?.split(' ')[0] || 'Member'}!</h2>
+                            <p className="text-xs text-zinc-400">{activeTab === 'overview' ? 'Summary of your growth statistics today.' : `${activeTab} analytics.`}</p>
                         </div>
 
                         {/* Overview Content */}
@@ -320,7 +320,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                             </div>
                                         </div>
                                         <div className="pt-2 z-10">
-                                            <button onClick={() => setActiveTab("leaderboard")} className="w-full py-2 bg-white/5 border border-white/5 rounded-xl text-xs font-bold text-zinc-400  hover:bg-white/10 hover:text-white transition-all">Lihat Leaderboard</button>
+                                            <button onClick={() => setActiveTab("leaderboard")} className="w-full py-2 bg-white/5 border border-white/5 rounded-xl text-xs font-bold text-zinc-400  hover:bg-white/10 hover:text-white transition-all">View Leaderboard</button>
                                         </div>
                                     </div>
                                 </div>
@@ -334,8 +334,8 @@ export default function MemberDashboard({ user }: { user: any }) {
                                                 <Rocket className="w-7 h-7 fill-current" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <h4 className="text-lg font-bold text-white tracking-tight">Percepat Pendapatanmu!</h4>
-                                                <p className="text-xs text-primary/80 font-bold uppercase tracking-wide">Dapatkan bonus setiap kali orang daftar lewat link-mu.</p>
+                                                <h4 className="text-lg font-bold text-white tracking-tight">Boost Your Earnings!</h4>
+                                                <p className="text-xs text-primary/80 font-bold uppercase tracking-wide">Get a bonus every time someone joins via your link.</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-2xl p-2 pl-4 max-w-md w-full md:w-auto">
@@ -343,11 +343,11 @@ export default function MemberDashboard({ user }: { user: any }) {
                                             <button 
                                                 onClick={() => {
                                                     navigator.clipboard.writeText(`${origin}/?ref=${user?.id?.substring(0, 8)}`);
-                                                    showToast("Link referral disalin!", "success");
+                                                    showToast("Referral link copied!", "success");
                                                 }}
                                                 className="px-4 py-2.5 bg-primary text-white font-bold text-sm  rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shrink-0"
                                             >
-                                                <Copy className="w-3.5 h-3.5" /> Salin Link
+                                                <Copy className="w-3.5 h-3.5" /> Copy Link
                                             </button>
                                         </div>
                                     </div>
@@ -361,10 +361,10 @@ export default function MemberDashboard({ user }: { user: any }) {
                                 {/* Time Filter */}
                                 <div className="flex p-0.5 bg-black/40 border border-white/5 rounded-xl w-fit">
                                     {[
-                                        { id: 'today', label: 'Hari Ini' },
-                                        { id: '7days', label: '7 Hari' },
-                                        { id: 'month', label: 'Bulan Ini' },
-                                        { id: 'all', label: 'Semua' }
+                                        { id: 'today', label: 'Today' },
+                                        { id: '7days', label: '7 Days' },
+                                        { id: 'month', label: 'This Month' },
+                                        { id: 'all', label: 'All Time' }
                                     ].map(range => (
                                         <button key={range.id} onClick={() => setTimeRange(range.id)} className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${timeRange === range.id ? 'bg-white text-black shadow' : 'text-zinc-500 hover:text-white'}`}>
                                             {range.label}
@@ -387,7 +387,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         <h3 className="text-2xl font-bold text-green-400">${activeTab === 'watch' ? (user?.balanceWatch || 0).toFixed(2) : (user?.balanceReferral || 0).toFixed(2)}</h3>
                                     </div>
                                     <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-1.5 hover:border-white/10 transition-all">
-                                        <p className="text-zinc-400 text-xs font-medium">Saldo Tersedia</p>
+                                        <p className="text-zinc-400 text-xs font-medium">Available Balance</p>
                                         <h3 className="text-2xl font-bold text-white">${(activeTab === 'watch' ? (user?.balanceWatch || 0) : (user?.balanceReferral || 0)).toFixed(2)}</h3>
                                     </div>
                                 </div>
@@ -398,22 +398,22 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         <BatikPattern opacity={0.05} />
                                         <div className="flex flex-col gap-1 z-10">
                                             <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Watchtime Insights</h4>
-                                            <p className="text-sm font-semibold text-white">Sepanjang Waktu</p>
+                                            <p className="text-sm font-semibold text-white">All Time</p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4 z-10">
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-xs text-zinc-500">Total Durasi</span>
-                                                <h5 className="text-2xl font-bold text-white">{Math.floor(realStats.totalWatchtime / 3600)}j {Math.floor((realStats.totalWatchtime % 3600) / 60)}m</h5>
+                                                <span className="text-xs text-zinc-500">Total Duration</span>
+                                                <h5 className="text-2xl font-bold text-white">{Math.floor(realStats.totalWatchtime / 3600)}h {Math.floor((realStats.totalWatchtime % 3600) / 60)}m</h5>
                                             </div>
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-xs text-zinc-500">Rata-rata Tonton</span>
-                                                <h5 className="text-2xl font-bold text-primary">{realStats.avgRetention}d</h5>
+                                                <span className="text-xs text-zinc-500">Avg Retention</span>
+                                                <h5 className="text-2xl font-bold text-primary">{realStats.avgRetention}s</h5>
                                             </div>
                                         </div>
                                         <div className="pt-3 border-t border-white/5 z-10 flex items-center justify-between">
                                             <div className="flex flex-col gap-0.5">
-                                                <span className="text-xs text-zinc-500">Avg Retensi</span>
-                                                <span className="text-sm font-medium text-white">{realStats.avgRetention}d dari 10d minimum</span>
+                                                <span className="text-xs text-zinc-500">Avg Retention Rate</span>
+                                                <span className="text-sm font-medium text-white">{realStats.avgRetention}s from 10s minimum</span>
                                             </div>
                                             <div className="h-1.5 w-24 bg-white/5 rounded-full overflow-hidden">
                                                 <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min((realStats.avgRetention / 60) * 100, 100)}%` }} />
@@ -431,15 +431,16 @@ export default function MemberDashboard({ user }: { user: any }) {
                                             </div>
                                         </div>
                                         <div className="flex flex-col gap-1">
-                                            <h5 className="text-4xl font-bold text-white tracking-tighter">0</h5>
-                                            <p className="text-[8px] font-bold text-zinc-600  leading-relaxed">penonton aktif <br /> (10 menit terakhir)</p>
+                                            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none mb-1">Active Referrals</p>
+                                            <span className="text-2xl font-black text-white tracking-tighter">{user?.referralsCount || 0}</span>
+                                            <p className="text-[10px] font-bold text-zinc-500 mt-1 uppercase">Total Users</p>
                                         </div>
                                         <div className="flex-1 flex flex-col items-center justify-center py-4 border-y border-white/5 border-dashed">
-                                            <p className="text-xs text-zinc-700 text-center">Tidak ada penonton aktif saat ini</p>
+                                            <p className="text-xs text-zinc-700 text-center">No active viewers currently</p>
                                         </div>
                                         <div className="flex flex-col gap-1 pt-2">
                                             <span className="text-xs font-bold text-white ">0</span>
-                                            <span className="text-[7px] font-bold text-zinc-500 ">Total views hari ini</span>
+                                            <span className="text-[7px] font-bold text-zinc-500 ">Total views today</span>
                                         </div>
                                     </div>
                                 </div>
@@ -452,6 +453,10 @@ export default function MemberDashboard({ user }: { user: any }) {
                                                 <div className="flex items-center gap-2">
                                                     <LinkIcon className="w-3.5 h-3.5 text-primary" />
                                                     <h3 className="text-sm font-semibold text-white">Collection</h3>
+                                                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none mb-1">Your Balance</p>
+                                                    <div className="flex items-baseline gap-1">
+                                                        <span className="text-2xl font-black text-white tracking-tighter">Rp {user?.balance?.toLocaleString('id-ID')}</span>
+                                                    </div>
                                                 </div>
                                                 <span className="text-xs text-zinc-400">{selectedIds.size > 0 ? `${selectedIds.size} Selected` : `${collectedLinks.length} Links`}</span>
                                             </div>
@@ -576,7 +581,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                     </div>
                                     <div className="flex flex-wrap gap-3 z-10">
                                         <button onClick={() => setIsWithdrawModalOpen(true)} className="px-5 py-2.5 bg-white text-black font-semibold text-xs rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
-                                            <Rocket className="w-3.5 h-3.5" /> Tarik Saldo
+                                            <Rocket className="w-3.5 h-3.5" /> Withdraw Balance
                                         </button>
                                         <div className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl flex items-center gap-2">
                                             <PieChart className="w-3.5 h-3.5 text-primary" />

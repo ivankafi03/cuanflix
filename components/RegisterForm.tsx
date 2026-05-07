@@ -44,10 +44,10 @@ export default function RegisterForm() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.error || "Pendaftaran gagal");
+                throw new Error(data.error || "Registration failed");
             }
 
-            showToast("Akun berhasil dibuat! Silakan login.", "success");
+            showToast("Account created successfully! Please login.", "success");
             router.push("/auth/login?registered=true");
         } catch (err: any) {
             setError(err.message);
@@ -63,14 +63,14 @@ export default function RegisterForm() {
                 <div className="flex flex-col items-center gap-4 mb-8">
                     <Logo size="lg" showText={false} />
                     <div className="text-center">
-                        <h1 className="text-2xl font-bold text-white">Buat Akun Baru</h1>
-                        <p className="text-zinc-500 text-sm mt-1">Gratis. Mulai hasilkan uang sambil nonton.</p>
+                        <h1 className="text-2xl font-bold text-white">Create New Account</h1>
+                        <p className="text-zinc-500 text-sm mt-1">Free. Start earning while watching.</p>
                     </div>
                 </div>
 
                 {referrerId && (
                     <div className="mb-5 p-3.5 bg-primary/8 border border-primary/20 rounded-xl text-sm text-primary/80">
-                        Kamu diundang melalui link referral — kamu dan pengundangmu akan mendapat bonus pendaftaran.
+                        You're invited via a referral link — both you and your inviter will receive a registration bonus.
                     </div>
                 )}
 
@@ -83,12 +83,12 @@ export default function RegisterForm() {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-sm font-medium text-zinc-400">Nama Lengkap</label>
+                        <label className="text-sm font-medium text-zinc-400">Full Name</label>
                         <div className="relative">
                             <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
                             <input
                                 type="text"
-                                placeholder="Nama kamu"
+                                placeholder="Your name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 className="w-full bg-zinc-900 border border-zinc-800 focus:border-primary/50 rounded-lg py-3 pl-10 pr-4 text-white text-sm placeholder:text-zinc-600 focus:outline-none transition-colors"
@@ -103,7 +103,7 @@ export default function RegisterForm() {
                             <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
                             <input
                                 type="email"
-                                placeholder="nama@email.com"
+                                placeholder="name@email.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full bg-zinc-900 border border-zinc-800 focus:border-primary/50 rounded-lg py-3 pl-10 pr-4 text-white text-sm placeholder:text-zinc-600 focus:outline-none transition-colors"
@@ -118,7 +118,7 @@ export default function RegisterForm() {
                             <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600" />
                             <input
                                 type="password"
-                                placeholder="Min. 8 karakter"
+                                placeholder="Min. 8 characters"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full bg-zinc-900 border border-zinc-800 focus:border-primary/50 rounded-lg py-3 pl-10 pr-4 text-white text-sm placeholder:text-zinc-600 focus:outline-none transition-colors"
@@ -140,20 +140,20 @@ export default function RegisterForm() {
                         {isLoading ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
-                            "Buat Akun"
+                            "Create Account"
                         )}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-zinc-500 text-sm">
-                    Sudah punya akun?{" "}
+                    Already have an account?{" "}
                     <Link href="/auth/login" className="text-zinc-300 hover:text-white font-medium transition-colors">
-                        Masuk di sini
+                        Login here
                     </Link>
                 </p>
 
                 <p className="mt-4 text-center text-zinc-600 text-xs leading-relaxed">
-                    Dengan mendaftar, kamu menyetujui ketentuan layanan dan kebijakan privasi Samehadakuu.
+                    By registering, you agree to Samehadakuu's terms of service and privacy policy.
                 </p>
             </div>
         </div>

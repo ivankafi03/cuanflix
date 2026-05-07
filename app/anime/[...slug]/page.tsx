@@ -22,8 +22,8 @@ export async function generateMetadata({
     if (!anime) return { title: "Anime Detail - Samehadakuu" };
 
     return {
-        title: `Nonton ${anime.title} Subtitle Indonesia - Samehadakuu`,
-        description: `Streaming anime ${anime.title} subtitle Indonesia secara gratis. Sinopsis: ${anime.synopsis?.slice(0, 160)}...`,
+        title: `Watch ${anime.title} Online - Samehadakuu`,
+        description: `Stream anime ${anime.title} with HD quality for free. Synopsis: ${anime.synopsis?.slice(0, 160)}...`,
         openGraph: {
             images: [anime.image],
         },
@@ -57,8 +57,8 @@ export default async function AnimeDetailPrettyPage({
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <p className="text-white text-xl font-bold">Data anime tidak dapat dimuat.</p>
-                    <Link href="/" className="text-primary hover:underline">Kembali ke Home</Link>
+                    <p className="text-white text-xl font-bold">Anime data could not be loaded.</p>
+                    <Link href="/" className="text-primary hover:underline">Back to Home</Link>
                 </div>
             </div>
         );
@@ -97,7 +97,7 @@ export default async function AnimeDetailPrettyPage({
                                 className="w-full bg-primary hover:bg-primary/90 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20"
                             >
                                 <Play className="w-5 h-5 fill-current" />
-                                Nonton Sekarang
+                                Watch Now
                             </Link>
                             <div className="flex gap-3">
                                 <WatchlistButton
@@ -148,7 +148,7 @@ export default async function AnimeDetailPrettyPage({
                             <Link
                                 href={watchUrl}
                                 className="flex-1 bg-primary text-white py-2.5 rounded-xl font-bold flex items-center justify-center"
-                                title="Nonton Sekarang"
+                                title="Watch Now"
                             >
                                 <Play className="w-5 h-5 fill-current" />
                             </Link>
@@ -163,7 +163,7 @@ export default async function AnimeDetailPrettyPage({
 
                 {/* Sinopsis */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 mt-5">
-                    <h3 className="text-sm md:text-lg font-bold text-white mb-2">Sinopsis</h3>
+                    <h3 className="text-sm md:text-lg font-bold text-white mb-2">Synopsis</h3>
                     <p className="text-zinc-400 leading-relaxed text-sm whitespace-pre-line">{anime.synopsis}</p>
                 </div>
 
@@ -172,7 +172,7 @@ export default async function AnimeDetailPrettyPage({
                     <div className="flex items-center justify-between">
                         <h3 className="text-sm md:text-lg font-bold text-white flex items-center gap-2">
                             <List className="w-4 h-4 text-primary" />
-                            Daftar Episode
+                            Episode List
                         </h3>
                         <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">{anime.episodes.length} EP</span>
                     </div>
@@ -209,7 +209,7 @@ export default async function AnimeDetailPrettyPage({
                         <p className="text-white font-medium text-sm">{anime.studio}</p>
                     </div>
                     <div>
-                        <p className="text-muted-foreground text-xs uppercase font-bold tracking-wider mb-1">Kualitas</p>
+                        <p className="text-muted-foreground text-xs uppercase font-bold tracking-wider mb-1">Quality</p>
                         <p className="text-white font-medium text-sm">HD Official</p>
                     </div>
                 </div>

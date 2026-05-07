@@ -17,7 +17,7 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = (session?.user as any)?.role === "ADMIN" || pathname.startsWith("/admin");
+    const isMemberOrAdmin = !!session?.user || pathname.startsWith("/admin");
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [showAdOverlay, setShowAdOverlay] = useState(false);
@@ -57,8 +57,8 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     }, [showAdOverlay]);
 
     const handleStart = () => {
-        // Admin langsung nonton tanpa iklan
-        if (isAdmin) {
+        // Admin/Member langsung nonton tanpa iklan
+        if (isMemberOrAdmin) {
             setIsStarted(true);
             if (onPlay) onPlay();
             return;
@@ -88,22 +88,34 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
             {/* Pre-play Interstitial Ad Overlay */}
             {showAdOverlay && (
                 <div className="fixed inset-0 z-[999] bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
-                    {/* Countdown ring */}
-                    <div className="relative flex items-center justify-center w-20 h-20">
-                        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 80 80">
-                            <circle cx="40" cy="40" r="34" fill="none" stroke="#ffffff10" strokeWidth="4" />
-                            <circle
-                                cx="40" cy="40" r="34" fill="none" stroke="#f59e0b" strokeWidth="4"
-                                strokeDasharray={`${2 * Math.PI * 34}`}
-                                strokeDashoffset={`${2 * Math.PI * 34 * (1 - countdown / 5)}`}
-                                strokeLinecap="round"
-                                style={{ transition: 'stroke-dashoffset 1s linear' }}
-                            />
-                        </svg>
-                        <div className="text-center">
-                            <p className="text-white text-2xl font-black leading-none">{countdown}</p>
-                            <p className="text-zinc-500 text-[10px] leading-none mt-0.5">detik</p>
+                    <div className="flex flex-col items-center gap-4 text-center px-6">
+                        <div className="relative w-20 h-20">
+                            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 80 80">
+                                <circle cx="40" cy="40" r="34" fill="none" stroke="#ffffff08" strokeWidth="5" />
+                                <circle 
+                                    cx="40" cy="40" r="34" fill="none" stroke="#f59e0b" strokeWidth="5" 
+                                    strokeDasharray={`${2 * Math.PI * 34}`}
+                                    strokeDashoffset={`${2 * Math.PI * 34 * (countdown / 5)}`}
+                                    strokeLinecap="round"
+                                    style={{ transition: 'stroke-dashoffset 1s linear' }}
+                                />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-white text-2xl font-black leading-none">{countdown}</span>
+                                <span className="text-zinc-600 text-[9px] mt-0.5 uppercase tracking-widest">sec</span>
+                            </div>
                         </div>
+                        <div>
+                            <h4 className="text-sm font-bold text-white mb-1">Loading Content...</h4>
+                            <p className="text-[10px] text-zinc-500 font-medium">Please wait a moment while we prepare your video.</p>
+                        </div>
+                        <button 
+                            onClick={skipAd}
+                            disabled={countdown > 0}
+                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${countdown > 0 ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-white text-black hover:scale-105 shadow-xl'}`}
+                        >
+                            Skip Ad
+                        </button>
                     </div>
 
                     {/* Ad inside overlay */}
@@ -111,14 +123,6 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                         <p className="text-zinc-600 text-[9px] uppercase tracking-[0.2em] text-center mb-3">Sponsor</p>
                         <div ref={adContainerRef} className="flex items-center justify-center min-w-[300px] min-h-[250px]" />
                     </div>
-
-                    <button
-                        onClick={skipAd}
-                        className="flex items-center gap-2 text-zinc-500 hover:text-white text-xs transition-all border border-white/8 hover:border-white/20 px-4 py-2 rounded-lg"
-                    >
-                        <X className="w-3 h-3" />
-                        Lewati ({countdown}s)
-                    </button>
                 </div>
             )}
 
@@ -126,17 +130,20 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
             <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/5 shadow-2xl group/player">
                 {!isStarted ? (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm transition-all group-hover/player:bg-black/30">
-                        <button
-                            onClick={handleStart}
-                            className="group/btn relative flex flex-col items-center gap-4"
-                        >
-                            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(251,191,36,0.3)] group-hover/btn:scale-110 group-hover/btn:shadow-primary/50 transition-all duration-500">
-                                <Play className="w-6 h-6 text-black fill-current ml-1" />
-                            </div>
-                            <div className="bg-white/10 border border-white/10 px-6 py-2 rounded-xl backdrop-blur-md">
-                                <p className="text-white font-black text-xs uppercase tracking-[0.2em]">Mulai Menonton</p>
-                            </div>
-                        </button>
+                        <div className="flex flex-col items-center text-center px-6">
+                            <Play className="w-16 h-16 text-white/20 mb-4" />
+                            <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-2">Ready to Watch?</h3>
+                            <p className="text-zinc-500 text-xs font-medium max-w-[200px] leading-relaxed mb-6">
+                                Prepare yourself for an amazing streaming experience.
+                            </p>
+                            <button 
+                                onClick={handleStart}
+                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group"
+                            >
+                                <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
+                                Start Video
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <iframe
@@ -151,7 +158,7 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
             {/* Server Switcher */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between px-1">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none">Pilih Server Video</span>
+                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none">Select Video Server</span>
                     <span className="text-[10px] font-black text-primary uppercase tracking-widest leading-none bg-primary/10 px-2 py-0.5 rounded-lg">HD Multi</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -170,7 +177,7 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                 </div>
             </div>
 
-            {/* Banner iklan di bawah player */}
+            {/* Banner ads below player */}
             <div className="w-full flex justify-center py-2">
                 <div className="hidden md:block">
                     <AdUnit type="leaderboard" />

@@ -34,7 +34,7 @@ export default function LoginForm() {
         setError("");
 
         if (!turnstileToken) {
-            setError("Silakan selesaikan verifikasi CAPTCHA.");
+            setError("Please complete the CAPTCHA verification.");
             setLoading(false);
             return;
         }
@@ -52,14 +52,14 @@ export default function LoginForm() {
                     setIsSuspended(true);
                     setError("");
                 } else {
-                    setError("Email atau password salah. Coba lagi.");
+                    setError("Invalid email or password. Try again.");
                 }
             } else {
                 router.push("/dashboard");
                 router.refresh();
             }
         } catch {
-            setError("Terjadi kesalahan. Silakan coba lagi.");
+            setError("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -72,26 +72,26 @@ export default function LoginForm() {
                 <div className="flex flex-col items-center gap-4 mb-8">
                     <Logo size="lg" showText={false} />
                     <div className="text-center">
-                        <h1 className="text-2xl font-bold text-white">Masuk ke Akun</h1>
-                        <p className="text-zinc-500 text-sm mt-1">Kelola video dan saldo kamu</p>
+                        <h1 className="text-2xl font-bold text-white">Login to Account</h1>
+                        <p className="text-zinc-500 text-sm mt-1">Manage your videos and balance</p>
                     </div>
                 </div>
 
                 {/* Alerts */}
                 {isSuspended && (
                     <div className="mb-5 p-4 bg-orange-500/8 border border-orange-500/20 rounded-xl">
-                        <p className="text-orange-400 text-sm font-medium">Akun Dinonaktifkan</p>
+                        <p className="text-orange-400 text-sm font-medium">Account Suspended</p>
                         <p className="text-orange-400/70 text-xs mt-1 leading-relaxed">
-                            Akunmu telah ditangguhkan oleh admin. Hubungi support jika kamu merasa ini kesalahan.
+                            Your account has been suspended by admin. Contact support if you believe this is a mistake.
                         </p>
                     </div>
                 )}
 
                 {isSessionExpired && (
                     <div className="mb-5 p-4 bg-primary/8 border border-primary/20 rounded-xl">
-                        <p className="text-primary text-sm font-medium">Sesi Berakhir</p>
+                        <p className="text-primary text-sm font-medium">Session Expired</p>
                         <p className="text-primary/70 text-xs mt-1 leading-relaxed">
-                            Silakan login kembali dengan password baru yang dikirim ke email.
+                            Please login again with the new password sent to your email.
                         </p>
                     </div>
                 )}
@@ -148,15 +148,15 @@ export default function LoginForm() {
                         {loading ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
-                            "Masuk"
+                            "Login"
                         )}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-zinc-500 text-sm">
-                    Belum punya akun?{" "}
+                    Don't have an account?{" "}
                     <Link href="/auth/register" className="text-zinc-300 hover:text-white font-medium transition-colors">
-                        Daftar gratis
+                        Register for free
                     </Link>
                 </p>
             </div>
