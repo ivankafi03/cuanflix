@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Play, X } from "lucide-react";
 import { VideoServer } from "@/lib/anime";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import AdUnit from "@/components/ads/AdUnit";
 
 const DIRECT_LINK = "https://www.profitablecpmratenetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc";
@@ -14,8 +15,9 @@ interface VideoPlayerProps {
 }
 
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
+    const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = (session?.user as any)?.role === "ADMIN";
+    const isAdmin = (session?.user as any)?.role === "ADMIN" || pathname.startsWith("/admin");
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [showAdOverlay, setShowAdOverlay] = useState(false);

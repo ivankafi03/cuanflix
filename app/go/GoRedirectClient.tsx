@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Play, Shield } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const DIRECT_LINK = "https://www.profitablecpmratenetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc";
 
@@ -13,17 +14,25 @@ function openAd() {
 export default function GoRedirectClient() {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const pathname = usePathname();
+    const { data: session } = useSession();
     const destination = searchParams.get("to") || "/";
     const [countdown, setCountdown] = useState(10);
     const [canSkip, setCanSkip] = useState(false);
+    
+    const isAdmin = (session?.user as any)?.role === "ADMIN" || pathname.startsWith("/admin");
     const adRef1 = useRef<HTMLDivElement>(null);
     const adRef2 = useRef<HTMLDivElement>(null);
     const adsLoaded = useRef(false);
 
     // Klik 1 sudah terjadi (user mengklik episode) → buka Direct Link otomatis saat halaman ini dimuat
     useEffect(() => {
+        if (isAdmin) {
+            router.push(destination);
+            return;
+        }
         openAd();
-    }, []);
+    }, [isAdmin, destination, router]);
 
     // Load AdsTerra banner ads
     useEffect(() => {

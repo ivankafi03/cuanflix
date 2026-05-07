@@ -20,6 +20,23 @@ export default function AdScripts() {
     // Cek apakah halaman sekarang masuk dalam daftar hitam iklan
     const isAuthPage = hideAdsOn.some(path => pathname.startsWith(path));
 
+    // Keamanan brutal: Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan dari DOM
+    useEffect(() => {
+        if (isAdmin || isAuthPage) {
+            // Hapus script-script iklan jika ada yang tersisa
+            const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"]');
+            adScripts.forEach(s => s.remove());
+
+            // Hapus container iklan jika ada
+            const adContainers = document.querySelectorAll('[id*="container-"], [class*="ad-"]');
+            adContainers.forEach(c => (c as HTMLElement).style.display = 'none');
+            
+            // Hapus Histats jika ada
+            const histats = document.querySelectorAll('script[src*="histats"]');
+            histats.forEach(h => h.remove());
+        }
+    }, [pathname, isAdmin, isAuthPage]);
+
     // Jika Admin atau sedang di halaman auth/admin, jangan tampilkan apa-apa
     if (isAdmin || isAuthPage) return null;
 
@@ -42,7 +59,7 @@ export default function AdScripts() {
             {/* Histats Tracker */}
             <Script id="histats-tracker" strategy="lazyOnload">{`
                 var _Hasync = _Hasync || [];
-                _Hasync.push(['Histats.start', '1,5025180,4,0,0,0,00010000']);
+                _Hasync.push(['Histats.start', '1, 5025180, 4, 0, 0, 0, 00010000']);
                 _Hasync.push(['Histats.fasi', '1']);
                 _Hasync.push(['Histats.track_hits', '']);
                 (function() {
@@ -55,3 +72,4 @@ export default function AdScripts() {
         </>
     );
 }
+
