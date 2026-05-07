@@ -23,6 +23,7 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     const [countdown, setCountdown] = useState(5);
     const [clickCount, setClickCount] = useState(0);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [isMidrollArmed, setIsMidrollArmed] = useState(false);
     const adContainerRef = useRef<HTMLDivElement>(null);
     const adLoaded = useRef(false);
 
@@ -38,6 +39,17 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
         const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
         return () => clearTimeout(timer);
     }, [showAdOverlay, countdown, onPlay]);
+ 
+     // Mid-roll Recurring Ad Trap (Every 2 minutes for guests)
+     useEffect(() => {
+         if (!isStarted || pathname.startsWith("/admin") || !!session?.user) return;
+
+         const interval = setInterval(() => {
+             setIsMidrollArmed(true);
+         }, 120000); // 120 seconds = 2 minutes
+
+         return () => clearInterval(interval);
+     }, [isStarted, pathname, session]);
 
     // Load ad into overlay when it appears
     useEffect(() => {
@@ -140,6 +152,17 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
 
             {/* Player Container */}
             <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/5 shadow-2xl group/player">
+                {/* Mid-roll Ad Trap Layer */}
+                {isMidrollArmed && isStarted && (
+                    <div 
+                        onClick={() => {
+                            try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
+                            setIsMidrollArmed(false);
+                        }}
+                        className="absolute inset-0 z-[25] cursor-pointer" 
+                    />
+                )}
+
                 {!isStarted ? (
                     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px] transition-all group-hover/player:bg-black/40">
                         <div className="flex flex-col items-center text-center px-4">
