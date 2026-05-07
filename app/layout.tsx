@@ -29,9 +29,13 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Samehadakuu - Nonton Anime Subtitle Indonesia Terlengkap",
-  description: "Dapatkan akses gratis ke ribuan episode anime terbaru dengan subtitle Indonesia. Streaming cepat, kualitas HD, dan koleksi lengkap hanya di Samehadakuu.",
-  keywords: ["nonton anime", "anime subtitle indonesia", "streaming anime", "anime terbaru", "solo leveling sub indo"],
+  metadataBase: new URL("https://samehadakuu.com"),
+  title: {
+    default: "Samehadakuu - Watch Anime & Earn Money | Sub Indo HD",
+    template: "%s | Samehadakuu"
+  },
+  description: "Nonton anime favoritmu dan dapatkan uang! Platform streaming anime pertama yang membayar Anda untuk menonton dan membagikan link. HD, Cepat, & Terlengkap.",
+  keywords: ["nonton anime dapat uang", "anime subtitle indonesia", "streaming anime", "affiliate anime", "watch to earn anime"],
   authors: [{ name: "Samehadakuu Team" }],
   icons: {
     icon: [
@@ -43,8 +47,8 @@ export const metadata: Metadata = {
     monetag: "355a8ebbeed7ba984eb785bbb6977945",
   },
   openGraph: {
-    title: "Samehadakuu - Nonton Anime Subtitle Indonesia Terlengkap",
-    description: "Streaming anime terbaru kualitas HD Sub Indo gratis hanya di Samehadakuu.",
+    title: "Samehadakuu - Watch Anime & Earn Money",
+    description: "Nonton anime dan dapatkan uang tunai! Bagikan link affiliate-mu dan raih pendapatan harian. Streaming HD Sub Indo Terlengkap.",
     url: "https://samehadakuu.com",
     siteName: "Samehadakuu",
     images: [
@@ -52,7 +56,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Samehadakuu - Anime Streaming",
+        alt: "Samehadakuu - Watch & Earn Anime",
       },
     ],
     locale: "id_ID",
@@ -60,8 +64,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Samehadakuu - Nonton Anime Subtitle Indonesia",
-    description: "Streaming anime terbaru kualitas HD Sub Indo gratis hanya di Samehadakuu.",
+    title: "Samehadakuu - Watch Anime & Earn Money",
+    description: "Platform anime pertama yang membayar penontonnya. Nonton HD & Share Link = Cuan!",
     images: ["/og-image.png"],
   },
 };
