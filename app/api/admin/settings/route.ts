@@ -81,11 +81,11 @@ export async function POST(req: Request) {
                 maintenanceMode: Boolean(maintenanceMode),
                 maintenanceMessage: maintenanceMessage || "Situs sedang dalam pemeliharaan rutin untuk meningkatkan performa.",
                 ...(registrationBonus !== undefined && { registrationBonus: parseFloat(registrationBonus) || 0.1 }),
-                telegramLink: telegramLink || "https://t.me/samehadakuu_official",
-                xLink: xLink || "https://x.com/samehadakuu",
-                instagramLink: instagramLink || "https://instagram.com/samehadakuu",
-                tiktokLink: tiktokLink || "https://tiktok.com/@samehadakuu",
-                supportEmail: supportEmail || "support@samehadakuu.com",
+                telegramLink: telegramLink ?? "https://t.me/samehadakuu_official",
+                xLink: xLink !== undefined ? xLink : "https://x.com/samehadakuu",
+                instagramLink: instagramLink !== undefined ? instagramLink : "https://instagram.com/samehadakuu",
+                tiktokLink: tiktokLink !== undefined ? tiktokLink : "https://tiktok.com/@samehadakuu",
+                supportEmail: supportEmail !== undefined ? supportEmail : "support@samehadakuu.com",
             }
         });
 
