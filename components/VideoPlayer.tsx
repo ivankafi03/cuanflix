@@ -15,7 +15,7 @@ interface VideoPlayerProps {
 }
 
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
-    const pathname = usePathname();
+    const pathname = usePathname() || "";
     const { data: session } = useSession();
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);

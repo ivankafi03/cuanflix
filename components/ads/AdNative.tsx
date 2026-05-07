@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 // Native Banner Ad (container-based)
 export default function AdNative({ className = "" }: { className?: string }) {
-    const pathname = usePathname();
+    const pathname = usePathname() || "";
     const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
     

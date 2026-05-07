@@ -30,7 +30,7 @@ const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> 
 };
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
-    const pathname = usePathname();
+    const pathname = usePathname() || "";
     const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
     
