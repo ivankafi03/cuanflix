@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { MessageSquare, List, ThumbsUp, Heart, Share2, Info, Sparkles } from "lucide-react";
+import { MessageSquare, List, ThumbsUp, Heart, Share2, Info, Sparkles, Play } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getWatchPageData, getUrlFromSlug, getSlugFromUrl } from "@/lib/anime";
+import { getWatchPageData, getUrlFromSlug, getSlugFromUrl, getAnimeDetail } from "@/lib/anime";
 import VideoPlayer from "@/components/VideoPlayer";
 import ReportButton from "@/components/ReportButton";
 import WatchActions from "@/components/WatchActions";
@@ -135,27 +135,35 @@ export default async function WatchPrettyPage({
                     sidebar={
                         <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex flex-col p-6">
                             <h3 className="font-bold text-white flex items-center gap-2 mb-4">
-                                <List className="w-5 h-5 text-primary" />
-                                Streaming Info
+                                <List className="w-4 h-4 text-primary" />
+                                Episode List
                             </h3>
-                            <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-                                You are watching with the best HD quality available from our premium servers.
-                            </p>
-                            <div className="flex flex-col gap-2">
-                                <div className="flex justify-between text-xs py-2 border-b border-white/5">
-                                    <span className="text-zinc-500">Quality</span>
-                                    <span className="text-white font-bold">Multi (360p - 1080p)</span>
-                                </div>
-                                <div className="flex justify-between text-xs py-2 border-b border-white/5">
-                                    <span className="text-zinc-500">Server</span>
-                                    <span className="text-white font-bold">{watchData.servers.length} Available</span>
-                                </div>
+                            <div className="flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                                {seriesDetail?.episodes?.map((ep: any, idx: number) => (
+                                    <Link
+                                        key={idx}
+                                        href={`/watch/${getSlugFromUrl(ep.link)}`}
+                                        className={`p-3 rounded-xl border transition-all flex items-center justify-between group ${ep.link.includes(path) || (idx === 0 && path === 'id')
+                                                ? 'bg-primary/20 border-primary/30 text-primary shadow-lg shadow-primary/10'
+                                                : 'bg-white/5 border-white/5 text-zinc-400 hover:bg-white/10'
+                                            }`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs ${ep.link.includes(path) ? 'bg-primary text-black' : 'bg-white/5 group-hover:bg-primary/20 group-hover:text-primary transition-colors'}`}>
+                                                {ep.eps || idx + 1}
+                                            </div>
+                                            <span className="text-[11px] font-bold truncate max-w-[150px]">{ep.title}</span>
+                                        </div>
+                                        <Play className={`w-3 h-3 ${ep.link.includes(path) ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'} transition-colors`} />
+                                    </Link>
+                                )) || (
+                                    <div className="text-center py-8 text-zinc-500 text-xs">No episode list available.</div>
+                                )}
                             </div>
-                            <ReportButton />
                         </div>
                     }
                 >
-                    {/* Anime Info & Actions */}
+                    {/* Anime Info Section */}
                     <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 md:p-6 shadow-xl overflow-hidden relative">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[50px] -translate-y-1/2 translate-x-1/2 rounded-full" />
                         
@@ -212,16 +220,6 @@ export default async function WatchPrettyPage({
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                        <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/5">
-                            <div className="bg-primary/10 p-2 rounded-lg">
-                                <Info className="w-4 h-4 text-primary" />
-                            </div>
-                            <p className="text-[11px] text-zinc-400 font-medium leading-relaxed">
-                                <span className="text-white font-black uppercase tracking-tighter">Member Tips:</span> Switch servers if the player takes too long to load. Rewards are still counted automatically.
-                            </p>
                         </div>
                     </div>
                 </WatchPageClient>
