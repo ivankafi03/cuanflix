@@ -1,38 +1,30 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 
 export default function AdScripts() {
-    const pathname = usePathname() || "";
-    const { data: session, status } = useSession();
+    const pathname  = usePathname() || "";
     const [mounted, setMounted] = useState(false);
-    
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
-    // Daftar halaman yang WAJIB bersih dari iklan (Dashboard & Admin)
-    const hideAdsOn = [
-        "/admin",
-        "/dashboard"
-    ];
+    // ── HOOK 1: set mounted ──────────────────────────────────────────
+    useEffect(() => { setMounted(true); }, []);
 
-    const isRestrictedPage = hideAdsOn.some(path => pathname.startsWith(path));
+    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
 
-    // Jika di halaman terlarang, beri class khusus untuk CSS (jika masih ada CSS yang butuh)
+    // ── HOOK 2: toggle body class for CSS-level ad suppression ───────
     useEffect(() => {
         if (!mounted) return;
-        if (isRestrictedPage) {
-            document.body.classList.add('admin-page');
+        if (isRestricted) {
+            document.body.classList.add("admin-page");
         } else {
-            document.body.classList.remove('admin-page');
+            document.body.classList.remove("admin-page");
         }
-    }, [isRestrictedPage, mounted]);
+    }, [mounted, isRestricted]);
 
-    if (!mounted || status === "loading" || isRestrictedPage) return null;
+    // ── Conditional render AFTER all hooks ───────────────────────────
+    if (!mounted || isRestricted) return null;
 
     return (
         <>
@@ -66,4 +58,3 @@ export default function AdScripts() {
         </>
     );
 }
-
