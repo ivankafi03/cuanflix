@@ -8,7 +8,8 @@ import { useEffect } from "react";
 export default function AdScripts() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = (session?.user as any)?.role === "ADMIN";
+    // Jika user sudah login (Member atau Admin), anggap sebagai "Premium" dan matikan iklan
+    const isMemberOrAdmin = !!session?.user;
 
     // Daftar halaman yang TIDAK boleh ada iklan
     const hideAdsOn = [
@@ -23,7 +24,7 @@ export default function AdScripts() {
 
     // Keamanan brutal: Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan dari DOM
     useEffect(() => {
-        if (isAdmin || isAuthPage) {
+        if (isMemberOrAdmin || isAuthPage) {
             // Tambahkan class admin-page ke body untuk mengaktifkan CSS Nuklir
             document.body.classList.add('admin-page');
 
@@ -42,10 +43,10 @@ export default function AdScripts() {
             // Hapus class admin-page jika sudah di halaman biasa agar iklan pengunjung muncul lagi
             document.body.classList.remove('admin-page');
         }
-    }, [pathname, isAdmin, isAuthPage]);
+    }, [pathname, isMemberOrAdmin, isAuthPage]);
 
-    // Jika Admin atau sedang di halaman auth/admin, jangan tampilkan apa-apa
-    if (isAdmin || isAuthPage) return null;
+    // Jika sudah login atau sedang di halaman auth/admin, jangan tampilkan apa-apa
+    if (isMemberOrAdmin || isAuthPage) return null;
 
     return (
         <>

@@ -8,16 +8,14 @@ import { usePathname } from "next/navigation";
 export default function AdNative({ className = "" }: { className?: string }) {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = (session?.user as any)?.role === "ADMIN";
-
-    // Keamanan ekstra: Matikan jika di halaman admin/dashboard
     const isRestrictedPage = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth");
+    const isMemberOrAdmin = !!session?.user || isRestrictedPage;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const loaded = useRef(false);
 
     useEffect(() => {
-        if (isAdmin || isRestrictedPage || loaded.current || !containerRef.current) return;
+        if (isMemberOrAdmin || loaded.current || !containerRef.current) return;
         loaded.current = true;
 
         const script = document.createElement("script");
@@ -26,9 +24,9 @@ export default function AdNative({ className = "" }: { className?: string }) {
         script.setAttribute("data-cfasync", "false");
 
         containerRef.current.appendChild(script);
-    }, []);
+    }, [isMemberOrAdmin]);
 
-    return (isAdmin || isRestrictedPage) ? null : (
+    return isMemberOrAdmin ? null : (
         <div className={`w-full overflow-hidden ${className}`}>
             <div id="container-cc6b63069d4fbfd8dc3934796f64530a" ref={containerRef} />
         </div>
