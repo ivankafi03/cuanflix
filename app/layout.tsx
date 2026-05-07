@@ -83,14 +83,21 @@ export default async function RootLayout({
   // IP Ban check — runs on every page load (server-side)
   try {
     const headerList = await headers();
-    const ip = headerList.get("x-forwarded-for")?.split(",")[0].trim()
-      || headerList.get("x-real-ip")
-      || null;
+    const userAgent = headerList.get("user-agent") || "";
+    
+    // Bypass IP check for social media bots to ensure OG images work
+    const isSocialBot = /facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot/i.test(userAgent);
+    
+    if (!isSocialBot) {
+      const ip = headerList.get("x-forwarded-for")?.split(",")[0].trim()
+        || headerList.get("x-real-ip")
+        || null;
 
-    if (ip) {
-      const banned = await prisma.blockedIp.findUnique({ where: { ip } });
-      if (banned) {
-        redirect("/blocked");
+      if (ip) {
+        const banned = await prisma.blockedIp.findUnique({ where: { ip } });
+        if (banned) {
+          redirect("/blocked");
+        }
       }
     }
   } catch {
