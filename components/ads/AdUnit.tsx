@@ -34,26 +34,36 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
         if (!shouldRender || loaded.current || !containerRef.current) return;
         loaded.current = true;
 
+        // Detect if mobile to use mobile size instead of leaderboard
+        const isMobile = window.innerWidth < 768;
+        const finalKey = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.key : config.key;
+        const finalWidth = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.width : config.width;
+        const finalHeight = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.height : config.height;
+
         (window as any).atOptions = {
-            key: config.key,
+            key: finalKey,
             format: "iframe",
-            height: config.height,
-            width: config.width,
+            height: finalHeight,
+            width: finalWidth,
             params: {},
         };
         const script = document.createElement("script");
-        script.src   = `https://www.highperformanceformat.com/${config.key}/invoke.js`;
+        script.src   = `https://www.highperformanceformat.com/${finalKey}/invoke.js`;
         script.async = true;
         containerRef.current.appendChild(script);
-    }, [shouldRender, config.key, config.height, config.width]);
+    }, [shouldRender, config.key, config.height, config.width, type]);
 
     // ── Conditional render AFTER all hooks ───────────────────────────
     if (!shouldRender) return null;
 
+    const isMobile = mounted && window.innerWidth < 768;
+    const finalWidth = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.width : config.width;
+    const finalHeight = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.height : config.height;
+
     return (
         <div
             className={`overflow-hidden flex items-center justify-center ${className}`}
-            style={{ minWidth: config.width, minHeight: config.height }}
+            style={{ minWidth: finalWidth, minHeight: finalHeight }}
         >
             <div ref={containerRef} />
         </div>
