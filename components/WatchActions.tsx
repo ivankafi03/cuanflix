@@ -30,7 +30,7 @@ export default function WatchActions({ anime }: WatchActionsProps) {
             setLikeCount(prev => prev - 1);
         } else {
             setLikeCount(prev => prev + 1);
-            showToast("Terima kasih! Kamu menyukai episode ini.", "success");
+            showToast("Thank you! You liked this episode.", "success");
         }
         setLiked(!liked);
     };
@@ -65,7 +65,7 @@ export default function WatchActions({ anime }: WatchActionsProps) {
 
         navigator.clipboard.writeText(shareUrl);
         showToast(
-            isLoggedIn ? "Link Cuan disalin & tersimpan di Dashboard!" : "Link berhasil disalin ke clipboard!",
+            isLoggedIn ? "Affiliate link copied & saved to Dashboard!" : "Link copied to clipboard successfully!",
             "success"
         );
     };
@@ -94,7 +94,7 @@ export default function WatchActions({ anime }: WatchActionsProps) {
                 className="px-4 py-2 rounded-xl flex items-center gap-2 text-[11px] font-black uppercase tracking-wider transition-all border bg-primary/10 hover:bg-primary/20 border-primary/20 text-primary shadow-lg shadow-primary/5 group disabled:opacity-50"
             >
                 {collecting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Share2 className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />}
-                {session ? "Salin Link Cuan" : "Bagikan"}
+                {session ? "Copy Affiliate Link" : "Share"}
             </button>
         </div>
     );

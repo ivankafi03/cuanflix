@@ -22,20 +22,15 @@ export default function AdScripts() {
 
     const isRestrictedPage = hideAdsOn.some(path => pathname.startsWith(path));
 
-    // Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan
+    // Jika di halaman terlarang, beri class khusus untuk CSS (jika masih ada CSS yang butuh)
     useEffect(() => {
         if (!mounted) return;
-
         if (isRestrictedPage) {
             document.body.classList.add('admin-page');
-            const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"]');
-            adScripts.forEach(s => s.remove());
-            const adContainers = document.querySelectorAll('[id*="container-"], [class*="ad-"]');
-            adContainers.forEach(c => (c as HTMLElement).style.display = 'none');
         } else {
             document.body.classList.remove('admin-page');
         }
-    }, [pathname, isRestrictedPage, mounted]);
+    }, [isRestrictedPage, mounted]);
 
     if (!mounted || status === "loading" || isRestrictedPage) return null;
 

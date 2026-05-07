@@ -70,7 +70,7 @@ export default async function WatchPrettyPage({
     const url = getUrlFromSlug(path);
     const watchData = await getWatchPageData(url);
 
-    if (!watchData || watchData.servers.length === 0) {
+    if (!watchData || !watchData.servers || watchData.servers.length === 0) {
         return (
             <div className="min-h-screen flex items-center justify-center p-6">
                 <div className="flex flex-col items-center gap-6 bg-white/5 border border-white/10 p-12 rounded-3xl max-w-lg text-center">
