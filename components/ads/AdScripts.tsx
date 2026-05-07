@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 export default function AdScripts() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = session?.user?.role === "ADMIN";
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
 
     // Daftar halaman yang TIDAK boleh ada iklan
     const hideAdsOn = [
