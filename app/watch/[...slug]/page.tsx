@@ -70,6 +70,7 @@ export default async function WatchPrettyPage({
 
     const url = getUrlFromSlug(path);
     const watchData = await getWatchPageData(url);
+    const seriesDetail = await getAnimeDetail(url);
 
     if (!watchData || !watchData.servers || watchData.servers.length === 0) {
         return (
