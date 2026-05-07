@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 
 export default function AdScripts() {
     const pathname  = usePathname() || "";
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
 
     // ── HOOK 1: set mounted ──────────────────────────────────────────
@@ -18,32 +18,40 @@ export default function AdScripts() {
     // ── HOOK 2: toggle body class and cleanup ads ────────────────────
     useEffect(() => {
         if (!mounted) return;
+        
         if (isRestricted) {
             document.body.classList.add("admin-page");
             
-            // Aggressive Cleanup: Nuke all known ad scripts from DOM
-            const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"], script[id*="adsterra"], script[id*="monetag"]');
-            adScripts.forEach(s => s.remove());
-            
-            // Hide all ad containers
-            const adContainers = document.querySelectorAll('[id*="container-"], [class*="ad-"], [class*="banner"]');
-            adContainers.forEach(c => {
-                (c as HTMLElement).style.display = 'none';
-                (c as HTMLElement).style.visibility = 'hidden';
-                (c as HTMLElement).style.height = '0';
-            });
+            // Aggressive Cleanup: Nuke all known ad scripts and elements
+            const cleanup = () => {
+                const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"], script[id*="adsterra"], script[id*="monetag"]');
+                adScripts.forEach(s => s.remove());
+                
+                const adElements = document.querySelectorAll('[id*="container-"], [class*="ad-"], [class*="banner"], iframe[src*="profitablecpm"], iframe[src*="highperformance"], iframe[src*="quge5"]');
+                adElements.forEach(el => {
+                    (el as HTMLElement).style.display = 'none';
+                    (el as HTMLElement).style.setProperty('display', 'none', 'important');
+                    el.remove();
+                });
+            };
+
+            cleanup();
+            const interval = setInterval(cleanup, 1000); // Continuous cleanup
+            return () => clearInterval(interval);
         } else {
             document.body.classList.remove("admin-page");
         }
-    }, [mounted, isRestricted]);
+    }, [mounted, isRestricted, pathname]);
 
     // ── Conditional render AFTER all hooks ───────────────────────────
-    if (!mounted || isRestricted) return null;
+    if (!mounted || status === "loading") return null;
 
-    // Jika member login, matikan iklan Popunder/Pop-up agar navigasi lancar
-    // Tapi iklan Banner (AdUnit/AdNative) tetap muncul di halaman depan
+    // Jika member login, matikan iklan Popunder/Pop-up (Script-level)
     const isMember = !!session?.user;
-    if (isMember) return null;
+    
+    // Guardian tetap render null di restricted page untuk scripts, 
+    // tapi useEffect di atas tetap jalan karena component ini tetap dimount di layout
+    if (isRestricted || isMember) return null;
 
     return (
         <>
