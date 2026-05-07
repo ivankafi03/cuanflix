@@ -65,7 +65,7 @@ export default async function AnimeDetailPrettyPage({
     }
 
     const watchUrl = anime.episodes.length > 0
-        ? `/watch/${getSlugFromUrl(anime.episodes[0].link)}`
+        ? `/go?to=/watch/${getSlugFromUrl(anime.episodes[0].link)}`
         : "#";
 
     return (
@@ -183,7 +183,7 @@ export default async function AnimeDetailPrettyPage({
                             return (
                                 <Link
                                     key={i}
-                                    href={`/watch/${getSlugFromUrl(ep.link)}`}
+                                    href={`/go?to=/watch/${getSlugFromUrl(ep.link)}`}
                                     className="flex items-center justify-between p-2.5 md:p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all group"
                                 >
                                     <div className="flex items-center gap-3">
