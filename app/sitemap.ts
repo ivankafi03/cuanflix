@@ -3,7 +3,7 @@ import { getLatestAnime, getSlugFromUrl } from '@/lib/anime'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const latestAnime = await getLatestAnime()
-    const baseUrl = 'https://samehadakuu-scraper.vercel.app' // Optional: provide your custom domain
+    const baseUrl = 'https://samehadakuu.com' // Optional: provide your custom domain
 
     const animeLinks = latestAnime.map((anime) => ({
         url: `${baseUrl}/watch/${getSlugFromUrl(anime.link)}`,
