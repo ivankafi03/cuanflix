@@ -22,6 +22,7 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     const [showAdOverlay, setShowAdOverlay] = useState(false);
     const [countdown, setCountdown] = useState(5);
     const [clickCount, setClickCount] = useState(0);
+    const [isProcessing, setIsProcessing] = useState(false);
     const adContainerRef = useRef<HTMLDivElement>(null);
     const adLoaded = useRef(false);
 
@@ -65,8 +66,14 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
         }
 
         if (clickCount < 3) {
+            setIsProcessing(true);
             setClickCount(prev => prev + 1);
             try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
+            
+            // Reset processing state after a short delay
+            setTimeout(() => {
+                setIsProcessing(false);
+            }, 1500);
             return;
         }
 
@@ -143,10 +150,20 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                             </p>
                             <button 
                                 onClick={handleStart}
-                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group"
+                                disabled={isProcessing}
+                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group disabled:opacity-70 disabled:scale-100"
                             >
-                                <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
-                                Start Video
+                                {isProcessing ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Processing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
+                                        Start Video
+                                    </>
+                                )}
                             </button>
                         </div>
                     </div>

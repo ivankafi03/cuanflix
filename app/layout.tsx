@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import AdScripts from "@/components/ads/AdScripts";
+import AdblockDetector from "@/components/ads/AdblockDetector";
 
 // Inter — font utama untuk UI, body, label, form
 const inter = Inter({
@@ -119,6 +120,7 @@ export default async function RootLayout({
           </main>
           <ChatWidget />
           <AdScripts />
+          <AdblockDetector />
         </Providers>
       </body>
     </html>
