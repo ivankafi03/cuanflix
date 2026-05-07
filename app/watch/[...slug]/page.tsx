@@ -102,11 +102,11 @@ export default async function WatchPrettyPage({
                 videoUrl={`/watch/${path}`}
             />
 
-            <div className="max-w-[1600px] mx-auto px-4 md:px-6 pt-6 flex flex-col gap-6">
+            <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-24 md:pt-28 flex flex-col gap-8">
                 
-                {/* Top Leaderboard Banner */}
+                {/* Top Leaderboard Banner - Centered with Content */}
                 <div className="w-full flex justify-center">
-                    <AdUnit type="leaderboard" className="!justify-center" />
+                    <AdUnit type="leaderboard" className="!justify-center shadow-lg" />
                 </div>
 
                 {/* Guest Call to Action Banner */}

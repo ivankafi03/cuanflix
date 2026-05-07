@@ -5,6 +5,7 @@ import VideoPlayer from "./VideoPlayer";
 import WatchEarningManager from "./WatchEarningManager";
 import { VideoServer } from "@/lib/anime";
 import dynamic from "next/dynamic";
+import AdUnit from "./ads/AdUnit";
 
 const CommentSection = dynamic(() => import("./CommentSection"), {
     loading: () => <div className="h-32 flex items-center justify-center bg-white/5 rounded-2xl animate-pulse mt-6">Memuat Komentar...</div>,
@@ -32,6 +33,11 @@ export default function WatchPageClient({ servers, videoId, children, sidebar }:
                     servers={servers}
                     onPlay={() => setIsWatching(true)}
                 />
+
+                {/* Bottom Banner - Below Player */}
+                <div className="w-full flex justify-center py-2">
+                    <AdUnit type="leaderboard" className="!justify-center" />
+                </div>
 
                 {children}
 
