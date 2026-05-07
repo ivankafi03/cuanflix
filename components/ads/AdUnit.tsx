@@ -38,12 +38,10 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
         setMounted(true);
     }, []);
 
-    const isMemberOrAdmin = !!session?.user;
+    // Sembunyikan HANYA di dashboard/admin
+    const isRestrictedPage = pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
     
-    // Keamanan ekstra: Matikan jika di halaman admin/dashboard
-    const isRestrictedPage = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth");
-    
-    if (!mounted || status === "loading" || isMemberOrAdmin || isRestrictedPage) return null;
+    if (!mounted || status === "loading" || isRestrictedPage) return null;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const loaded = useRef(false);
@@ -51,7 +49,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     const config = AD_CONFIG[type];
 
     useEffect(() => {
-        if (isMemberOrAdmin || loaded.current || !containerRef.current) return;
+        if (loaded.current || !containerRef.current) return;
         loaded.current = true;
 
         // Set atOptions
@@ -70,7 +68,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
         containerRef.current.appendChild(script);
     }, [config.key, config.height, config.width]);
 
-    return isMemberOrAdmin ? null : (
+    return (
         <div
             className={`overflow-hidden flex items-center justify-center ${className}`}
             style={{ minWidth: config.width, minHeight: config.height }}

@@ -14,47 +14,30 @@ export default function AdScripts() {
         setMounted(true);
     }, []);
 
-    // Jika user sudah login (Member atau Admin), anggap sebagai "Premium" dan matikan iklan
-    const isMemberOrAdmin = !!session?.user;
-
-    // Daftar halaman yang TIDAK boleh ada iklan
+    // Daftar halaman yang WAJIB bersih dari iklan (Dashboard & Admin)
     const hideAdsOn = [
-        "/auth",
-        "/api/auth",
         "/admin",
         "/dashboard"
     ];
 
-    // Cek apakah halaman sekarang masuk dalam daftar hitam iklan
-    const isAuthPage = hideAdsOn.some(path => pathname.startsWith(path));
+    const isRestrictedPage = hideAdsOn.some(path => pathname.startsWith(path));
 
-    // Keamanan brutal: Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan dari DOM
+    // Jika di halaman terlarang, paksa hapus semua sisa-sisa iklan
     useEffect(() => {
         if (!mounted) return;
 
-        if (isMemberOrAdmin || isAuthPage) {
-            // Tambahkan class admin-page ke body untuk mengaktifkan CSS Nuklir
+        if (isRestrictedPage) {
             document.body.classList.add('admin-page');
-
-            // Hapus script-script iklan jika ada yang tersisa
             const adScripts = document.querySelectorAll('script[src*="profitablecpm"], script[src*="quge5"], script[src*="highperformance"]');
             adScripts.forEach(s => s.remove());
-
-            // Hapus container iklan jika ada
             const adContainers = document.querySelectorAll('[id*="container-"], [class*="ad-"]');
             adContainers.forEach(c => (c as HTMLElement).style.display = 'none');
-            
-            // Hapus Histats jika ada
-            const histats = document.querySelectorAll('script[src*="histats"]');
-            histats.forEach(h => h.remove());
         } else {
-            // Hapus class admin-page jika sudah di halaman biasa agar iklan pengunjung muncul lagi
             document.body.classList.remove('admin-page');
         }
-    }, [pathname, isMemberOrAdmin, isAuthPage, mounted]);
+    }, [pathname, isRestrictedPage, mounted]);
 
-    // Jika belum mounted, masih loading session, atau user adalah member/admin, jangan tampilkan apa-apa
-    if (!mounted || status === "loading" || isMemberOrAdmin || isAuthPage) return null;
+    if (!mounted || status === "loading" || isRestrictedPage) return null;
 
     return (
         <>

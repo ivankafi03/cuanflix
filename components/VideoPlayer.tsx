@@ -17,11 +17,11 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isMemberOrAdmin = !!session?.user || pathname.startsWith("/admin");
     const [activeServerIndex, setActiveServerIndex] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [showAdOverlay, setShowAdOverlay] = useState(false);
     const [countdown, setCountdown] = useState(5);
+    const [clickCount, setClickCount] = useState(0);
     const adContainerRef = useRef<HTMLDivElement>(null);
     const adLoaded = useRef(false);
 
@@ -57,14 +57,19 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     }, [showAdOverlay]);
 
     const handleStart = () => {
-        // Admin/Member langsung nonton tanpa iklan
-        if (isMemberOrAdmin) {
+        // Admin di halaman admin skip iklan
+        if (pathname.startsWith("/admin")) {
             setIsStarted(true);
             if (onPlay) onPlay();
             return;
         }
-        // Klik 3: buka Direct Link di tab baru
-        try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
+
+        if (clickCount < 3) {
+            setClickCount(prev => prev + 1);
+            try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
+            return;
+        }
+
         setCountdown(5);
         setShowAdOverlay(true);
     };
@@ -138,10 +143,15 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                             </p>
                             <button 
                                 onClick={handleStart}
-                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group"
+                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex flex-col items-center gap-2 group"
                             >
-                                <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
-                                Start Video
+                                <div className="flex items-center gap-3">
+                                    <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
+                                    {clickCount < 3 ? `Unlock Video (${3 - clickCount} clicks left)` : "Start Video"}
+                                </div>
+                                {clickCount < 3 && (
+                                    <span className="text-[9px] opacity-50 font-medium normal-case">Click to unlock player</span>
+                                )}
                             </button>
                         </div>
                     </div>
@@ -155,6 +165,15 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                 )}
             </div>
 
+            {/* Banner ads directly below player */}
+            <div className="w-full flex justify-center py-2 bg-white/5 rounded-xl border border-white/5">
+                <div className="hidden md:block">
+                    <AdUnit type="leaderboard" />
+                </div>
+                <div className="block md:hidden">
+                    <AdUnit type="mobile" />
+                </div>
+            </div>
             {/* Server Switcher */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center justify-between px-1">
@@ -177,15 +196,7 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                 </div>
             </div>
 
-            {/* Banner ads below player */}
-            <div className="w-full flex justify-center py-2">
-                <div className="hidden md:block">
-                    <AdUnit type="leaderboard" />
-                </div>
-                <div className="block md:hidden">
-                    <AdUnit type="mobile" />
-                </div>
-            </div>
+
         </div>
     );
 }

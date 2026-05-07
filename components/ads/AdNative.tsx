@@ -14,14 +14,13 @@ export default function AdNative({ className = "" }: { className?: string }) {
         setMounted(true);
     }, []);
 
-    const isRestrictedPage = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth");
-    const isMemberOrAdmin = !!session?.user || isRestrictedPage;
+    const isRestrictedPage = pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
 
     const containerRef = useRef<HTMLDivElement>(null);
     const loaded = useRef(false);
 
     useEffect(() => {
-        if (!mounted || isMemberOrAdmin || loaded.current || !containerRef.current) return;
+        if (!mounted || isRestrictedPage || loaded.current || !containerRef.current) return;
         loaded.current = true;
 
         const script = document.createElement("script");
@@ -30,9 +29,9 @@ export default function AdNative({ className = "" }: { className?: string }) {
         script.setAttribute("data-cfasync", "false");
 
         containerRef.current.appendChild(script);
-    }, [isMemberOrAdmin, mounted]);
+    }, [isRestrictedPage, mounted]);
 
-    return (!mounted || status === "loading" || isMemberOrAdmin) ? null : (
+    return (!mounted || status === "loading" || isRestrictedPage) ? null : (
         <div className={`w-full overflow-hidden ${className}`}>
             <div id="container-cc6b63069d4fbfd8dc3934796f64530a" ref={containerRef} />
         </div>
