@@ -223,7 +223,7 @@ export default function MemberDashboard({ user }: { user: any }) {
         : `Kamu akan menghapus ${selectedIds.size} link yang terpilih dari koleksi kamu. Lanjutkan?`;
 
     return (
-        <div className="flex flex-col gap-4 pb-20 pt-24 md:pt-28">
+        <div className="flex flex-col gap-4 pb-20 pt-36 md:pt-40">
             {/* Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
