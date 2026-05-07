@@ -1,6 +1,7 @@
 import React from "react";
 import AnimeSection from "@/components/AnimeSection";
 import { getMovieAnime, mapAnimeList } from "@/lib/anime";
+import AdUnit from "@/components/ads/AdUnit";
 
 export const metadata = {
     title: "Anime Movie Sub Indo Lengkap - Samehadakuu",
@@ -23,6 +24,15 @@ export default async function MoviesPage() {
                     title=""
                     data={mappedData}
                 />
+
+                <div className="w-full flex justify-center py-8">
+                  <div className="hidden md:block">
+                    <AdUnit type="leaderboard" />
+                  </div>
+                  <div className="block md:hidden">
+                    <AdUnit type="mobile" />
+                  </div>
+                </div>
             </main>
         </div>
     );

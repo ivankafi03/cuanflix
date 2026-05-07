@@ -1,6 +1,7 @@
 import React from "react";
 import AnimeSection from "@/components/AnimeSection";
 import { getAnimeList, mapAnimeList } from "@/lib/anime";
+import AdUnit from "@/components/ads/AdUnit";
 
 export default async function AnimeListPage() {
     const animeData = await getAnimeList('anime/');
@@ -13,6 +14,15 @@ export default async function AnimeListPage() {
                     title="All Anime List"
                     data={mappedData}
                 />
+
+                <div className="w-full flex justify-center py-8">
+                  <div className="hidden md:block">
+                    <AdUnit type="leaderboard" />
+                  </div>
+                  <div className="block md:hidden">
+                    <AdUnit type="mobile" />
+                  </div>
+                </div>
             </main>
         </div>
     );

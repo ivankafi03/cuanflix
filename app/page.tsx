@@ -24,6 +24,15 @@ export default async function Home() {
           <LatestAnimeContent title="Latest Releases" />
         </Suspense>
 
+        <div className="w-full flex justify-center py-4">
+          <div className="hidden md:block">
+            <AdUnit type="leaderboard" />
+          </div>
+          <div className="block md:hidden">
+            <AdUnit type="mobile" />
+          </div>
+        </div>
+
         <Suspense fallback={<div className="h-72 bg-zinc-900/50 animate-pulse rounded-xl" />}>
           <OngoingAnimeContent />
         </Suspense>
@@ -58,6 +67,15 @@ export default async function Home() {
         <Suspense fallback={<div className="h-72 bg-zinc-900/50 animate-pulse rounded-xl" />}>
           <MovieAnimeContent />
         </Suspense>
+
+        <div className="w-full flex justify-center py-4">
+          <div className="hidden md:block">
+            <AdUnit type="leaderboard" />
+          </div>
+          <div className="block md:hidden">
+            <AdUnit type="mobile" />
+          </div>
+        </div>
 
         <Suspense fallback={<div className="h-72 bg-zinc-900/50 animate-pulse rounded-xl" />}>
           <TrendingAnimeContent />
