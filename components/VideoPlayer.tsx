@@ -141,17 +141,17 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
             {/* Player Container */}
             <div className="relative aspect-video bg-black rounded-2xl overflow-hidden border border-white/5 shadow-2xl group/player">
                 {!isStarted ? (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm transition-all group-hover/player:bg-black/30">
-                        <div className="flex flex-col items-center text-center px-6">
-                            <Play className="w-16 h-16 text-white/20 mb-4" />
-                            <h3 className="text-lg font-black text-white uppercase tracking-tighter mb-2">Ready to Watch?</h3>
-                            <p className="text-zinc-500 text-xs font-medium max-w-[200px] leading-relaxed mb-6">
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px] transition-all group-hover/player:bg-black/40">
+                        <div className="flex flex-col items-center text-center px-4">
+                            <Play className="w-10 h-10 md:w-16 md:h-16 text-white/20 mb-3 md:mb-4" />
+                            <h3 className="text-base md:text-lg font-black text-white uppercase tracking-tighter mb-1 md:mb-2">Ready to Watch?</h3>
+                            <p className="text-zinc-500 text-[10px] md:text-xs font-medium max-w-[180px] md:max-w-[200px] leading-relaxed mb-4 md:mb-6">
                                 Prepare yourself for an amazing streaming experience.
                             </p>
                             <button 
                                 onClick={handleStart}
                                 disabled={isProcessing}
-                                className="px-10 py-4 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-3 group disabled:opacity-70 disabled:scale-100"
+                                className="px-8 py-3 md:px-10 md:py-4 bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-widest rounded-xl md:rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-2 md:gap-3 group disabled:opacity-70 disabled:scale-100"
                             >
                                 {isProcessing ? (
                                     <>
