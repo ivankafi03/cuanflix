@@ -87,10 +87,20 @@ export default async function RootLayout({
         </Providers>
         {/* AdsTerra Popunder - hanya untuk pengunjung biasa, bukan admin */}
         {!isAdmin && (
-          <Script
-            src="https://pl29360872.profitablecpmratenetwork.com/a6/20/66/a620661409a43f241ad7455bce5763f5.js"
-            strategy="lazyOnload"
-          />
+          <>
+            {/* AdsTerra Popunder */}
+            <Script
+              src="https://pl29360872.profitablecpmratenetwork.com/a6/20/66/a620661409a43f241ad7455bce5763f5.js"
+              strategy="lazyOnload"
+            />
+            {/* Monetag MultiTag */}
+            <Script
+              src="https://quge5.com/88/tag.min.js"
+              data-zone="237063"
+              strategy="lazyOnload"
+              data-cfasync="false"
+            />
+          </>
         )}
         {/* Histats.com invisible tracker - semua pengunjung */}
         <Script id="histats-tracker" strategy="lazyOnload">{`
