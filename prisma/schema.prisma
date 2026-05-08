@@ -37,6 +37,7 @@ model User {
   isFlagged        Boolean  @default(false) // Anomaly detected — silent flag for admin review
   flagReason       String?  // Reason for flagging (e.g. "Earning anomaly")
   isSuspended      Boolean  @default(false) // Account suspended by admin — blocks login
+  isBot            Boolean  @default(false) // Fake/seeded member for leaderboard display only
   
   // Relations
   referralViews ReferralView[]

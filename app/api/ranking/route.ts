@@ -69,7 +69,12 @@ export async function GET(req: Request) {
 
                 if (period === "alltime") {
                     const topUsers = await prisma.user.findMany({
-                        where: { role: "MEMBER" },
+                        where: { 
+                            OR: [
+                                { role: "MEMBER" },
+                                { isBot: true }
+                            ]
+                        },
                         select: {
                             id: true,
                             name: true,

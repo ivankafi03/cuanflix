@@ -8,7 +8,8 @@ import {
     Banknote, 
     Users, 
     MessageSquare, 
-    Settings 
+    Settings,
+    Ghost
 } from "lucide-react";
 
 export default function AdminNav() {
@@ -18,6 +19,7 @@ export default function AdminNav() {
         { id: "overview", label: "Overview", icon: BarChart3, href: "/admin" },
         { id: "payouts", label: "Payouts", icon: Banknote, href: "/admin/payouts" },
         { id: "members", label: "Members", icon: Users, href: "/admin/members" },
+        { id: "ghosts", label: "Ghosts", icon: Ghost, href: "/admin/ghosts" },
         { id: "chat", label: "Chat", icon: MessageSquare, href: "/admin/chat" },
         { id: "settings", label: "Settings", icon: AdminSettingsIcon, href: "/admin/settings" }
     ];

@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         // Fetch user balance + status
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { balanceWatch: true, balanceReferral: true, isFlagged: true, isSuspended: true }
+            select: { balanceWatch: true, balanceReferral: true, isFlagged: true, isSuspended: true, isBot: true }
         });
 
         const settings = await prisma.systemSettings.findUnique({
@@ -55,6 +55,11 @@ export async function POST(req: Request) {
 
         if (!user || !settings) {
             return NextResponse.json({ error: "System error" }, { status: 500 });
+        }
+
+        // Blokir jika bot
+        if (user.isBot) {
+            return NextResponse.json({ error: "Operation not allowed for this account type" }, { status: 403 });
         }
 
         // Blokir withdrawal jika akun flagged atau suspended

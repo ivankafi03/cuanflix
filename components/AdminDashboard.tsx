@@ -28,6 +28,7 @@ import {
     TrendingUp,
     MessageSquare,
     Trash2,
+    Ghost,
     AreaChart as AreaChartIcon
 } from "lucide-react";
 import { useToast } from "./ToastContext";
@@ -41,6 +42,7 @@ const CartesianGrid = dynamic(() => import('recharts').then(mod => mod.Cartesian
 const Tooltip = dynamic(() => import('recharts').then(mod => mod.Tooltip), { ssr: false });
 const ResponsiveContainer = dynamic(() => import('recharts').then(mod => mod.ResponsiveContainer), { ssr: false });
 
+const GhostManager = dynamic(() => import('./admin/GhostManager'), { ssr: false });
 import { DashboardSkeleton } from "./Skeletons";
 
 const BatikPattern = ({ opacity = 0.1 }: { opacity?: number }) => (
@@ -260,6 +262,7 @@ export default function AdminDashboard({ data }: { data: any }) {
                     { id: "overview", label: "Statistik", icon: BarChart3 },
                     { id: "payouts", label: "Pembayaran", icon: Banknote },
                     { id: "members", label: "Member", icon: Users },
+                    { id: "ghosts", label: "Ghosts", icon: Ghost },
                     { id: "chat", label: "Chat", icon: MessageSquare },
                     { id: "settings", label: "Konfigurasi", icon: Settings }
                 ].map((tab) => (
@@ -972,6 +975,10 @@ export default function AdminDashboard({ data }: { data: any }) {
                         ))}
                     </div>
                 </div>
+            )}
+
+            {activeTab === "ghosts" && (
+                <GhostManager />
             )}
 
             {activeTab === "chat" && (
