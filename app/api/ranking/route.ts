@@ -79,7 +79,8 @@ export async function GET(req: Request) {
                             id: true,
                             name: true,
                             balanceWatch: true,
-                            balanceReferral: true
+                            balanceReferral: true,
+                            isBot: true
                         },
                         take: 50 // Fetch more to sort accurately if type is total
                     });
@@ -89,7 +90,8 @@ export async function GET(req: Request) {
                         name: censorName(user.name),
                         watch: user.balanceWatch,
                         ref: user.balanceReferral,
-                        total: user.balanceWatch + user.balanceReferral
+                        total: user.balanceWatch + user.balanceReferral,
+                        isBot: user.isBot
                     })).sort((a, b) => {
                         if (type === "watch") return b.watch - a.watch;
                         if (type === "referral") return b.ref - a.ref;
@@ -100,7 +102,8 @@ export async function GET(req: Request) {
                         rank: index + 1,
                         name: user.name,
                         earning: type === "watch" ? user.watch : type === "referral" ? user.ref : user.total,
-                        isVerified: true
+                        isVerified: !user.isBot,
+                        isBot: user.isBot
                     }));
                 } else {
                     // For Daily/Weekly, aggregate EarningsLog
@@ -121,7 +124,7 @@ export async function GET(req: Request) {
                     const userIds = aggregatedEarnings.map(item => item.userId);
                     const users = await prisma.user.findMany({
                         where: { id: { in: userIds } },
-                        select: { id: true, name: true }
+                        select: { id: true, name: true, isBot: true }
                     });
 
                     result = aggregatedEarnings.map((item, index) => {
@@ -130,7 +133,8 @@ export async function GET(req: Request) {
                             rank: index + 1,
                             name: censorName(user?.name || "Member"),
                             earning: item._sum.amount || 0,
-                            isVerified: true
+                            isVerified: user ? !user.isBot : true,
+                            isBot: user?.isBot || false
                         };
                     });
                 }

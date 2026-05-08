@@ -12,7 +12,7 @@ export async function GET() {
             orderBy: { createdAt: "desc" },
             include: {
                 user: {
-                    select: { id: true, name: true, image: true, role: true }
+                    select: { id: true, name: true, image: true, role: true, isBot: true }
                 }
             }
         });
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
             },
             include: {
                 user: {
-                    select: { id: true, name: true, image: true, role: true }
+                    select: { id: true, name: true, image: true, role: true, isBot: true }
                 }
             }
         });

@@ -13,7 +13,8 @@ export default function AdScripts() {
     // ── HOOK 1: set mounted ──────────────────────────────────────────
     useEffect(() => { setMounted(true); }, []);
 
-    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
+    const isAdmin = (session?.user as any)?.role === "ADMIN";
+    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || isAdmin;
 
     // ── HOOK 2: toggle body class and cleanup ads ────────────────────
     useEffect(() => {

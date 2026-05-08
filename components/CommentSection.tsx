@@ -143,6 +143,11 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                                                     <ShieldCheck className="w-2.5 h-2.5" /> Admin
                                                 </span>
                                             )}
+                                            {comment.user.isBot && (
+                                                <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-500 text-[8px] font-black rounded uppercase">
+                                                    BOT
+                                                </span>
+                                            )}
                                             <span className="text-[9px] text-zinc-600 font-bold uppercase">{new Date(comment.createdAt).toLocaleDateString()}</span>
                                         </div>
                                         {(session?.user as any)?.id === comment.userId || (session?.user as any)?.role === "ADMIN" ? (

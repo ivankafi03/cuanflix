@@ -110,8 +110,9 @@ export default async function RootLayout({
   }
 
   // Cek apakah user adalah admin — jika iya, sembunyikan semua iklan
-  const session = await getServerSession(authOptions);
-  const isMemberOrAdmin = !!session?.user;
+  // Cek apakah user adalah admin — jika iya, sembunyikan semua iklan
+  const session = await getServerSession(authOptions) as any;
+  const isAdmin = session?.user?.role === "ADMIN";
 
   return (
     <html lang="id" className="dark scroll-smooth">
@@ -124,7 +125,7 @@ export default async function RootLayout({
           </main>
           <Footer />
           <ChatWidget />
-          <AdScripts />
+          {!isAdmin && <AdScripts />}
           <AdblockDetector />
           <NotificationToast />
         </Providers>

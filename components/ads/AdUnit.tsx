@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type AdType = "leaderboard" | "rectangle" | "mobile";
 
@@ -18,6 +19,7 @@ const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> 
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
     const pathname  = usePathname() || "";
+    const { data: session } = useSession();
     const [mounted, setMounted] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const loaded       = useRef(false);
@@ -26,7 +28,8 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     useEffect(() => { setMounted(true); }, []);
 
     const config          = AD_CONFIG[type];
-    const isRestricted    = pathname.startsWith("/admin") || pathname.startsWith("/dashboard");
+    const isAdmin         = (session?.user as any)?.role === "ADMIN";
+    const isRestricted    = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || isAdmin;
     const shouldRender    = mounted && !isRestricted;
 
     // ── HOOK 2: inject ad script (runs only when shouldRender is true) ─

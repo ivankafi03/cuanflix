@@ -19,7 +19,8 @@ export async function GET(req: Request) {
                     select: {
                         name: true,
                         image: true,
-                        role: true
+                        role: true,
+                        isBot: true
                     }
                 }
             },
@@ -62,7 +63,8 @@ export async function POST(req: Request) {
                     select: {
                         name: true,
                         image: true,
-                        role: true
+                        role: true,
+                        isBot: true
                     }
                 }
             }

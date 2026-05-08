@@ -72,8 +72,9 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
     }, [showAdOverlay]);
 
     const handleStart = () => {
-        // Admin di halaman admin skip iklan
-        if (pathname.startsWith("/admin")) {
+        // Admin skip iklan
+        const isAdmin = (session?.user as any)?.role === "ADMIN";
+        if (pathname.startsWith("/admin") || isAdmin) {
             setIsStarted(true);
             if (onPlay) onPlay();
             return;
