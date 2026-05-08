@@ -204,7 +204,10 @@ export default function AdminMembersClient() {
                                                 {member.name?.substring(0, 1)}
                                             </div>
                                             <div className="flex flex-col min-w-0">
-                                                <span className="text-sm font-semibold text-white truncate max-w-[150px] tracking-tight">{member.name}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-sm font-semibold text-white truncate max-w-[150px] tracking-tight">{member.name}</span>
+                                                    {member.isBot && <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 text-[8px] font-black rounded uppercase">BOT</span>}
+                                                </div>
                                                 <span className="text-xs text-zinc-600 truncate max-w-[150px] font-medium">{member.email}</span>
                                             </div>
                                         </div>

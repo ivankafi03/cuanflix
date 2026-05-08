@@ -28,6 +28,7 @@ export async function GET() {
                 isFlagged: true,
                 flagReason: true,
                 isSuspended: true,
+                isBot: true,
                 deviceFingerprint: true,
                 createdAt: true,
             },
