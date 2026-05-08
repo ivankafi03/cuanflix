@@ -92,7 +92,7 @@ export default function AdScripts() {
             </Script>
             <noscript>
                 <a href="/" target="_blank">
-                    <img src="https://sstatic1.histats.com/0.gif?5025180&101" alt="histats" border="0" style={{ display: 'none' }} />
+                    <img src="https://sstatic1.histats.com/0.gif?5025180&101" alt="histats" style={{ display: 'none' }} />
                 </a>
             </noscript>
         </>
