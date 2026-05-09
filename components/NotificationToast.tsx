@@ -63,16 +63,16 @@ export default function NotificationToast() {
 
                 <div className="flex flex-col gap-0.5 z-10">
                     <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none">
-                        {isGuest ? "Recent Withdrawal" : "Member Milestone"}
+                        {notification.type === "WITHDRAWAL" ? "Recent Withdrawal" : "Member Activity"}
                     </p>
                     <h4 className="text-sm font-bold text-white leading-tight">
                         {notification.name}
                     </h4>
                     <p className="text-xs text-zinc-400">
-                        {isGuest ? (
+                        {notification.type === "WITHDRAWAL" ? (
                             <>Telah mencairkan <span className="text-green-400 font-bold">${notification.amount}</span> ke {notification.method}</>
                         ) : (
-                            <>Hampir mencapai target! Saldo saat ini <span className="text-primary font-bold">${notification.milestone}</span></>
+                            <>{notification.message}</>
                         )}
                     </p>
                 </div>
