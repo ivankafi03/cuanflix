@@ -4,8 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export const metadata = {
-    title: "Login - Samehadakuu Member",
-    description: "Masuk ke dashboard member Samehadakuu",
+    title: "Login - Cuanflix Member",
+    description: "Masuk ke dashboard member Cuanflix",
 };
 
 export default async function LoginPage() {

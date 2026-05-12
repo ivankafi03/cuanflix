@@ -35,34 +35,29 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://samehadakuu.com"),
+  metadataBase: new URL("https://cuanflix.com"),
   title: {
-    default: "Samehadakuu - Watch Anime & Earn Money | Sub Indo HD",
-    template: "%s | Samehadakuu"
+    default: "Cuanflix - Premium Database | HD Streaming",
+    template: "%s | Cuanflix"
   },
-  description: "Nonton anime favoritmu dan dapatkan uang! Platform streaming anime pertama yang membayar Anda untuk menonton dan membagikan link. HD, Cepat, & Terlengkap.",
-  keywords: ["nonton anime dapat uang", "anime subtitle indonesia", "streaming anime", "affiliate anime", "watch to earn anime"],
-  authors: [{ name: "Samehadakuu Team" }],
-  icons: {
-    icon: [
-      { url: "/icon.png", type: "image/png" },
-    ],
-    apple: "/icon.png",
-  },
+  description: "Eksplorasi database video terlengkap dengan Cuanflix. Streaming HD, Cepat, & Estetik.",
+  keywords: ["streaming video", "cuanflix", "hd video", "nonton hd"],
+  authors: [{ name: "Cuanflix Team" }],
+
   other: {
     monetag: "355a8ebbeed7ba984eb785bbb6977945",
   },
   openGraph: {
-    title: "Samehadakuu - Watch Anime & Earn Money",
-    description: "Nonton anime dan dapatkan uang tunai! Bagikan link affiliate-mu dan raih pendapatan harian. Streaming HD Sub Indo Terlengkap.",
-    url: "https://samehadakuu.com",
-    siteName: "Samehadakuu",
+    title: "Cuanflix - Premium Streaming Database",
+    description: "Database streaming tercepat dan terlengkap dengan antarmuka yang bersih.",
+    url: "https://cuanflix.com",
+    siteName: "Cuanflix",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Samehadakuu - Watch & Earn Anime",
+        alt: "Cuanflix - Streaming",
       },
     ],
     locale: "id_ID",
@@ -70,8 +65,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Samehadakuu - Watch Anime & Earn Money",
-    description: "Platform anime pertama yang membayar penontonnya. Nonton HD & Share Link = Cuan!",
+    title: "Cuanflix - Premium Streaming Database",
+    description: "Streaming tercepat dengan antarmuka premium.",
     images: ["/og-image.png"],
   },
 };

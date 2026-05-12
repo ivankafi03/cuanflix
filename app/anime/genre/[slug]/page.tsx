@@ -11,7 +11,7 @@ interface GenrePageProps {
 export async function generateMetadata({ params }: GenrePageProps) {
     const genreName = params.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     return {
-        title: `Watch ${genreName} Anime Online - Samehadakuu`,
+        title: `Watch ${genreName} Videos Online - Cuanflix`,
         description: `Complete collection of ${genreName} anime with HD quality.`
     };
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -23,23 +21,26 @@ interface AnimeSectionProps {
 
 export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
     return (
-        <section className="flex flex-col gap-5">
+        <section className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-white tracking-tight">
-                    {title}
-                </h2>
+                {title && (
+                    <h2 className="text-xl font-bold text-foreground">
+                        {title}
+                    </h2>
+                )}
                 {href && href !== "#" && (
                     <Link
                         href={href}
-                        className="text-sm text-zinc-500 hover:text-primary flex items-center gap-1 transition-colors"
+                        prefetch={false}
+                        className="text-xs text-zinc-500 hover:text-white flex items-center gap-1 transition-colors"
                     >
-                        Lihat Semua
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        View All
+                        <ArrowRight className="w-3 h-3" />
                     </Link>
                 )}
             </div>
 
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2.5 sm:gap-4">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2 sm:gap-3">
                 {data.map((anime) => (
                     <AnimeCard key={anime.id} {...anime} />
                 ))}

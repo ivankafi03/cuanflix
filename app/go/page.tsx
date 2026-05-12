@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import GoRedirectClient from "./GoRedirectClient";
 
 export const metadata = {
-    title: "Memuat Video... - Samehadakuu",
+    title: "Memuat Video... - Cuanflix",
     robots: { index: false },
 };
 

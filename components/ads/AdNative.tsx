@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function AdNative({ className = "" }: { className?: string }) {
+    return null;
     const pathname  = usePathname() || "";
     const [mounted, setMounted] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);

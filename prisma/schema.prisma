@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -236,4 +236,10 @@ model UserClaim {
   user              User            @relation(fields: [userId], references: [id])
   broadcastReward   BroadcastReward @relation(fields: [broadcastRewardId], references: [id])
   @@unique([userId, broadcastRewardId])
+}
+
+model ContentCache {
+  key       String   @id // e.g. "homepage_categories"
+  data      String   // Store as JSON string
+  updatedAt DateTime @updatedAt
 }

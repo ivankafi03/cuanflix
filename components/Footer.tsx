@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import { Twitter, Instagram, Mail, Send, Video } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+    const pathname = usePathname();
     const currentYear = new Date().getFullYear();
     const [settings, setSettings] = useState<any>(null);
 
@@ -21,9 +23,9 @@ export default function Footer() {
             title: "Navigation",
             links: [
                 { name: "Home", href: "/" },
-                { name: "Anime List", href: "/anime" },
-                { name: "Ongoing", href: "/anime/ongoing" },
-                { name: "Popular", href: "/anime/popular" },
+                { name: "Videos", href: "/jav" },
+                { name: "Categories", href: "/categories" },
+                { name: "Popular", href: "/search?q=popular" },
             ],
         },
         {
@@ -41,24 +43,27 @@ export default function Footer() {
                 { name: "Privacy Policy", href: "/privacy" },
                 { name: "Terms of Service", href: "/terms" },
                 { name: "DMCA", href: "/terms" },
-                { name: "Contact", href: settings?.supportEmail ? `mailto:${settings.supportEmail}` : "mailto:support@samehadakuu.com" },
+                { name: "Contact", href: settings?.supportEmail ? `mailto:${settings.supportEmail}` : "mailto:support@cuanflix.com" },
             ],
         },
     ];
 
     return (
-        <footer className="bg-zinc-950 border-t border-white/5 pt-16 pb-8 mt-20 relative overflow-hidden">
+        <footer className="bg-background pt-16 pb-8 mt-20 relative overflow-hidden">
             <div className="absolute inset-0 bg-dot-grid opacity-10 pointer-events-none" />
             
             <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
                     {/* Brand Section */}
                     <div className="col-span-2 lg:col-span-2">
-                        <Link href="/" className="inline-block mb-6">
-                            <Logo size="md" />
+                        <Link href="/" className="flex items-center gap-2 mb-6 group">
+                            <Logo className="w-8 h-8 rounded-xl shadow-lg shadow-primary/20" />
+                            <span className="text-white font-bold text-xl tracking-tight">
+                                Cuan<span className="text-primary">flix</span>
+                            </span>
                         </Link>
                         <p className="text-zinc-500 text-sm max-w-xs leading-relaxed mb-6 font-medium">
-                            The best place to watch anime while earning money. Join our community and start your journey today!
+                            The best place to explore premium videos while earning rewards. Join our community and start your journey today!
                         </p>
                         <div className="flex gap-4">
                             {settings?.xLink && (
@@ -111,10 +116,10 @@ export default function Footer() {
 
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="text-zinc-600 text-xs font-medium">
-                        © {currentYear} Samehadakuu. All rights reserved. Built for anime fans.
+                        © {currentYear} Cuanflix. All rights reserved. Premium database.
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                         <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Systems Operational</span>
                     </div>
                 </div>

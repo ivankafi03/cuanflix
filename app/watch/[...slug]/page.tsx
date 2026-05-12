@@ -3,7 +3,8 @@ import Link from "next/link";
 import { MessageSquare, List, ThumbsUp, Heart, Share2, Info, Sparkles, Play, Layers } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getWatchPageData, getUrlFromSlug, getSlugFromUrl, getAnimeDetail, searchAnime, getLatestAnime } from "@/lib/anime";
+import { getWatchPageData, getUrlFromSlug, getSlugFromUrl, getAnimeDetail, searchAnime, getLatestAnime } from "@/lib/cuanflix";
+import { getJavWatchData, getJavDetail, searchJav } from "@/lib/jav";
 import VideoPlayer from "@/components/VideoPlayer";
 import ReportButton from "@/components/ReportButton";
 import WatchActions from "@/components/WatchActions";
@@ -23,14 +24,21 @@ export async function generateMetadata({
     const path = slug.join('/');
 
     const url = getUrlFromSlug(path);
-    const watchData = await getWatchPageData(url);
+    let watchData: any = null;
+    
+    if (path.startsWith('jav/')) {
+        const id = path.split('/').pop() || '';
+        watchData = await getJavWatchData(id);
+    } else {
+        watchData = await getWatchPageData(url);
+    }
 
     // Guess a readable title from the slug, or use watchData.title if available
     const title = watchData?.title || path.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || "Watch Anime";
 
     return {
-        title: `Watch ${title} Online - Samehadakuu`,
-        description: `Stream ${title} in HD quality for free on Samehadakuu. High speed servers and premium experience.`,
+        title: `Watch ${title} Online - Cuanflix`,
+        description: `Stream ${title} in HD quality for free on Cuanflix. High speed servers and premium experience.`,
     };
 }
 
@@ -69,13 +77,35 @@ export default async function WatchPrettyPage({
     }
 
     const url = getUrlFromSlug(path);
-    const watchData = await getWatchPageData(url);
-    const seriesDetail = await getAnimeDetail(url);
+    let watchData: any = null;
+    let seriesDetail: any = null;
+
+    if (path.startsWith('jav/')) {
+        const id = path.split('/').pop() || '';
+        watchData = await getJavWatchData(id);
+        const detail = await getJavDetail(id);
+        seriesDetail = detail;
+    } else {
+        watchData = await getWatchPageData(url);
+        seriesDetail = await getAnimeDetail(url);
+    }
 
     // Fetch related anime based on the first genre
     let relatedAnime: any[] = [];
     try {
-        if (seriesDetail && seriesDetail.genres && seriesDetail.genres.length > 0) {
+        if (path.startsWith('jav/')) {
+            const { videos: results } = await searchJav('School'); // Default category for related
+            relatedAnime = results.slice(0, 6).map((item, idx) => ({
+                id: idx + 1,
+                title: item.title,
+                image: item.image,
+                rating: 0,
+                episodes: 1,
+                episodeRaw: item.episode,
+                type: 'JAV',
+                href: `/watch/${item.href}`
+            }));
+        } else if (seriesDetail && seriesDetail.genres && seriesDetail.genres.length > 0) {
             relatedAnime = await searchAnime(seriesDetail.genres[0]);
         }
         
@@ -86,7 +116,7 @@ export default async function WatchPrettyPage({
         }
 
         // Remove current anime from related
-        relatedAnime = relatedAnime.filter(a => !a.link.includes(path)).slice(0, 6);
+        relatedAnime = relatedAnime.filter(a => !(a.link || a.href || '').includes(path)).slice(0, 6);
     } catch (e) {
         console.error("Failed to fetch related anime", e);
     }
@@ -129,7 +159,7 @@ export default async function WatchPrettyPage({
                 {/* Guest Call to Action Banner */}
                 {!session && (
                     <div className="mb-6 bg-gradient-to-r from-primary/20 via-primary/5 to-transparent border border-primary/10 rounded-2xl p-5 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -translate-y-1/2 translate-x-1/4 rounded-full" />
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 -translate-y-1/2 translate-x-1/4 rounded-full" />
                         <div className="flex flex-col gap-1.5 relative z-10 text-center md:text-left">
                             <div className="flex items-center gap-2 justify-center md:justify-start">
                                 <Sparkles className="w-4 h-4 text-primary" />
@@ -151,55 +181,23 @@ export default async function WatchPrettyPage({
 
                 <WatchPageClient
                     servers={watchData.servers}
+                    downloads={watchData.downloads}
                     videoId={path}
-                    episodes={seriesDetail?.episodes || []}
                     relatedAnime={relatedAnime}
-                    sidebar={
-                        <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex flex-col p-6">
-                            <h3 className="font-bold text-white flex items-center gap-2 mb-4">
-                                <List className="w-4 h-4 text-primary" />
-                                Episode List
-                            </h3>
-                            <div className="flex flex-col gap-2 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-                                {seriesDetail?.episodes?.map((ep: any, idx: number) => (
-                                    <Link
-                                        key={idx}
-                                        href={`/watch/${getSlugFromUrl(ep.link)}`}
-                                        className={`p-3 rounded-xl border transition-all flex items-center justify-between group ${ep.link.includes(path) || (idx === 0 && path === 'id')
-                                                ? 'bg-primary/20 border-primary/30 text-primary shadow-lg shadow-primary/10'
-                                                : 'bg-white/5 border-white/5 text-zinc-400 hover:bg-white/10'
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs ${ep.link.includes(path) ? 'bg-primary text-black' : 'bg-white/5 group-hover:bg-primary/20 group-hover:text-primary transition-colors'}`}>
-                                                {ep.eps || idx + 1}
-                                            </div>
-                                            <span className="text-[11px] font-bold truncate max-w-[150px]">{ep.title}</span>
-                                        </div>
-                                        <Play className={`w-3 h-3 ${ep.link.includes(path) ? 'text-primary' : 'text-zinc-600 group-hover:text-primary'} transition-colors`} />
-                                    </Link>
-                                )) || (
-                                    <div className="text-center py-8 text-zinc-500 text-xs">No episode list available.</div>
-                                )}
-                            </div>
-                        </div>
-                    }
                 >
                     {/* Anime Info Section */}
-                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 md:p-6 shadow-xl overflow-hidden relative">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-[50px] -translate-y-1/2 translate-x-1/2 rounded-full" />
-                        
+                    <div className="bg-secondary border border-border rounded-xl p-5 md:p-6 shadow-md overflow-hidden relative mt-6">
                         <div className="flex flex-col gap-5 relative z-10">
                             {/* Header Section */}
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border pb-5">
                                 <div className="flex flex-col gap-1.5">
-                                    <h1 className="text-xl md:text-2xl font-black text-white leading-tight tracking-tight">{watchData.title}</h1>
+                                    <h1 className="text-xl md:text-2xl font-bold text-foreground leading-tight tracking-tight">{watchData.title}</h1>
                                     <div className="flex items-center gap-3">
-                                        <p className="text-primary font-bold text-[10px] uppercase tracking-[0.2em]">Streaming Ultra HD • Global Node</p>
+                                        <p className="text-primary font-semibold text-xs tracking-wide">Streaming Ultra HD • Global Node</p>
                                         {!session && (
                                             <Link href="/auth/login" className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 border border-primary/20 rounded-md group hover:bg-primary/20 transition-all">
-                                                <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
-                                                <span className="text-[8px] font-black text-primary uppercase tracking-wider">Ad-Lite Available</span>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                                <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Ad-Lite Available</span>
                                             </Link>
                                         )}
                                     </div>
@@ -221,15 +219,15 @@ export default async function WatchPrettyPage({
                             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                 <div className="flex items-center gap-4">
                                     <div className="flex flex-col gap-0.5">
-                                        <span className="text-zinc-500 text-[9px] uppercase font-bold tracking-widest">Rewards Status</span>
+                                        <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">Rewards Status</span>
                                         <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                            <span className="text-white text-xs font-black uppercase tracking-tighter">Active Tracking</span>
+                                            <div className="w-2 h-2 rounded-full bg-green-500" />
+                                            <span className="text-foreground text-xs font-bold uppercase">Active Tracking</span>
                                         </div>
                                     </div>
-                                    <div className="h-8 w-px bg-white/5" />
+                                    <div className="h-8 w-px bg-border" />
                                     <div className="flex flex-col gap-0.5">
-                                        <span className="text-zinc-500 text-[9px] uppercase font-bold tracking-widest">Member Support</span>
+                                        <span className="text-muted-foreground text-[10px] uppercase font-bold tracking-wider">Member Support</span>
                                         <p className="text-white/60 text-[10px] font-medium italic max-w-xs leading-tight">
                                             Switch servers if loading is slow. Rewards are counted automatically.
                                         </p>

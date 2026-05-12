@@ -672,7 +672,52 @@ export async function getWatchPageData(url: string): Promise<WatchPageData | nul
             }
         });
 
-        return { title, poster, rating, episode, type: typeValue, servers };
+        const downloads: any[] = [];
+
+        function resolveSafelink(link: string): string {
+            if (!link) return "";
+            try {
+                // Common pattern for anjay.me / soralink: base64 in the path
+                const urlObj = new URL(link);
+                const pathParts = urlObj.pathname.split('/');
+                const lastPart = pathParts[pathParts.length - 1];
+                
+                // If it looks like base64 (usually long and alphanumeric)
+                if (lastPart && lastPart.length > 20 && /^[A-Za-z0-9+/=]+$/.test(lastPart)) {
+                    const decoded = Buffer.from(lastPart, 'base64').toString('utf-8');
+                    if (decoded.startsWith('http')) return decoded;
+                }
+                
+                // Check query parameters (e.g. ?url=...)
+                const urlParam = urlObj.searchParams.get('url') || urlObj.searchParams.get('link') || urlObj.searchParams.get('id');
+                if (urlParam && urlParam.startsWith('http')) return urlParam;
+                if (urlParam && /^[A-Za-z0-9+/=]+$/.test(urlParam)) {
+                    const decoded = Buffer.from(urlParam, 'base64').toString('utf-8');
+                    if (decoded.startsWith('http')) return decoded;
+                }
+            } catch (e) {}
+            return link;
+        }
+
+        $('.download-eps, .download-list, .dl-links, .download, .download-eps ul li, .download-list ul li').each((i, el) => {
+            const format = $(el).find('strong, b').first().text().trim() || "HD Quality";
+            const links: any[] = [];
+            $(el).find('a').each((k, a) => {
+                const name = $(a).text().trim();
+                let link = $(a).attr('href') || '';
+                
+                if (link && !link.includes('facebook.com') && !link.includes('twitter.com')) {
+                    // Try to resolve safelink
+                    const resolvedLink = resolveSafelink(link);
+                    links.push({ name, link: resolvedLink });
+                }
+            });
+            if (links.length > 0) {
+                downloads.push({ format, links });
+            }
+        });
+
+        return { title, poster, rating, episode, type: typeValue, servers, downloads };
     } catch (error) {
         console.error('Error scraping watch page data:', error);
         return null;

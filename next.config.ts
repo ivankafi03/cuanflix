@@ -43,6 +43,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**.kotakanimeid.link',
       },
+      {
+        protocol: 'https',
+        hostname: 'nontonasik.my.id',
+      },
     ],
   },
   experimental: {},

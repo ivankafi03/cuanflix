@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { Play, Star, Clock, Calendar, List } from "lucide-react";
 import { redirect } from "next/navigation";
-import { getAnimeDetail, getUrlFromSlug, getSlugFromUrl } from "@/lib/anime";
+import { getAnimeDetail, getUrlFromSlug, getSlugFromUrl } from "@/lib/cuanflix";
 import WatchlistButton from "@/components/WatchlistButton";
 import AnimeShareButton from "@/components/AnimeShareButton";
 
@@ -19,11 +19,11 @@ export async function generateMetadata({
     const url = getUrlFromSlug(fullPath);
     const anime = await getAnimeDetail(url);
 
-    if (!anime) return { title: "Anime Detail - Samehadakuu" };
+    if (!anime) return { title: "Video Detail - Cuanflix" };
 
     return {
-        title: `Watch ${anime.title} Online - Samehadakuu`,
-        description: `Stream anime ${anime.title} with HD quality for free. Synopsis: ${anime.synopsis?.slice(0, 160)}...`,
+        title: `Watch ${anime.title} Online - Cuanflix`,
+        description: `Stream ${anime.title} with HD quality for free. Synopsis: ${anime.synopsis?.slice(0, 160)}...`,
         openGraph: {
             images: [anime.image],
         },
@@ -47,6 +47,12 @@ export default async function AnimeDetailPrettyPage({
             const cleanSlug = slugFromUrl.replace(/^anime\//, '');
             redirect(`/anime/${cleanSlug}`);
         }
+    }
+
+    // Fail-safe: If path looks like a JAV ID, redirect to watch page
+    if (path.startsWith('jav/') || /^\d+$/.test(path)) {
+        const id = path.replace(/^jav\//, '');
+        redirect(`/watch/jav/${id}`);
     }
 
     const fullPath = path.startsWith('anime/') ? path : `anime/${path}`;
@@ -167,40 +173,6 @@ export default async function AnimeDetailPrettyPage({
                     <p className="text-zinc-400 leading-relaxed text-sm whitespace-pre-line">{anime.synopsis}</p>
                 </div>
 
-                {/* Episode List */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-4 md:p-6 mt-4 flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-sm md:text-lg font-bold text-white flex items-center gap-2">
-                            <List className="w-4 h-4 text-primary" />
-                            Episode List
-                        </h3>
-                        <span className="text-xs text-muted-foreground font-bold uppercase tracking-wider">{anime.episodes.length} EP</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-1.5 max-h-[400px] md:max-h-[500px] overflow-y-auto pr-1 custom-scrollbar">
-                        {anime.episodes.map((ep, i) => {
-                            const epNum = ep.eps || (anime.episodes.length - i);
-                            return (
-                                <Link
-                                    key={i}
-                                    href={`/go?to=/watch/${getSlugFromUrl(ep.link)}`}
-                                    className="flex items-center justify-between p-2.5 md:p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all group"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-sm group-hover:bg-primary group-hover:text-white transition-colors flex-shrink-0">
-                                            {epNum}
-                                        </div>
-                                        <div className="flex flex-col">
-                                            <span className="text-white font-semibold text-sm">Episode {epNum}</span>
-                                            <span className="text-zinc-500 text-xs">{ep.date}</span>
-                                        </div>
-                                    </div>
-                                    <Play className="w-3.5 h-3.5 text-zinc-600 group-hover:text-primary transition-colors flex-shrink-0" />
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </div>
 
                 {/* Detail */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">

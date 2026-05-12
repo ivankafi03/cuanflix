@@ -109,8 +109,8 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                         <AreaChart data={chartData}>
                             <defs>
                                 <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#e11d48" stopOpacity={0.2}/>
-                                    <stop offset="95%" stopColor="#e11d48" stopOpacity={0}/>
+                                    <stop offset="5%" stopColor="#f472b6" stopOpacity={0.2}/>
+                                    <stop offset="95%" stopColor="#f472b6" stopOpacity={0}/>
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="#ffffff08" vertical={false} />
@@ -137,7 +137,7 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                             <Area 
                                 type="monotone" 
                                 dataKey="earnings" 
-                                stroke="#e11d48" 
+                                stroke="#f472b6" 
                                 strokeWidth={2}
                                 fillOpacity={1} 
                                 fill="url(#colorEarnings)" 

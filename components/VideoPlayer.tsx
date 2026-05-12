@@ -2,19 +2,21 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { Play, X } from "lucide-react";
-import { VideoServer } from "@/lib/anime";
+import { VideoServer } from "@/lib/cuanflix";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import AdUnit from "@/components/ads/AdUnit";
 
 const DIRECT_LINK = "https://www.profitablecpmratenetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc";
 
 interface VideoPlayerProps {
     servers: VideoServer[];
+    downloads?: any[];
     onPlay?: () => void;
 }
 
-export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
+export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPlayerProps) {
     const pathname = usePathname() || "";
     const { data: session } = useSession();
     const [activeServerIndex, setActiveServerIndex] = useState(0);
@@ -175,31 +177,23 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                 )}
 
                 {!isStarted ? (
-                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px] transition-all group-hover/player:bg-black/40">
-                        <div className="flex flex-col items-center text-center px-4">
-                            <Play className="w-10 h-10 md:w-16 md:h-16 text-white/20 mb-3 md:mb-4" />
-                            <h3 className="text-base md:text-lg font-black text-white uppercase tracking-tighter mb-1 md:mb-2">Ready to Watch?</h3>
-                            <p className="text-zinc-500 text-[10px] md:text-xs font-medium max-w-[180px] md:max-w-[200px] leading-relaxed mb-4 md:mb-6">
-                                Prepare yourself for an amazing streaming experience.
-                            </p>
-                            <button 
-                                onClick={handleStart}
-                                disabled={isProcessing}
-                                className="px-8 py-3 md:px-10 md:py-4 bg-primary text-white text-[10px] md:text-xs font-black uppercase tracking-widest rounded-xl md:rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/40 flex items-center gap-2 md:gap-3 group disabled:opacity-70 disabled:scale-100"
-                            >
+                    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[4px] group-hover/player:bg-black/50 transition-all">
+                        <button 
+                            onClick={handleStart}
+                            disabled={isProcessing}
+                            className="relative group/btn flex flex-col items-center gap-4"
+                        >
+                            <div className="w-20 h-20 md:w-24 md:h-24 bg-primary text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(244,114,182,0.3)] group-hover/btn:scale-110 active:scale-95 transition-all duration-500">
                                 {isProcessing ? (
-                                    <>
-                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        Processing...
-                                    </>
+                                    <div className="w-8 h-8 border-4 border-black/30 border-t-black rounded-full animate-spin" />
                                 ) : (
-                                    <>
-                                        <Play className="w-4 h-4 fill-current group-hover:animate-pulse" />
-                                        Start Video
-                                    </>
+                                    <Play className="w-10 h-10 fill-current ml-1" />
                                 )}
-                            </button>
-                        </div>
+                            </div>
+                            <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.4em] opacity-60 group-hover/btn:opacity-100 transition-opacity">
+                                {isProcessing ? "Processing..." : "Play Video"}
+                            </span>
+                        </button>
                     </div>
                 ) : (
                     <iframe
@@ -211,25 +205,42 @@ export default function VideoPlayer({ servers, onPlay }: VideoPlayerProps) {
                 )}
             </div>
 
-            {/* Server Switcher */}
-            <div className="flex flex-col gap-2">
+            {/* Server Switcher & Download */}
+            <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between px-1">
                     <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none">Select Video Server</span>
-                    <span className="text-[10px] font-black text-primary uppercase tracking-widest leading-none bg-primary/10 px-2 py-0.5 rounded-lg">HD Multi</span>
+                    <div className="flex items-center gap-4">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-widest leading-none bg-primary/10 px-2 py-0.5 rounded-lg">HD Multi</span>
+                    </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                    {servers.map((server, i) => (
-                        <button
-                            key={i}
-                            onClick={() => setActiveServerIndex(i)}
-                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all duration-300 ${i === activeServerIndex
-                                ? "bg-white border-white text-black shadow-xl scale-105"
-                                : "bg-black/40 border-white/5 text-zinc-500 hover:text-white hover:border-white/20"
-                                }`}
-                        >
-                            {server.name}
-                        </button>
-                    ))}
+                
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-wrap gap-2">
+                        {servers.map((server, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setActiveServerIndex(i)}
+                                className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all duration-300 ${i === activeServerIndex
+                                    ? "bg-white border-white text-black shadow-xl scale-105"
+                                    : "bg-black/40 border-white/5 text-zinc-500 hover:text-white hover:border-white/20"
+                                    }`}
+                            >
+                                {server.name}
+                            </button>
+                        ))}
+                    </div>
+
+                    <Link
+                        href={`/download?url=${encodeURIComponent(downloads?.[0]?.links?.[0]?.link || servers[activeServerIndex].iframe)}&title=${encodeURIComponent(pathname.split('/').pop() || 'Video Content')}`}
+                        className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-black rounded-xl text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 group shadow-lg shadow-primary/20"
+                    >
+                        <svg className="w-4 h-4 group-hover:animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        {downloads && downloads.length > 0 ? "Direct Download" : "Download Video"}
+                    </Link>
                 </div>
             </div>
 
