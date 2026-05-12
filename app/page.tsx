@@ -64,9 +64,9 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Iklan di bawah setiap kategori (Dinamis sesuai device) */}
+                  {/* Iklan di bawah setiap kategori (Original Leaderboard Size) */}
                   <div className="flex justify-center -my-4">
-                    <AdUnit type={idx % 2 === 0 ? "leaderboard" : "rectangle"} />
+                    <AdUnit type="leaderboard" />
                   </div>
                 </React.Fragment>
               );

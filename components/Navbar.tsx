@@ -254,7 +254,20 @@ export default function Navbar() {
                             </motion.div>
                         </motion.div>
 
-                        {/* User Account Card - Now at the Top */}
+                        {/* 1. Search Box at the very top */}
+                        <div className="flex items-center bg-white/5 border border-white/8 rounded-lg px-4 py-2 gap-2 mt-2">
+                            <Search className="w-4 h-4 text-zinc-500 shrink-0" />
+                            <input
+                                type="text"
+                                placeholder="Search videos..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSearch(true)}
+                                className="bg-transparent outline-none text-sm text-white placeholder:text-zinc-600 w-full"
+                            />
+                        </div>
+
+                        {/* 2. User Account Card - Below Search */}
                         <div className="mb-2">
                             {session ? (
                                 <motion.div 
@@ -309,34 +322,25 @@ export default function Navbar() {
                             )}
                         </div>
 
-                        {navLinks.map((link, i) => (
-                            <motion.div
-                                key={link.name}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: i * 0.1 + 0.1 }}
-                            >
-                                <Link
-                                    href={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-sm font-black text-zinc-500 hover:text-primary transition-all flex items-center gap-3 group/link"
+                        {/* 3. Navigation Links - Bottom */}
+                        <div className="flex flex-col gap-4 mt-2">
+                            {navLinks.map((link, i) => (
+                                <motion.div
+                                    key={link.name}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: i * 0.1 + 0.1 }}
                                 >
-                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover/link:bg-primary transition-all" />
-                                    {link.name}
-                                </Link>
-                            </motion.div>
-                        ))}
-
-                        <div className="flex items-center bg-white/5 border border-white/8 rounded-lg px-4 py-2 mt-2 gap-2">
-                            <Search className="w-4 h-4 text-zinc-500 shrink-0" />
-                            <input
-                                type="text"
-                                placeholder="Search videos..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => e.key === "Enter" && handleSearch(true)}
-                                className="bg-transparent outline-none text-sm text-white placeholder:text-zinc-600 w-full"
-                            />
+                                    <Link
+                                        href={link.href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="text-sm font-black text-zinc-500 hover:text-primary transition-all flex items-center gap-3 group/link"
+                                    >
+                                        <div className="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover/link:bg-primary transition-all" />
+                                        {link.name}
+                                    </Link>
+                                </motion.div>
+                            ))}
                         </div>
                     </motion.div>
                 )}
