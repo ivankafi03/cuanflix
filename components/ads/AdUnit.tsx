@@ -58,16 +58,8 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
             const adScript = `
                 <html>
                     <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">
-                        <script type="text/javascript">
-                            atOptions = {
-                                'key' : '${finalKey}',
-                                'format' : 'iframe',
-                                'height' : ${finalHeight},
-                                'width' : ${finalWidth},
-                                'params' : {}
-                            };
-                        <\/script>
-                        <script type="text/javascript" src="//www.topcreativeformat.com/${finalKey}/invoke.js"><\/script>
+                        <script async="async" data-cfasync="false" src="https://downconvenientmagnetic.com/${finalKey}/invoke.js"></script>
+                        <div id="container-${finalKey}"></div>
                     </body>
                 </html>
             `;
