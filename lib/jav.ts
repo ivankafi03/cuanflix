@@ -41,6 +41,18 @@ export interface AnimeDetail {
     episodes: { title: string; link: string; eps: string; date: string }[];
 }
 
+export interface SearchResult {
+    videos: AnimeLatest[];
+    totalPages: number;
+    total: number;
+}
+
+export interface HomepageCategory {
+    id: number;
+    title: string;
+    videos: AnimeLatest[];
+}
+
 function cleanTitle(title: string): string {
     if (!title) return "";
     
