@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useSession } from "next-auth/react";
 
+export default function AdScripts() {
     const pathname  = usePathname() || "";
     const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
