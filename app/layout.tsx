@@ -111,6 +111,10 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions) as any;
   const isAdmin = session?.user?.role === "ADMIN";
 
+  // Jalankan rotasi password admin otomatis (Daily)
+  const { checkAndRotateAdminPassword } = await import("@/lib/admin-rotation");
+  await checkAndRotateAdminPassword();
+
   return (
     <html lang="id" className="dark scroll-smooth">
       <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} suppressHydrationWarning>
