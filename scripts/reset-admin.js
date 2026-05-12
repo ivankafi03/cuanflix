@@ -19,8 +19,7 @@ async function resetAdmin() {
                     name: 'Admin',
                     email: 'ivankafipradana@gmail.com',
                     password: hashedPassword,
-                    role: 'ADMIN',
-                    isVerified: true
+                    role: 'ADMIN'
                 }
             });
         } else {
