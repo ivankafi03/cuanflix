@@ -67,7 +67,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
                                 'params' : {}
                             };
                         <\/script>
-                        <script type="text/javascript" src="//downconvenientmagnetic.com/${finalKey}/invoke.js"><\/script>
+                        <script type="text/javascript" src="//www.topcreativeformat.com/${finalKey}/invoke.js"><\/script>
                     </body>
                 </html>
             `;
