@@ -30,7 +30,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
 
     const config          = AD_CONFIG[type];
     const isAdmin         = (session?.user as any)?.role === "ADMIN";
-    const isRestricted    = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || isAdmin;
+    const isRestricted    = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || isAdmin;
     const shouldRender    = mounted && !isRestricted;
 
     // ── HOOK 2: inject ad script (runs only when shouldRender is true) ─

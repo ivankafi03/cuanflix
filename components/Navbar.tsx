@@ -61,7 +61,7 @@ export default function Navbar() {
     };
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        <nav className={`fixed top-0 left-0 right-0 z-[9999999] transition-all duration-500 ${
             isMobileMenuOpen 
                 ? "bg-zinc-950/95 backdrop-blur-2xl border-b border-white/5" 
                 : isScrolled 
