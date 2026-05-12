@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-type AdType = "leaderboard" | "rectangle" | "mobile" | "halfpage" | "banner";
+type AdType = "leaderboard" | "rectangle" | "mobile" | "halfpage" | "banner" | "native";
 
 interface AdUnitProps {
     type: AdType;
@@ -18,6 +18,7 @@ const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> 
     mobile:      { key: "863f6aef8282a41ad5ebdefcf161468b", width: 320, height: 50 },
     halfpage:    { key: "863f6aef8282a41ad5ebdefcf161468b", width: 160, height: 600 },
     banner:      { key: "863f6aef8282a41ad5ebdefcf161468b", width: 468, height: 60 },
+    native:      { key: "863f6aef8282a41ad5ebdefcf161468b", width: 300, height: 250 }, // Native container placeholder
 };
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
