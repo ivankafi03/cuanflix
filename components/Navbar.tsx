@@ -132,21 +132,7 @@ export default function Navbar() {
                     </AnimatePresence>
                 </Link>
 
-                {/* Animated Center Text for Mobile */}
-                <AnimatePresence>
-                    {isMobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 10 }}
-                            className="absolute left-1/2 -translate-x-1/2 md:hidden"
-                        >
-                            <span className="text-[10px] font-black text-primary uppercase tracking-[0.4em] drop-shadow-[0_0_8px_rgba(244,114,182,0.4)]">
-                                cuanflix.site
-                            </span>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+
 
                 {/* Desktop Nav Links */}
                 <div className="hidden md:flex items-center gap-6">
