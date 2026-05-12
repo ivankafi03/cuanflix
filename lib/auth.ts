@@ -32,10 +32,7 @@ export const authOptions: NextAuthOptions = {
                     }
                 }
 
-                // Check and rotate before login if it's a new day
-                if (credentials.email === (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com")) {
-                    await checkAndRotateAdminPassword();
-                }
+
 
                 const user = await prisma.user.findUnique({
                     where: { email: credentials.email }
