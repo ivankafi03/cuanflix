@@ -28,14 +28,11 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
 
     return (
         <section className="relative flex flex-col justify-end px-6 pt-40 pb-20 md:pb-32 min-h-[70vh] md:min-h-[85vh] overflow-hidden">
-            {/* Background Slides */}
-            {videos.map((video, idx) => (
-                <div
-                    key={idx}
-                    className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ${idx === currentIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-                    style={{ backgroundImage: `url(${video.image})` }}
-                />
-            ))}
+            {/* Background Slides - Optimized to only render current slide */}
+            <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 scale-105"
+                style={{ backgroundImage: `url(${currentVideo.image})` }}
+            />
 
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent" />

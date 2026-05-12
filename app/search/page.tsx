@@ -5,6 +5,7 @@ import { searchJav } from "@/lib/jav";
 import { redirect } from "next/navigation";
 import { Search, Database } from "lucide-react";
 import Pagination from "@/components/Pagination";
+import AdUnit from "@/components/ads/AdUnit";
 
 export default async function SearchPage({
     searchParams,
@@ -71,6 +72,11 @@ export default async function SearchPage({
                             <span className="text-lg font-black text-white italic leading-none">{totalPages.toLocaleString()}</span>
                         </div>
                     </div>
+                </div>
+
+                {/* Banner Iklan */}
+                <div className="flex justify-center -mb-4">
+                    <AdUnit type="leaderboard" />
                 </div>
 
                 {/* Content Grid */}
