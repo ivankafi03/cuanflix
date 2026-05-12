@@ -144,6 +144,11 @@ export default function CategoriesPage() {
                     </div>
                 </section>
 
+                {/* Banner Iklan bawah Trending */}
+                <div className="flex justify-center -my-6">
+                    <AdUnit type="leaderboard" />
+                </div>
+
                 {/* Sub-Bab 3: The Deep Explorer */}
                 <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
                 <TagsExplorer />
