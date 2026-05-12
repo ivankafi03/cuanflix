@@ -82,9 +82,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerList = await headers();
+
   // IP Ban check — runs on every page load (server-side)
   try {
-    const headerList = await headers();
     const userAgent = headerList.get("user-agent") || "";
     
     // Bypass IP check for social media bots to ensure OG images work
