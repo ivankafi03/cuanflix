@@ -45,9 +45,8 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                     Popular Premiere
                 </span>
                 
-                {/* Generic Title instead of long JAV titles */}
-                <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight tracking-tighter drop-shadow-2xl">
-                    Trending This Week
+                <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-foreground leading-tight tracking-tighter drop-shadow-2xl line-clamp-2">
+                    {currentVideo.title}
                 </h2>
                 
                 <p className="text-sm md:text-lg text-foreground/80 leading-relaxed max-w-2xl font-medium drop-shadow-md">

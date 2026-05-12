@@ -6,7 +6,9 @@ import Script from "next/script";
 import { useSession } from "next-auth/react";
 
 export default function AdScripts() {
+    // HAPUS BARIS DI BAWAH INI UNTUK MENGAKTIFKAN IKLAN
     return null;
+
     const pathname  = usePathname() || "";
     const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
@@ -56,23 +58,24 @@ export default function AdScripts() {
 
     return (
         <>
-            {/* AdsTerra Popunder */}
+            {/* AdsTerra Popunder (GANTI SRC DI BAWAH INI) */}
             <Script
                 id="adsterra-popunder"
-                src="https://pl29360872.profitablecpmratenetwork.com/a6/20/66/a620661409a43f241ad7455bce5763f5.js"
+                src="YOUR_ADSTERRA_POPUNDER_URL_HERE"
                 strategy="lazyOnload"
             />
-            {/* AdsTerra Social Bar */}
+            {/* AdsTerra Social Bar (GANTI SRC DI BAWAH INI) */}
             <Script
                 id="adsterra-social-bar"
-                src="https://pl29361005.profitablecpmratenetwork.com/6c/42/86/6c42861347614d9396e6d78701918386.js"
+                src="YOUR_ADSTERRA_SOCIAL_BAR_URL_HERE"
                 strategy="lazyOnload"
             />
-            {/* Monetag MultiTag - Disabled for cleaner experience
+            {/* Monetag MultiTag (HAPUS KOMENTAR DAN GANTI SRC/ZONE UNTUK MENGAKTIFKAN) */}
+            {/*
             <Script
                 id="monetag-multitag"
-                src="https://quge5.com/88/tag.min.js"
-                data-zone="237063"
+                src="YOUR_MONETAG_SCRIPT_URL_HERE"
+                data-zone="YOUR_MONETAG_ZONE_ID_HERE"
                 strategy="lazyOnload"
                 data-cfasync="false"
             />

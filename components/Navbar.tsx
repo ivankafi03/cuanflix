@@ -86,7 +86,7 @@ export default function Navbar() {
                                     animate={isMobileMenuOpen ? { scale: 1.1, rotate: 360 } : { scale: 1, rotate: 0 }}
                                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                                 >
-                                    <Logo className="w-8 h-8 md:w-9 md:h-9 shadow-lg shadow-primary/20 rounded-xl" />
+                                    <Logo className="w-8 h-8 md:w-9 md:h-9 shadow-lg shadow-primary/20 rounded-xl" showText={false} />
                                 </motion.div>
                                 <span className="text-white font-black text-xl tracking-tight hidden sm:block">
                                     Cuan<span className="text-primary">flix</span>
@@ -110,7 +110,7 @@ export default function Navbar() {
                                         className="flex items-center gap-2"
                                     >
                                         <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(244,114,182,0.6)]" />
-                                        <span className="text-white font-black text-xs md:text-sm italic uppercase tracking-tighter">
+                                        <span className="text-white font-black text-xs md:text-sm italic uppercase tracking-wide">
                                             {scrollingTexts[textIndex].includes(" Dapat ") ? (
                                                 scrollingTexts[textIndex].split(" Dapat ").map((part, i) => (
                                                     <React.Fragment key={i}>

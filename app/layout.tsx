@@ -37,7 +37,7 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL("https://cuanflix.site"),
   title: {
-    default: "Cuanflix - Premium Database | HD Streaming",
+    default: "Cuanflix | Nonton JAV Premium",
     template: "%s | Cuanflix"
   },
   description: "Eksplorasi database video terlengkap dengan Cuanflix. Streaming HD, Cepat, & Estetik.",

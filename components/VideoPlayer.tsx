@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import AdUnit from "@/components/ads/AdUnit";
 
-const DIRECT_LINK = "https://www.profitablecpmratenetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc";
+const DIRECT_LINK = "YOUR_ADSTERRA_DIRECT_LINK_HERE";
 
 interface VideoPlayerProps {
     servers: VideoServer[];
@@ -60,17 +60,19 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
         if (!showAdOverlay || adLoaded.current || !adContainerRef.current) return;
         adLoaded.current = true;
 
+        /* HAPUS KOMENTAR DI BAWAH INI UNTUK MENGAKTIFKAN INTERSTITIAL ADSTERRA
         (window as any).atOptions = {
-            key: "f16bab575f321c24cf6f7e82f039c85f",
+            key: "YOUR_ADSTERRA_INTERSTITIAL_KEY",
             format: "iframe",
             height: 250,
             width: 300,
             params: {},
         };
         const script = document.createElement("script");
-        script.src = "https://www.highperformanceformat.com/f16bab575f321c24cf6f7e82f039c85f/invoke.js";
+        script.src = "https://www.highperformanceformat.com/YOUR_ADSTERRA_INTERSTITIAL_KEY/invoke.js";
         script.async = true;
         adContainerRef.current.appendChild(script);
+        */
     }, [showAdOverlay]);
 
     const handleStart = () => {

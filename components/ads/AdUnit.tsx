@@ -12,12 +12,14 @@ interface AdUnitProps {
 }
 
 const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> = {
-    leaderboard: { key: "1dcbb1fb3684781e2c9a5588522d0ffc", width: 728, height: 90 },
-    rectangle:   { key: "f16bab575f321c24cf6f7e82f039c85f", width: 300, height: 250 },
-    mobile:      { key: "f09d108bbf23573dc096215b7e0a6ac8", width: 320, height: 50 },
+    // Ganti string kosong "" di bawah ini dengan KEY/ID Adsterra Native Banner Anda
+    leaderboard: { key: "YOUR_LEADERBOARD_KEY", width: 728, height: 90 },
+    rectangle:   { key: "YOUR_RECTANGLE_KEY", width: 300, height: 250 },
+    mobile:      { key: "YOUR_MOBILE_KEY", width: 320, height: 50 },
 };
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
+    // HAPUS BARIS DI BAWAH INI UNTUK MENGAKTIFKAN IKLAN BANNER
     return null;
     const pathname  = usePathname() || "";
     const { data: session } = useSession();
