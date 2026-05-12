@@ -46,7 +46,14 @@ export async function POST(req: Request) {
         // Fetch user balance + status
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { balanceWatch: true, balanceReferral: true, isFlagged: true, isSuspended: true, isBot: true }
+            select: { 
+                balanceWatch: true, 
+                balanceReferral: true, 
+                balanceBonus: true,
+                isFlagged: true, 
+                isSuspended: true, 
+                isBot: true 
+            }
         });
 
         const settings = await prisma.systemSettings.findUnique({
