@@ -157,10 +157,12 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                         </button>
                     </div>
 
-                    {/* Ad inside overlay */}
+                    {/* Ad inside overlay - Klik ke-4 */}
                     <div className="bg-zinc-900/80 border border-white/10 rounded-2xl p-4 overflow-hidden shadow-2xl">
-                        <p className="text-zinc-600 text-[9px] uppercase tracking-[0.2em] text-center mb-3">Sponsor</p>
-                        <div ref={adContainerRef} className="flex items-center justify-center min-w-[300px] min-h-[250px]" />
+                        <p className="text-zinc-600 text-[9px] uppercase tracking-[0.2em] text-center mb-3">Sponsor Offer</p>
+                        <div className="flex items-center justify-center min-w-[300px] min-h-[250px]">
+                            <AdUnit type="native" />
+                        </div>
                     </div>
                 </div>
             )}

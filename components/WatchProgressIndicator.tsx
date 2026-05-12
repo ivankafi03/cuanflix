@@ -5,6 +5,7 @@ import { DollarSign, Sparkles, TrendingUp, CheckCircle2, Play } from "lucide-rea
 import { motion, AnimatePresence } from "framer-motion";
 import { useWidget } from "./WidgetContext";
 
+
 export default function WatchProgressIndicator({
     duration = 60,
     onComplete
