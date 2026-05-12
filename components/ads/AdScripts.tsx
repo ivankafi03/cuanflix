@@ -5,10 +5,6 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { useSession } from "next-auth/react";
 
-export default function AdScripts() {
-    // HAPUS BARIS DI BAWAH INI UNTUK MENGAKTIFKAN IKLAN
-    return null;
-
     const pathname  = usePathname() || "";
     const { data: session, status } = useSession();
     const [mounted, setMounted] = useState(false);
@@ -58,16 +54,16 @@ export default function AdScripts() {
 
     return (
         <>
-            {/* AdsTerra Popunder (GANTI SRC DI BAWAH INI) */}
+            {/* AdsTerra Popunder */}
             <Script
                 id="adsterra-popunder"
-                src="YOUR_ADSTERRA_POPUNDER_URL_HERE"
+                src="https://pl29429557.profitablecpmratenetwork.com/ec/06/5a/ec065a7e4c204506aa310f99c17a98a4.js"
                 strategy="lazyOnload"
             />
-            {/* AdsTerra Social Bar (GANTI SRC DI BAWAH INI) */}
+            {/* AdsTerra Social Bar */}
             <Script
                 id="adsterra-social-bar"
-                src="YOUR_ADSTERRA_SOCIAL_BAR_URL_HERE"
+                src="https://pl29429558.profitablecpmratenetwork.com/82/24/c4/8224c42340e4d16455652554fa3261c8.js"
                 strategy="lazyOnload"
             />
             {/* Monetag MultiTag (HAPUS KOMENTAR DAN GANTI SRC/ZONE UNTUK MENGAKTIFKAN) */}

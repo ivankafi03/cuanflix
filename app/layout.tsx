@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Cuanflix Team" }],
 
   other: {
-    monetag: "355a8ebbeed7ba984eb785bbb6977945",
+    monetag: "4b870a568c7fe8aca7b36f2669891e3d",
   },
   openGraph: {
     title: "Cuanflix - Premium Streaming Database",
