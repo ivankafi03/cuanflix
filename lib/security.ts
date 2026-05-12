@@ -63,7 +63,7 @@ export function getBrowserFingerprint(): string {
  * Verifies Cloudflare Turnstile token
  */
 export async function verifyTurnstile(token: string): Promise<boolean> {
-    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+    const secretKey = process.env.TURNSTILE_SECRET_KEY || "0x4AAAAAADOBIyzXxMnP8_m51gCoxmhdmlA";
     if (!secretKey) {
         console.warn("[SECURITY] TURNSTILE_SECRET_KEY not found. Skipping verification.");
         return true;

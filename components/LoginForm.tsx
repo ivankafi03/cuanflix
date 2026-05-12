@@ -136,7 +136,7 @@ export default function LoginForm() {
                     </div>
 
                     <Turnstile
-                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAADOBI3uPCTN-hz2I"}
                         onVerify={(token) => setTurnstileToken(token)}
                     />
 
