@@ -12,15 +12,13 @@ interface AdUnitProps {
 }
 
 const AD_CONFIG: Record<AdType, { key: string; width: number; height: number }> = {
-    // Ganti string kosong "" di bawah ini dengan KEY/ID Adsterra Native Banner Anda
-    leaderboard: { key: "YOUR_LEADERBOARD_KEY", width: 728, height: 90 },
-    rectangle:   { key: "YOUR_RECTANGLE_KEY", width: 300, height: 250 },
-    mobile:      { key: "YOUR_MOBILE_KEY", width: 320, height: 50 },
+    // Key terbaru dari pengguna
+    leaderboard: { key: "863f6aef8282a41ad5ebdefcf161468b", width: 728, height: 90 },
+    rectangle:   { key: "863f6aef8282a41ad5ebdefcf161468b", width: 300, height: 250 },
+    mobile:      { key: "863f6aef8282a41ad5ebdefcf161468b", width: 320, height: 50 },
 };
 
 export default function AdUnit({ type, className = "" }: AdUnitProps) {
-    // HAPUS BARIS DI BAWAH INI UNTUK MENGAKTIFKAN IKLAN BANNER
-    return null;
     const pathname  = usePathname() || "";
     const { data: session } = useSession();
     const [mounted, setMounted] = useState(false);
@@ -69,7 +67,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
                                 'params' : {}
                             };
                         <\/script>
-                        <script type="text/javascript" src="//www.highperformanceformat.com/${finalKey}/invoke.js"><\/script>
+                        <script type="text/javascript" src="//downconvenientmagnetic.com/${finalKey}/invoke.js"><\/script>
                     </body>
                 </html>
             `;

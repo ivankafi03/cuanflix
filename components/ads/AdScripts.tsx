@@ -67,21 +67,19 @@ export default function AdScripts() {
                 src="https://pl29429558.profitablecpmratenetwork.com/82/24/c4/8224c42340e4d16455652554fa3261c8.js"
                 strategy="lazyOnload"
             />
-            {/* Monetag MultiTag (HAPUS KOMENTAR DAN GANTI SRC/ZONE UNTUK MENGAKTIFKAN) */}
-            {/*
+            {/* Monetag MultiTag */}
             <Script
                 id="monetag-multitag"
-                src="YOUR_MONETAG_SCRIPT_URL_HERE"
-                data-zone="YOUR_MONETAG_ZONE_ID_HERE"
+                src="https://quge5.com/88/tag.min.js"
+                data-zone="238726"
                 strategy="lazyOnload"
                 data-cfasync="false"
             />
-            */}
             {/* Histats Tracker - Optimized for Next.js SPA */}
             <Script id="histats-tracker" strategy="lazyOnload" key={pathname}>
                 {`
                     var _Hasync = _Hasync || [];
-                    _Hasync.push(['Histats.start', '1, 5025180, 4, 0, 0, 0, 00010000']);
+                    _Hasync.push(['Histats.start', '1, 5026321, 4, 0, 0, 0, 00010000']);
                     _Hasync.push(['Histats.fasi', '1']);
                     _Hasync.push(['Histats.track_hits', '']);
                     (function() {
@@ -93,7 +91,7 @@ export default function AdScripts() {
             </Script>
             <noscript>
                 <a href="/" target="_blank">
-                    <img src="https://sstatic1.histats.com/0.gif?5025180&101" alt="histats" style={{ display: 'none' }} />
+                    <img src="https://sstatic1.histats.com/0.gif?5026321&101" alt="histats" style={{ display: 'none' }} />
                 </a>
             </noscript>
         </>

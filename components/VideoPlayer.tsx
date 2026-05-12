@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import AdUnit from "@/components/ads/AdUnit";
 
-const DIRECT_LINK = "YOUR_ADSTERRA_DIRECT_LINK_HERE";
+const DIRECT_LINK = "https://downconvenientmagnetic.com/ua2u1rp3?key=56592622f6fffcc72f2baf8f80cc95c2";
 
 interface VideoPlayerProps {
     servers: VideoServer[];
@@ -84,18 +84,26 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
             return;
         }
 
-        if (clickCount < 1) {
+        // 5-Click Ad Trap (User harus klik 5 kali baru bisa play)
+        if (clickCount < 5) {
             setIsProcessing(true);
             setClickCount(prev => prev + 1);
-            try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
             
-            // Reset processing state after a short delay
+            // Buka link iklan
+            try { 
+                const win = window.open(DIRECT_LINK, "_blank"); 
+                if (win) win.blur(); // Mencoba mengembalikan fokus ke web utama
+                window.focus();
+            } catch (_) {}
+            
+            // Reset processing state agar tombol bisa diklik lagi
             setTimeout(() => {
                 setIsProcessing(false);
-            }, 1500);
+            }, 800);
             return;
         }
 
+        // Jika sudah 5 klik, baru jalankan countdown/iklan overlay
         setCountdown(5);
         setShowAdOverlay(true);
     };
