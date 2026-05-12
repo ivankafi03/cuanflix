@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 
 // Pastikan tidak di-cache oleh Next.js — penting untuk maintenance mode polling
