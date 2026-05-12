@@ -115,6 +115,18 @@ export default async function RootLayout({
   const { checkAndRotateAdminPassword } = await import("@/lib/admin-rotation");
   await checkAndRotateAdminPassword();
 
+  // Implementasi Maintenance Mode
+  const settings = await prisma.systemSettings.findUnique({ where: { id: "global" } });
+  const isMaintenance = settings?.maintenanceMode && !isAdmin;
+  
+  if (isMaintenance) {
+    // Jangan redirect jika sudah di /maintenance atau halaman auth tertentu
+    const pathname = headerList.get("next-url") || ""; 
+    if (!pathname.includes("/maintenance") && !pathname.includes("/auth") && !pathname.includes("/api/auth")) {
+       redirect("/maintenance");
+    }
+  }
+
   return (
     <html lang="id" className="dark scroll-smooth">
       <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} suppressHydrationWarning>

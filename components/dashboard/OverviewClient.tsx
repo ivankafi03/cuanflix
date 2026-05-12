@@ -10,7 +10,9 @@ import {
     Copy,
     ChevronRight,
     Send,
-    MessageCircle
+    MessageCircle,
+    Loader2,
+    Gift
 } from "lucide-react";
 import { useToast } from "../ToastContext";
 import { proxyImage } from "@/lib/proxy-image";
@@ -20,22 +22,75 @@ export default function OverviewClient({ user }: { user: any }) {
     const [watchHistory, setWatchHistory] = useState<any[]>([]);
     const [settings, setSettings] = useState<any>(null);
     const [origin, setOrigin] = useState("");
+    const [claimingBonus, setClaimingBonus] = useState(false);
+    const [availableBroadcasts, setAvailableBroadcasts] = useState<any[]>([]);
     const { showToast } = useToast();
 
     useEffect(() => {
         const fetchData = async () => {
-            const [rankRes, histRes, settRes] = await Promise.all([
+            const [rankRes, histRes, settRes, broadRes] = await Promise.all([
                 fetch("/api/ranking?period=daily&type=total"),
                 fetch("/api/history?limit=5"),
-                fetch("/api/admin/settings")
+                fetch("/api/admin/settings"),
+                fetch("/api/member/broadcasts")
             ]);
             if (rankRes.ok) setRankingData(await rankRes.json());
             if (histRes.ok) setWatchHistory(await histRes.json());
             if (settRes.ok) setSettings(await settRes.json());
+            if (broadRes.ok) setAvailableBroadcasts(await broadRes.json());
         };
         fetchData();
         setOrigin(window.location.origin);
     }, []);
+
+    const handleClaimBonus = async () => {
+        setClaimingBonus(true);
+        try {
+            const res = await fetch("/api/member/rewards/claim", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rewardId: "REGISTRATION_BONUS" })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast(data.message || "Bonus claimed successfully!", "success");
+                // Reload to update balance and hide claim card
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast(data.error || "Failed to claim bonus", "error");
+            }
+        } catch (err) {
+            showToast("Network error", "error");
+        } finally {
+            setClaimingBonus(false);
+        }
+    };
+
+    const handleClaimBroadcast = async (broadcastId: string) => {
+        setClaimingBonus(true);
+        try {
+            const res = await fetch("/api/member/rewards/claim", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rewardId: broadcastId })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast(data.message || "Reward claimed!", "success");
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast(data.error || "Failed to claim reward", "error");
+            }
+        } catch (err) {
+            showToast("Network error", "error");
+        } finally {
+            setClaimingBonus(false);
+        }
+    };
 
     const totalBalance = (user?.balanceWatch || 0) + (user?.balanceReferral || 0) + (user?.balanceBonus || 0);
     const userRankIdx = rankingData.findIndex(r => r.name === user?.name);
@@ -133,6 +188,64 @@ export default function OverviewClient({ user }: { user: any }) {
                             </a>
                         </div>
                     </div>
+
+                    {/* Available Broadcast Rewards */}
+                    {availableBroadcasts.map((b) => (
+                        <div key={b.id} className="bg-gradient-to-r from-orange-500/20 via-primary/5 to-transparent border border-orange-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group mb-2">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 blur-[60px] -mr-16 -mt-16 group-hover:bg-orange-500/20 transition-all" />
+                            
+                            <div className="flex items-center gap-5 z-10">
+                                <div className="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(249,115,22,0.4)] animate-pulse">
+                                    <Gift className="w-8 h-8" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h3 className="text-lg font-black text-white tracking-tight uppercase italic">{b.title}</h3>
+                                    <p className="text-xs text-zinc-400 font-medium">{b.message}</p>
+                                </div>
+                            </div>
+
+                            <button 
+                                onClick={() => handleClaimBroadcast(b.id)}
+                                disabled={claimingBonus}
+                                className="w-full sm:w-auto px-8 py-3 bg-white text-black text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-2xl shadow-white/10 hover:scale-105 active:scale-95 disabled:opacity-50"
+                            >
+                                {claimingBonus ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <>KLAIM ${b.amount.toFixed(2)} <ChevronRight className="w-4 h-4" /></>
+                                )}
+                            </button>
+                        </div>
+                    ))}
+
+                    {/* Welcome Reward Claim (If not claimed) */}
+                    {!user.registrationBonusClaimed && (
+                        <div className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/30 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[60px] -mr-16 -mt-16 group-hover:bg-primary/30 transition-all" />
+                            
+                            <div className="flex items-center gap-5 z-10">
+                                <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-white shadow-[0_0_20px_rgba(244,114,182,0.4)] animate-bounce-slow">
+                                    <Trophy className="w-8 h-8" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h3 className="text-lg font-black text-white tracking-tight uppercase italic">Welcome <span className="text-primary">Reward!</span></h3>
+                                    <p className="text-xs text-zinc-400 font-medium">Klaim bonus pendaftaran pertamamu sekarang juga.</p>
+                                </div>
+                            </div>
+
+                            <button 
+                                onClick={handleClaimBonus}
+                                disabled={claimingBonus}
+                                className="w-full sm:w-auto px-8 py-3 bg-white text-black text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-2xl shadow-white/10 hover:scale-105 active:scale-95 disabled:opacity-50"
+                            >
+                                {claimingBonus ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <>KLAIM $1.00 <ChevronRight className="w-4 h-4" /></>
+                                )}
+                            </button>
+                        </div>
+                    )}
 
                     {/* Referral Promo */}
                     <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 relative overflow-hidden group">

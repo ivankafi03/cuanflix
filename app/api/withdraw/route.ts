@@ -72,7 +72,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Akun Anda sedang dalam proses verifikasi. Hubungi admin." }, { status: 403 });
         }
 
-        const totalBalance = user.balanceWatch + user.balanceReferral;
+        const totalBalance = user.balanceWatch + user.balanceReferral + (user.balanceBonus || 0);
         const minWd = settings.minWithdrawal;
 
         if (amount < minWd) {
@@ -84,26 +84,45 @@ export async function POST(req: Request) {
         }
 
         // Deduct balance and create request in a transaction
-        // We'll deduct from balanceWatch first, then balanceReferral if needed
+        // We'll deduct from balanceWatch first, then balanceReferral, then balanceBonus
         const result = await prisma.$transaction(async (tx) => {
             let remainingToDeduct = amount;
             let newBalanceWatch = user.balanceWatch;
             let newBalanceReferral = user.balanceReferral;
+            let newBalanceBonus = user.balanceBonus || 0;
 
+            // 1. Potong dari Watch
             if (newBalanceWatch >= remainingToDeduct) {
                 newBalanceWatch -= remainingToDeduct;
                 remainingToDeduct = 0;
             } else {
                 remainingToDeduct -= newBalanceWatch;
                 newBalanceWatch = 0;
-                newBalanceReferral -= remainingToDeduct;
+            }
+
+            // 2. Potong dari Referral jika masih ada sisa
+            if (remainingToDeduct > 0) {
+                if (newBalanceReferral >= remainingToDeduct) {
+                    newBalanceReferral -= remainingToDeduct;
+                    remainingToDeduct = 0;
+                } else {
+                    remainingToDeduct -= newBalanceReferral;
+                    newBalanceReferral = 0;
+                }
+            }
+
+            // 3. Potong dari Bonus jika masih ada sisa
+            if (remainingToDeduct > 0) {
+                newBalanceBonus -= remainingToDeduct;
+                remainingToDeduct = 0;
             }
 
             await tx.user.update({
                 where: { id: userId },
                 data: {
                     balanceWatch: newBalanceWatch,
-                    balanceReferral: newBalanceReferral
+                    balanceReferral: newBalanceReferral,
+                    balanceBonus: newBalanceBonus
                 }
             });
 

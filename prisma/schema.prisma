@@ -243,3 +243,11 @@ model ContentCache {
   data      String   // Store as JSON string
   updatedAt DateTime @updatedAt
 }
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String   // e.g. "UPDATE_SETTINGS", "UNBLOCK_IP"
+  details   String   // JSON string of changes
+  ip        String?
+  createdAt DateTime @default(now())
+}

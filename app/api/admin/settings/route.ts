@@ -91,6 +91,19 @@ export async function POST(req: Request) {
             }
         });
 
+        // Record to AuditLog
+        const headerList = await headers();
+        const ip = headerList.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+
+        await prisma.auditLog.create({
+            data: {
+                userId: session.user.id,
+                action: "UPDATE_SETTINGS",
+                details: JSON.stringify(data),
+                ip
+            }
+        });
+
         return NextResponse.json(updated);
     } catch (error) {
         console.error("Error updating settings:", error);
