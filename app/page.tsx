@@ -64,9 +64,9 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Iklan di bawah setiap kategori (Brutal Mode) */}
+                  {/* Iklan di bawah setiap kategori (Dinamis sesuai device) */}
                   <div className="flex justify-center -my-4">
-                    <AdUnit type="leaderboard" />
+                    <AdUnit type={idx % 2 === 0 ? "leaderboard" : "rectangle"} />
                   </div>
                 </React.Fragment>
               );

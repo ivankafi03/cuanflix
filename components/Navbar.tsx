@@ -254,6 +254,61 @@ export default function Navbar() {
                             </motion.div>
                         </motion.div>
 
+                        {/* User Account Card - Now at the Top */}
+                        <div className="mb-2">
+                            {session ? (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="flex flex-col gap-2 p-4 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-xl relative overflow-hidden group"
+                                >
+                                    <div className="absolute -top-12 -right-12 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-700" />
+                                    <div className="flex items-center gap-3 mb-1 relative z-10">
+                                        <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center font-black text-primary text-lg">
+                                            {session.user?.name?.[0] || "U"}
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none mb-1">Welcome back</span>
+                                            <span className="text-sm font-black text-white italic truncate max-w-[150px]">{session.user?.name || "Member"}</span>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 mt-2 relative z-10">
+                                        <Link
+                                            href={is_admin ? "/admin" : "/dashboard"}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="py-2.5 text-center rounded-xl bg-primary text-black text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg shadow-primary/20"
+                                        >
+                                            {is_admin ? "Admin" : "Dashboard"}
+                                        </Link>
+                                        <button
+                                            onClick={() => { setIsMobileMenuOpen(false); signOut(); }}
+                                            className="py-2.5 text-center rounded-xl bg-white/5 border border-white/10 text-[10px] font-black text-zinc-400 uppercase tracking-widest hover:text-red-400 transition-all"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="p-4 rounded-[2rem] bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/20 flex flex-col gap-3 relative overflow-hidden"
+                                >
+                                    <div className="flex flex-col gap-1 relative z-10">
+                                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Premium Access</span>
+                                        <h4 className="text-white font-black italic uppercase text-base leading-none">Login ke Akun Anda</h4>
+                                    </div>
+                                    <Link
+                                        href="/auth/login"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="py-3 flex items-center justify-center rounded-xl bg-primary text-black text-[11px] font-black uppercase tracking-widest shadow-lg shadow-primary/30 active:scale-95 transition-all relative z-10"
+                                    >
+                                        Login Sekarang
+                                    </Link>
+                                </motion.div>
+                            )}
+                        </div>
+
                         {navLinks.map((link, i) => (
                             <motion.div
                                 key={link.name}
@@ -272,7 +327,7 @@ export default function Navbar() {
                             </motion.div>
                         ))}
 
-                        <div className="flex items-center bg-white/5 border border-white/8 rounded-lg px-4 py-2 gap-2">
+                        <div className="flex items-center bg-white/5 border border-white/8 rounded-lg px-4 py-2 mt-2 gap-2">
                             <Search className="w-4 h-4 text-zinc-500 shrink-0" />
                             <input
                                 type="text"
@@ -283,43 +338,6 @@ export default function Navbar() {
                                 className="bg-transparent outline-none text-sm text-white placeholder:text-zinc-600 w-full"
                             />
                         </div>
-
-                        {session ? (
-                            <motion.div 
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                                className="flex flex-col gap-2 pt-1"
-                            >
-                                <Link
-                                    href={is_admin ? "/admin" : "/dashboard"}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="py-3 text-center rounded-2xl bg-white/5 border border-white/5 text-sm font-black text-white hover:bg-primary/10 hover:border-primary/20 transition-all"
-                                >
-                                    {is_admin ? "Admin Panel" : "Dashboard"}
-                                </Link>
-                                <button
-                                    onClick={() => { setIsMobileMenuOpen(false); signOut(); }}
-                                    className="py-3 text-center rounded-2xl bg-red-500/5 border border-red-500/10 text-sm font-black text-red-400"
-                                >
-                                    Logout
-                                </button>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                            >
-                                <Link
-                                    href="/auth/login"
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="py-3 flex items-center justify-center rounded-2xl bg-primary text-white text-sm font-black shadow-lg shadow-primary/20"
-                                >
-                                    Login Account
-                                </Link>
-                            </motion.div>
-                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
