@@ -25,6 +25,7 @@ export interface WatchPageData {
     episode: string;
     type: string;
     servers: VideoServer[];
+    downloads: any[];
 }
 
 export interface AnimeDetail {
@@ -129,7 +130,8 @@ function resolveNuxtData(data: any[]): any {
     return walk(0);
 }
 
-function extractNuxtObject(html: string): any {
+function extractNuxtObject(html: string | undefined): any {
+    if (!html) return null;
     const $ = cheerio.load(html);
     const scriptText = $('#__NUXT_DATA__').html();
     if (!scriptText) return null;
