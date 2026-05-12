@@ -3,6 +3,7 @@ import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { getLatestVideos } from "@/lib/jav";
 import { Compass, Database, ChevronLeft } from "lucide-react";
+import AdUnit from "@/components/ads/AdUnit";
 import Pagination from "@/components/Pagination";
 
 export const metadata = {
@@ -74,6 +75,11 @@ async function JavContent({ searchParams }: { searchParams: Promise<{ page?: str
                     <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     Back to Home
                 </Link>
+            </div>
+
+            {/* Banner Iklan */}
+            <div className="flex justify-center mt-8 -mb-4">
+                <AdUnit type="leaderboard" />
             </div>
 
             {/* Video Grid */}

@@ -1,7 +1,8 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import HeroSlider from "@/components/HeroSlider";
+import AdUnit from "@/components/ads/AdUnit";
 import { getHomepageCategories } from "@/lib/jav";
 import prisma from "@/lib/prisma";
 
@@ -57,12 +58,19 @@ export default async function Home() {
               const sectionHref = CATEGORY_MAP[category.title] || `/search?q=${encodeURIComponent(category.title)}`;
 
               return (
-                <AnimeSection
-                  key={idx}
-                  title={category.title}
-                  data={javData}
-                  href={sectionHref}
-                />
+                <React.Fragment key={idx}>
+                  <AnimeSection
+                    title={category.title}
+                    data={javData}
+                    href={sectionHref}
+                  />
+                  {/* Iklan di sela kategori: Setelah kategori ke-1 dan ke-3 */}
+                  {(idx === 0 || idx === 2) && (
+                    <div className="flex justify-center -my-4">
+                      <AdUnit type="leaderboard" />
+                    </div>
+                  )}
+                </React.Fragment>
               );
             })}
           </div>

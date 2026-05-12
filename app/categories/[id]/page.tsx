@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { getVideosByCategory } from "@/lib/jav";
+import AdUnit from "@/components/ads/AdUnit";
 import Pagination from "@/components/Pagination";
 
 const GENRES: Record<string, { name: string; emoji: string }> = {
@@ -69,6 +70,11 @@ export default async function CategoryPage({
                             {total > 0 ? `${total.toLocaleString()} videos` : ""} — Page {currentPage.toLocaleString()} of {totalPages.toLocaleString()}
                         </p>
                     </div>
+                </div>
+
+                {/* Banner Iklan */}
+                <div className="flex justify-center -mb-4">
+                    <AdUnit type="leaderboard" />
                 </div>
 
                 {/* Video Grid */}

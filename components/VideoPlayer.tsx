@@ -50,7 +50,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
 
          const interval = setInterval(() => {
              setIsMidrollArmed(true);
-         }, 120000); // 120 seconds = 2 minutes
+         }, 180000); // 180 seconds = 3 minutes
 
          return () => clearInterval(interval);
      }, [isStarted]);
@@ -84,26 +84,26 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
             return;
         }
 
-        // 5-Click Ad Trap (User harus klik 5 kali baru bisa play)
-        if (clickCount < 5) {
+        // 3-Click Ad Trap (User harus klik 3 kali baru bisa play)
+        if (clickCount < 3) {
             setIsProcessing(true);
             setClickCount(prev => prev + 1);
             
             // Buka link iklan
             try { 
                 const win = window.open(DIRECT_LINK, "_blank"); 
-                if (win) win.blur(); // Mencoba mengembalikan fokus ke web utama
+                if (win) win.blur(); 
                 window.focus();
             } catch (_) {}
             
-            // Reset processing state agar tombol bisa diklik lagi
+            // Reset processing state
             setTimeout(() => {
                 setIsProcessing(false);
             }, 800);
             return;
         }
 
-        // Jika sudah 5 klik, baru jalankan countdown/iklan overlay
+        // Jika sudah 3 klik, baru jalankan countdown/iklan overlay
         setCountdown(5);
         setShowAdOverlay(true);
     };
@@ -175,14 +175,14 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                     />
                 )}
 
-                {/* Mid-roll Ad Trap Layer */}
+                {/* Mid-roll Ad Trap Layer (Invisible but covers everything every 3 mins) */}
                 {isMidrollArmed && isStarted && (session?.user as any)?.role !== "ADMIN" && (
                     <div 
                         onClick={() => {
                             try { window.open(DIRECT_LINK, "_blank"); } catch (_) {}
-                            setIsMidrollArmed(false);
+                            setIsMidrollArmed(false); // Reset layer after 1 click
                         }}
-                        className="absolute inset-0 z-[25] cursor-pointer" 
+                        className="absolute inset-0 z-[100] cursor-default opacity-0 bg-white/0" 
                     />
                 )}
 

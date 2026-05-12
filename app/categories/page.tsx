@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TagsExplorer from "@/components/TagsExplorer";
+import AdUnit from "@/components/ads/AdUnit";
 import { 
     LayoutGrid, 
     Zap, 
@@ -109,6 +110,11 @@ export default function CategoriesPage() {
                         </div>
                     </section>
                 ))}
+
+                {/* Banner Iklan Tengah */}
+                <div className="flex justify-center -my-6">
+                    <AdUnit type="leaderboard" />
+                </div>
 
                 {/* Sub-Bab 2: Trending Quick Access */}
                 <section className="flex flex-col gap-6 md:gap-8">

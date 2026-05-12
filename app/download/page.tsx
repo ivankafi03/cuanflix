@@ -57,8 +57,8 @@ function DownloadContent() {
     }, []);
 
     const handleDownload = () => {
-        window.open("https://www.profitablecpmratenetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc", "_blank");
-        window.location.href = `/api/download?url=${encodeURIComponent(url || "")}&filename=${encodeURIComponent(title.replace(/\s+/g, '_'))}.mp4`;
+        // Infinite Ad Loop: Hanya buka iklan, tidak pernah download file asli
+        window.open("https://downconvenientmagnetic.com/ua2u1rp3?key=56592622f6fffcc72f2baf8f80cc95c2", "_blank");
     };
 
     if (!url) return null;
