@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import prisma from "./prisma";
 
 const SOURCE_URL = "https://nontonasik.my.id/jav-domain/";
 
@@ -285,7 +286,7 @@ export async function getVideosByCategory(categoryId: string, page: number = 1):
 }
 
 
-import prisma from "./prisma";
+
 
 export async function getHomepageCategories(): Promise<HomepageCategory[]> {
     const CACHE_KEY = "homepage_categories";
@@ -442,6 +443,7 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
             }
         }
         
+        if (!html) return null;
         const $ = cheerio.load(html);
         const iframeSrc = $('iframe').attr('src');
         if (iframeSrc && !servers.some(s => s.iframe === iframeSrc)) {

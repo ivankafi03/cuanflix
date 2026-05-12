@@ -349,6 +349,7 @@ async function enrichAnimeWithRatings(items: AnimeLatest[], limit: number = 40, 
 export async function getFeaturedAnime(): Promise<AnimeLatest[]> {
     try {
         const html = await fetchWithTimeout(SOURCE_URL);
+        if (!html) return [];
         const $ = cheerio.load(html);
         const featured: AnimeLatest[] = [];
 
@@ -406,6 +407,7 @@ export async function getMovieAnime(): Promise<AnimeLatest[]> {
 export async function getLatestAnime(): Promise<AnimeLatest[]> {
     try {
         const html = await fetchWithTimeout(SOURCE_URL);
+        if (!html) return [];
         const $ = cheerio.load(html);
         const results: AnimeLatest[] = [];
 
@@ -476,6 +478,7 @@ export async function getPopularAnime(): Promise<AnimeLatest[]> {
 
         // Fallback to sidebar if listing fails
         const html = await fetchWithTimeout(SOURCE_URL);
+        if (!html) return [];
         const $ = cheerio.load(html);
         return scrapePopularSidebar($);
     } catch (error) {
@@ -596,6 +599,7 @@ export async function getWatchPageData(url: string): Promise<WatchPageData | nul
         const html = await fetchWithTimeout(url, {
             next: { revalidate: 3600 } // 1 hour
         });
+        if (!html) return null;
         const $ = cheerio.load(html);
 
         const titleRaw = $('.entry-title').text().trim() || $('h1.entry-title').text().trim();
@@ -729,6 +733,7 @@ export async function getAnimeList(path: string): Promise<AnimeLatest[]> {
     try {
         let url = path.startsWith('http') ? normalizeUrl(path) : `${SOURCE_URL}${path}`;
         const html = await fetchWithTimeout(url);
+        if (!html) return [];
         const $ = cheerio.load(html);
         const results: AnimeLatest[] = [];
 
@@ -787,6 +792,7 @@ export async function searchAnime(query: string): Promise<AnimeLatest[]> {
     try {
         const url = `${SOURCE_URL}?s=${encodeURIComponent(query)}`;
         const html = await fetchWithTimeout(url);
+        if (!html) return [];
         const $ = cheerio.load(html);
         const results: AnimeLatest[] = [];
 
