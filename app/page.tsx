@@ -64,12 +64,10 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Iklan di sela kategori: Setelah kategori ke-1 dan ke-3 */}
-                  {(idx === 0 || idx === 2) && (
-                    <div className="flex justify-center -my-4">
-                      <AdUnit type="leaderboard" />
-                    </div>
-                  )}
+                  {/* Iklan di bawah setiap kategori (Brutal Mode) */}
+                  <div className="flex justify-center -my-4">
+                    <AdUnit type="leaderboard" />
+                  </div>
                 </React.Fragment>
               );
             })}

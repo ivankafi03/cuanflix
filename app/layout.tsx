@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import AdScripts from "@/components/ads/AdScripts";
+import AntiAdBlock from "@/components/ads/AntiAdBlock";
 import AdblockDetector from "@/components/ads/AdblockDetector";
 import AdUnit from "@/components/ads/AdUnit";
 
@@ -122,7 +123,7 @@ export default async function RootLayout({
           <Footer />
           <ChatWidget />
           {!isAdmin && <AdScripts />}
-          <AdblockDetector />
+          <AntiAdBlock />
           <NotificationToast />
           <RewardNotification />
         </Providers>

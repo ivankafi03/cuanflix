@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import AnimeCard from "./AnimeCard";
+import AdUnit from "./ads/AdUnit";
+import { useSession } from "next-auth/react";
 
 interface AnimeData {
     id: number;
@@ -41,8 +43,16 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
             </div>
 
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2 sm:gap-3">
-                {data.map((anime) => (
-                    <AnimeCard key={anime.id} {...anime} />
+                {data.map((anime, index) => (
+                    <React.Fragment key={anime.id}>
+                        <AnimeCard {...anime} />
+                        {/* Native Ad: Insert every 10 items */}
+                        {(index + 1) % 10 === 0 && (
+                            <div className="aspect-[2/3] bg-zinc-900/40 rounded-2xl border border-white/5 p-1 flex items-center justify-center overflow-hidden">
+                                <AdUnit type="rectangle" />
+                            </div>
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
         </section>

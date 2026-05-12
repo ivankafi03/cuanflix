@@ -59,10 +59,7 @@ export default function WatchPageClient({
                     onPlay={() => setIsWatching(true)}
                 />
 
-                {/* Banner di bawah player */}
-                <div className="mt-8 flex justify-center">
-                    <AdUnit type="leaderboard" />
-                </div>
+
 
                 {children}
 

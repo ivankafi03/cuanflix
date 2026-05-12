@@ -74,7 +74,7 @@ export default function Navbar() {
                 {/* Logo & Scrolling Text */}
                 <Link href="/" className="flex items-center gap-2 shrink-0 group relative z-[60] min-w-[140px]">
                     <AnimatePresence mode="wait">
-                        {!isScrolled ? (
+                        {!isScrolled && !isMobileMenuOpen ? (
                             <motion.div
                                 key="logo-full"
                                 initial={{ opacity: 0, x: -10 }}
@@ -217,7 +217,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="md:hidden bg-zinc-950/95 backdrop-blur-2xl border-b border-white/5 px-5 py-10 flex flex-col gap-4 relative overflow-visible"
                     >
                         {/* Culik Mascot - Hanging from the Hamburger Button area */}
