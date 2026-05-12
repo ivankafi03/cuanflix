@@ -156,24 +156,25 @@ export default async function WatchPrettyPage({
                 
 
 
-                {/* Guest Call to Action Banner */}
+                {/* Guest Call to Action Banner - Smaller & More Elegant */}
                 {!session && (
-                    <div className="mb-6 bg-gradient-to-r from-primary/20 via-primary/5 to-transparent border border-primary/10 rounded-2xl p-5 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden relative group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 -translate-y-1/2 translate-x-1/4 rounded-full" />
-                        <div className="flex flex-col gap-1.5 relative z-10 text-center md:text-left">
-                            <div className="flex items-center gap-2 justify-center md:justify-start">
-                                <Sparkles className="w-4 h-4 text-primary" />
-                                <span className="text-primary font-black tracking-widest text-[10px] uppercase">Exclusive Access</span>
+                    <div className="mb-4 bg-white/5 border border-white/10 rounded-2xl p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative group backdrop-blur-sm">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -translate-y-1/2 translate-x-1/4 rounded-full blur-2xl" />
+                        <div className="flex items-center gap-4 relative z-10">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                                <Sparkles className="w-5 h-5 text-primary" />
                             </div>
-                            <h2 className="text-xl md:text-2xl font-black text-white leading-tight">Get Rewards & Minimize Ads</h2>
-                            <p className="text-zinc-500 font-medium text-sm max-w-xl">Login to earn rewards automatically and enjoy a cleaner, ad-lite experience with fewer pop-ups.</p>
+                            <div className="flex flex-col">
+                                <h2 className="text-sm md:text-base font-black text-white leading-none">Cuanflix Premium</h2>
+                                <p className="text-zinc-500 font-medium text-[10px] md:text-xs">Login untuk simpan video & hilangkan sebagian iklan.</p>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-3 relative z-10 w-full md:w-auto">
-                            <Link href="/auth/login" className="flex-1 md:flex-none px-6 py-3 bg-primary text-black rounded-xl font-black text-xs hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/20 text-center uppercase tracking-wider">
+                        <div className="flex items-center gap-2 relative z-10 w-full md:w-auto">
+                            <Link href="/auth/login" className="flex-1 md:flex-none px-4 py-2 bg-primary text-black rounded-lg font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
                                 Login
                             </Link>
-                            <Link href="/auth/register" className="flex-1 md:flex-none px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-black text-xs hover:bg-white/10 transition-all text-center uppercase tracking-wider">
-                                Register
+                            <Link href="/auth/register" className="flex-1 md:flex-none px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">
+                                Daftar
                             </Link>
                         </div>
                     </div>
