@@ -85,7 +85,7 @@ export default function WatchPageClient({
                                         </span>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {dl.links.map((link, j) => (
+                                        {dl.links.map((link: any, j: number) => (
                                             <Link 
                                                 key={j}
                                                 href={`/download?url=${encodeURIComponent(link.link)}&title=${encodeURIComponent(videoId.replace(/-/g, ' '))}`}
@@ -115,7 +115,7 @@ export default function WatchPageClient({
                             </h3>
                         </div>
                         <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-                            {relatedAnime.map((anime, idx) => (
+                            {relatedAnime.map((anime: any, idx: number) => (
                                 <AnimeCard 
                                     key={idx}
                                     id={idx}

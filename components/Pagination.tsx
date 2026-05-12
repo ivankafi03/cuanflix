@@ -51,7 +51,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                     </div>
                 )}
 
-                {getPageNumbers().map((item, idx) =>
+                {getPageNumbers().map((item: any, idx: number) =>
                     item === "..." ? (
                         <span key={`dots-${idx}`} className="px-3 text-zinc-600 font-black tracking-widest">···</span>
                     ) : (
