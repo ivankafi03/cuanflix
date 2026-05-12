@@ -88,9 +88,11 @@ export default function Navbar() {
                                 >
                                     <Logo className="w-8 h-8 md:w-9 md:h-9 shadow-lg shadow-primary/20 rounded-xl" showText={false} />
                                 </motion.div>
-                                <span className="text-white font-black text-xl tracking-tight hidden sm:block">
-                                    Cuan<span className="text-primary">flix</span>
-                                </span>
+                                {!isScrolled && (
+                                    <span className="text-white font-black text-xl tracking-tight hidden sm:block">
+                                        Cuan<span className="text-primary">flix</span>
+                                    </span>
+                                )}
                             </motion.div>
                         ) : (
                             <motion.div
