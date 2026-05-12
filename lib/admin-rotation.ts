@@ -78,8 +78,22 @@ export async function checkAndRotateAdminPassword() {
                     `
                 });
                 console.log(`[ADMIN-ROTATION] Email sent to ${process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com'}`);
-            } else {
-                console.warn("[ADMIN-ROTATION] RESEND_API_KEY not found. Password updated to: " + newPassword);
+            }
+
+            // 7. Send Telegram Notification (More Reliable)
+            if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+                const message = `🔐 *PASSWORD ADMIN BARU*\n\nHalo Admin, password Anda telah dirotasi otomatis.\n\n🔑 Password: \`${newPassword}\`\n\n_Segera login dan amankan sistem!_`;
+                
+                await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: process.env.TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                console.log("[ADMIN-ROTATION] Telegram notification sent.");
             }
 
             return true; // Password was rotated
