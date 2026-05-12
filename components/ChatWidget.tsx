@@ -97,8 +97,8 @@ export default function ChatWidget() {
 
     const isWatchPage = mounted && pathname.startsWith("/watch");
     const bottomStyle = mounted && window.innerWidth < 1024 && isWatchPage
-        ? (rewardVisible ? "168px" : "96px") 
-        : "24px";
+        ? (rewardVisible ? "132px" : "60px") 
+        : "6px";
 
     return (
         <div 

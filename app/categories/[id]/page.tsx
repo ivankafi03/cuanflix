@@ -36,7 +36,7 @@ export default async function CategoryPage({
 
     const { videos, totalPages, total } = await getVideosByCategory(id, currentPage);
 
-    const javData = videos.map((item, index) => ({
+    const javData = videos.map((item: any, index: number) => ({
         id: index + 1,
         title: item.title,
         image: item.image,

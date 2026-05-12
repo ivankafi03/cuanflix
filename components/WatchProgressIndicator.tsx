@@ -75,7 +75,7 @@ export default function WatchProgressIndicator({
         return (
             <div 
                 className="fixed right-6 z-[90]"
-                style={{ bottom: mounted && window.innerWidth < 1024 ? "96px" : "24px" }}
+                style={{ bottom: mounted && window.innerWidth < 1024 ? "60px" : "6px" }}
             >
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -92,7 +92,7 @@ export default function WatchProgressIndicator({
     return (
         <div 
             className="fixed right-6 z-[90] flex flex-col items-end gap-3"
-            style={{ bottom: mounted && window.innerWidth < 1024 ? "100px" : "24px" }}
+            style={{ bottom: mounted && window.innerWidth < 1024 ? "64px" : "6px" }}
         >
             <AnimatePresence>
                 {showTooltip && !isClaimed && (
@@ -186,8 +186,18 @@ export default function WatchProgressIndicator({
                                 filter: "blur(0px)"
                             }}
                             transition={{ duration: 0.5, ease: "easeOut" }}
-                            className="relative"
+                            className="relative flex flex-col items-center gap-2"
                         >
+                            {/* Floating Text Animation */}
+                            <motion.div
+                                initial={{ y: 0, opacity: 0 }}
+                                animate={{ y: -60, opacity: [0, 1, 1, 0] }}
+                                transition={{ duration: 2, ease: "easeOut" }}
+                                className="absolute -top-4 font-black text-primary text-xl drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]"
+                            >
+                                +$0.005
+                            </motion.div>
+
                             {/* Burst Effect */}
                             <motion.div
                                 initial={{ scale: 0, opacity: 1 }}

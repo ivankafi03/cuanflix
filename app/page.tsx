@@ -43,7 +43,7 @@ export default async function Home() {
               const videosToShow = idx === 0 ? category.videos.slice(1) : category.videos;
               if (videosToShow.length === 0) return null;
 
-              const javData = videosToShow.map((item, index) => ({
+              const javData = videosToShow.map((item: any, index: number) => ({
                 id: index + 1,
                 title: item.title,
                 image: item.image,

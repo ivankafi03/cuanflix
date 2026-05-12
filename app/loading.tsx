@@ -2,20 +2,27 @@ import React from "react";
 
 export default function Loading() {
     return (
-        <div className="min-h-screen pt-24 px-6 max-w-7xl mx-auto flex flex-col gap-12">
-            <div className="flex flex-col gap-4">
-                <div className="h-10 w-64 bg-white/5 animate-pulse rounded-xl" />
-                <div className="h-4 w-96 bg-white/5 animate-pulse rounded-lg" />
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(i => (
-                    <div key={i} className="flex flex-col gap-3">
-                        <div className="aspect-[2/3] bg-white/5 animate-pulse rounded-2xl" />
-                        <div className="h-4 w-full bg-white/5 animate-pulse rounded-lg" />
-                        <div className="h-4 w-2/3 bg-white/5 animate-pulse rounded-lg" />
+        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center">
+            <div className="flex flex-col items-center gap-6">
+                {/* Ikon Pulsing Mewah */}
+                <div className="relative">
+                    <div className="w-20 h-20 bg-primary/20 rounded-3xl animate-pulse blur-xl absolute inset-0" />
+                    <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center relative z-10 animate-bounce shadow-[0_0_50px_rgba(var(--primary-rgb),0.5)]">
+                        <span className="text-black text-3xl font-black italic">$</span>
                     </div>
-                ))}
+                </div>
+                
+                {/* Teks Pulsing */}
+                <div className="flex flex-col items-center gap-2">
+                    <h2 className="text-2xl font-black text-white italic tracking-tighter animate-pulse">
+                        CUAN<span className="text-primary">FLIX</span>
+                    </h2>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.3s]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce [animation-delay:-0.15s]" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" />
+                    </div>
+                </div>
             </div>
         </div>
     );

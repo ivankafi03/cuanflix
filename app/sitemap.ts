@@ -5,8 +5,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { videos } = await getLatestVideos()
     const baseUrl = 'https://cuanflix.site' 
 
-    const animeLinks = latestAnime.map((anime) => ({
-        url: `${baseUrl}/watch/${getSlugFromUrl(anime.link)}`,
+    const videoLinks = videos.map((video) => ({
+        url: `${baseUrl}/watch/${video.href}`,
         lastModified: new Date(),
         changeFrequency: 'daily' as const,
         priority: 0.8,
@@ -19,6 +19,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'hourly' as const,
             priority: 1,
         },
-        ...animeLinks,
+        ...videoLinks,
     ]
 }

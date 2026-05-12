@@ -20,7 +20,7 @@ export default async function SearchPage({
 
     const { videos, totalPages, total } = await searchJav(query, currentPage);
 
-    const mappedData = videos.map((item, index) => ({
+    const mappedData = videos.map((item: any, index: number) => ({
         id: index + 1,
         title: item.title,
         image: item.image,
