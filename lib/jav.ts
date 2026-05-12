@@ -479,6 +479,8 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
                 // For upload18.org / videy.li / etc.
                 if (playUrl.includes('upload18.org') || playUrl.includes('videy.li') || playUrl.includes('doodstream')) {
                     const html = await fetchWithTimeout(playUrl);
+                    if (!html) return playUrl;
+                    
                     // Match .mp4 links in the HTML or scripts
                     const mp4Match = html.match(/https?:\/\/[^"']+\.mp4[^"']*/i);
                     if (mp4Match) return mp4Match[0];
