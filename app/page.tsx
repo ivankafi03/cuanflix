@@ -65,16 +65,12 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Native Ad Placement after the 3rd category */}
-                  {idx === 2 && (
-                    <div className="flex justify-center -my-6">
+                  {/* Native Ad Placement - Strategic & Responsive */}
+                  {(idx === 1 || idx === 4) && (
+                    <div className="w-full flex justify-center -mx-4 md:mx-0 my-4 overflow-visible">
                       <AdNative />
                     </div>
                   )}
-                  {/* Iklan di bawah setiap kategori (Original Leaderboard Size) */}
-                  <div className="flex justify-center -my-4">
-                    <AdUnit type="leaderboard" />
-                  </div>
                 </React.Fragment>
               );
             })}
