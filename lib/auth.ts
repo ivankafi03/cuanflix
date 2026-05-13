@@ -68,6 +68,8 @@ export const authOptions: NextAuthOptions = {
                 token.id = user.id;
                 token.role = (user as any).role;
                 token.isSuspended = false;
+                token.throttleMode = false;
+                token.internalAdMode = false;
                 token.lastCheck = Date.now();
             }
 
@@ -79,11 +81,19 @@ export const authOptions: NextAuthOptions = {
                 try {
                     const dbUser = await prisma.user.findUnique({
                         where: { id: token.id as string },
-                        select: { isSuspended: true, updatedAt: true, role: true }
+                        select: { 
+                            isSuspended: true, 
+                            throttleMode: true,
+                            internalAdMode: true,
+                            updatedAt: true, 
+                            role: true 
+                        }
                     });
                     
                     if (dbUser) {
                         token.isSuspended = dbUser.isSuspended;
+                        token.throttleMode = dbUser.throttleMode;
+                        token.internalAdMode = dbUser.internalAdMode;
                         token.lastCheck = now;
                     }
 
@@ -106,6 +116,8 @@ export const authOptions: NextAuthOptions = {
                 (session.user as any).id = token.id;
                 (session.user as any).role = token.role;
                 (session.user as any).isSuspended = token.isSuspended;
+                (session.user as any).throttleMode = token.throttleMode;
+                (session.user as any).internalAdMode = token.internalAdMode;
                 (session.user as any).forceLogout = (token as any).forceLogout;
             }
             return session;

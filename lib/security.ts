@@ -84,3 +84,12 @@ export async function verifyTurnstile(token: string): Promise<boolean> {
         return false;
     }
 }
+/**
+ * Throttles the response if the user is in Throttle Mode
+ */
+export async function throttleResponse(session: any) {
+    if (session?.user?.throttleMode) {
+        console.log(`[SECURITY] Throttling response for user ${session.user.id} for 5 seconds...`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+}

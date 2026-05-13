@@ -143,6 +143,16 @@ export default async function RootLayout({
           <AntiAdBlock />
           <NotificationToast />
           <RewardNotification />
+          
+          {/* Throttle Mode (Slowdown) Visual Indicator */}
+          {session?.user && (session.user as any).throttleMode && (
+            <div className="fixed inset-0 z-[9999] pointer-events-none flex flex-col items-center justify-center bg-black/10 backdrop-blur-[2px]">
+              <div className="p-4 bg-[#0F0F11] border border-white/5 rounded-2xl flex items-center gap-4 shadow-2xl animate-pulse">
+                <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Optimizing connection... (Slow Mode Active)</span>
+              </div>
+            </div>
+          )}
         </Providers>
       </body>
     </html>

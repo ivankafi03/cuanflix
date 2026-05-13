@@ -81,6 +81,27 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     // ── Conditional render AFTER all hooks ───────────────────────────
     if (!shouldRender) return null;
 
+    const isInternalAd = (session?.user as any)?.internalAdMode;
+
+    if (isInternalAd) {
+        return (
+            <a 
+                href="https://samehadakuu.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`flex flex-col items-center justify-center bg-zinc-900 border border-white/5 rounded-2xl p-4 gap-2 group transition-all hover:bg-zinc-800 ${className}`}
+                style={{ width: config.width, minHeight: config.height }}
+            >
+                <div className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">SPONSORED</div>
+                <div className="flex flex-col items-center">
+                    <span className="text-primary font-black text-xl italic tracking-tighter group-hover:scale-110 transition-transform">SAMEHADAKUU</span>
+                    <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">Nonton Anime Sub Indo Tercepat</span>
+                </div>
+                <div className="px-4 py-1.5 bg-primary/10 border border-primary/20 text-primary text-[8px] font-black rounded-full uppercase mt-2">KUNJUNGI SEKARANG</div>
+            </a>
+        );
+    }
+
     const isMobile = mounted && window.innerWidth < 768;
     const finalWidth = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.width : config.width;
     const finalHeight = (type === "leaderboard" && isMobile) ? AD_CONFIG.mobile.height : config.height;

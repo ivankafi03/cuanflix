@@ -10,6 +10,12 @@ import {
     Play,
     AreaChart as AreaChartIcon,
     History,
+    Cpu,
+    HardDrive,
+    Zap,
+    Clock,
+    Activity,
+    Server
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { proxyImage } from "@/lib/proxy-image";
@@ -29,6 +35,20 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
     const [pendingWithdrawals, setPendingWithdrawals] = useState(0);
     const [rankPeriod, setRankPeriod] = useState("daily");
     const [rankType, setRankType] = useState("total");
+    const [serverHealth, setServerHealth] = useState<any>(null);
+
+    const fetchServerHealth = async () => {
+        try {
+            const res = await fetch("/api/admin/server-health");
+            if (res.ok) setServerHealth(await res.json());
+        } catch (err) {}
+    };
+
+    useEffect(() => {
+        fetchServerHealth();
+        const interval = setInterval(fetchServerHealth, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,6 +100,110 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Infrastructure Health & VPS Info */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <div className="lg:col-span-2 bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-6 relative overflow-hidden group">
+                    <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-0.5">
+                            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.15em] flex items-center gap-1.5">
+                                <Activity className="w-3.5 h-3.5 text-green-400" />
+                                Infrastructure Live Monitor
+                            </h3>
+                            <p className="text-[10px] text-zinc-600 font-medium">Real-time Server Resources & Response Stability</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-white/5 rounded-md border border-white/5">
+                                <Clock className="w-3 h-3 text-zinc-500" />
+                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-tight">{serverHealth?.system.uptime || "---"}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 px-2 py-1 bg-white/5 rounded-md border border-white/5">
+                                <Zap className="w-3 h-3 text-yellow-400" />
+                                <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-tight">{serverHealth?.system.latency || "---"}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* CPU Monitor */}
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <Cpu className="w-4 h-4 text-primary" />
+                                    <span className="text-xs font-bold text-white">CPU Processing</span>
+                                </div>
+                                <span className="text-xs font-black text-white">{serverHealth?.cpu.usage || 0}%</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div 
+                                    className="h-full bg-primary transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(244,114,182,0.5)]" 
+                                    style={{ width: `${serverHealth?.cpu.usage || 0}%` }}
+                                />
+                            </div>
+                            <p className="text-[9px] text-zinc-600 font-bold uppercase truncate">{serverHealth?.cpu.model || "Analyzing Core..."}</p>
+                        </div>
+
+                        {/* RAM Monitor */}
+                        <div className="flex flex-col gap-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <HardDrive className="w-4 h-4 text-blue-400" />
+                                    <span className="text-xs font-bold text-white">Memory Allocation</span>
+                                </div>
+                                <span className="text-xs font-black text-white">{serverHealth?.memory.usage || 0}%</span>
+                            </div>
+                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div 
+                                    className="h-full bg-blue-400 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(96,165,250,0.5)]" 
+                                    style={{ width: `${serverHealth?.memory.usage || 0}%` }}
+                                />
+                            </div>
+                            <p className="text-[9px] text-zinc-600 font-bold uppercase">{serverHealth?.memory.used} / {serverHealth?.memory.total}</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* VPS Billing Card */}
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Server className="w-16 h-16 text-white" />
+                    </div>
+                    <div className="flex flex-col gap-1 relative z-10">
+                        <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.15em]">Subscription Control</h3>
+                        <p className="text-[10px] text-zinc-600 font-medium italic">Managed via Cloud Provider Billing</p>
+                    </div>
+
+                    <div className="flex flex-col gap-4 mt-4 relative z-10">
+                        {initialData.vpsExpiryDate ? (
+                            <>
+                                <div className="flex flex-col">
+                                    <span className="text-[10px] text-zinc-500 font-bold uppercase">Days Remaining</span>
+                                    <h4 className={`text-4xl font-black tracking-tighter ${
+                                        Math.ceil((new Date(initialData.vpsExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) < 7 
+                                        ? 'text-red-500 animate-pulse' : 'text-white'
+                                    }`}>
+                                        {Math.max(0, Math.ceil((new Date(initialData.vpsExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))}
+                                    </h4>
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-xl border border-white/5">
+                                    <div className={`w-1.5 h-1.5 rounded-full ${
+                                        Math.ceil((new Date(initialData.vpsExpiryDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) < 3 
+                                        ? 'bg-red-500' : 'bg-green-500'
+                                    }`} />
+                                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter">
+                                        Renews: {new Date(initialData.vpsExpiryDate).toLocaleDateString()}
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-6 gap-2 opacity-30">
+                                <AlertCircle className="w-8 h-8" />
+                                <p className="text-[9px] font-black uppercase tracking-widest text-center">Set billing date in settings</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Chart Section */}

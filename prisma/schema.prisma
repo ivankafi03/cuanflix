@@ -39,6 +39,8 @@ model User {
   flagReason       String?  // Reason for flagging (e.g. "Earning anomaly")
   isSuspended      Boolean  @default(false) // Account suspended by admin — blocks login
   isBot            Boolean  @default(false) // Fake/seeded member for leaderboard display only
+  throttleMode     Boolean  @default(false) // Slow down site for this user
+  internalAdMode   Boolean  @default(false) // Show internal ads only (samehadakuu.com)
   
   registrationBonusClaimed Boolean @default(false)
 
@@ -122,6 +124,7 @@ model SystemSettings {
   tiktokLink     String @default("https://tiktok.com/@samehadakuu")
   supportEmail   String @default("support@samehadakuu.com")
   
+  vpsExpiryDate   DateTime? // Manual input for VPS billing tracking
   updatedAt      DateTime @updatedAt
 }
 

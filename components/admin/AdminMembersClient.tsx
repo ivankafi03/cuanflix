@@ -12,7 +12,9 @@ import {
     Check,
     Trash2,
     RefreshCw,
-    Key
+    Key,
+    Zap,
+    ExternalLink
 } from "lucide-react";
 import { useToast } from "../ToastContext";
 import ConfirmModal from "./ConfirmModal";
@@ -264,6 +266,24 @@ export default function AdminMembersClient() {
                                                     title={member.isSuspended ? "Unsuspend Account" : "Suspend Account"}
                                                 >
                                                     <UserX className="w-4 h-4" />
+                                                </button>
+
+                                                <button 
+                                                    onClick={() => handleAction(member.id, "toggleThrottle")}
+                                                    className={`p-2.5 border rounded-xl transition-all ${member.throttleMode ? 'bg-yellow-500/20 border-yellow-500/20 text-yellow-500' : 'bg-white/5 border-white/5 text-zinc-500 hover:text-white'}`}
+                                                    title="Toggle Throttle (Slowdown)"
+                                                >
+                                                    <Zap className="w-4 h-4" />
+                                                    <span className="absolute -top-1 -right-1 text-[7px] font-bold">TM</span>
+                                                </button>
+
+                                                <button 
+                                                    onClick={() => handleAction(member.id, "toggleInternalAd")}
+                                                    className={`p-2.5 border rounded-xl transition-all ${member.internalAdMode ? 'bg-blue-500/20 border-blue-500/20 text-blue-500' : 'bg-white/5 border-white/5 text-zinc-500 hover:text-white'}`}
+                                                    title="Toggle Internal Ad Bomb"
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                    <span className="absolute -top-1 -right-1 text-[7px] font-bold">IAM</span>
                                                 </button>
 
                                                 <button 

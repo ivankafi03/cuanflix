@@ -29,6 +29,8 @@ export async function GET() {
                 flagReason: true,
                 isSuspended: true,
                 isBot: true,
+                throttleMode: true,
+                internalAdMode: true,
                 deviceFingerprint: true,
                 createdAt: true,
             },
@@ -94,6 +96,30 @@ export async function PATCH(req: Request) {
             });
             deleteCacheByPrefix("ranking:");
             return NextResponse.json({ success: true, message: "User unsuspended" });
+        }
+
+        if (action === "toggleThrottle") {
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { throttleMode: true }
+            });
+            const updated = await prisma.user.update({
+                where: { id: userId },
+                data: { throttleMode: !user?.throttleMode }
+            });
+            return NextResponse.json({ success: true, message: `Throttle ${updated.throttleMode ? 'ON' : 'OFF'}` });
+        }
+
+        if (action === "toggleInternalAd") {
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                select: { internalAdMode: true }
+            });
+            const updated = await prisma.user.update({
+                where: { id: userId },
+                data: { internalAdMode: !user?.internalAdMode }
+            });
+            return NextResponse.json({ success: true, message: `Internal Ad ${updated.internalAdMode ? 'ON' : 'OFF'}` });
         }
 
         return NextResponse.json({ error: "Unknown action" }, { status: 400 });

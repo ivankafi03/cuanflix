@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { throttleResponse } from "@/lib/security";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,8 @@ export async function GET() {
         if (!session || !session.user?.id) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+
+        await throttleResponse(session);
 
         const withdrawals = await prisma.withdrawRequest.findMany({
             where: { userId: session.user.id },
@@ -35,6 +38,8 @@ export async function POST(req: Request) {
         if (session.user.isSuspended) {
             return NextResponse.json({ error: "Account Suspended" }, { status: 403 });
         }
+
+        await throttleResponse(session);
 
         const userId = session.user.id;
         const { amount, method, accountNumber, accountName } = await req.json();

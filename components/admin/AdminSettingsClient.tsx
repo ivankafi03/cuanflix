@@ -14,9 +14,9 @@ import {
     AlertCircle,
     Send,
     Instagram,
-    Twitter,
     Video,
-    Mail
+    Mail,
+    Calendar
 } from "lucide-react";
 import { useToast } from "../ToastContext";
 
@@ -34,7 +34,8 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
         xLink: initialSettings?.xLink || "",
         instagramLink: initialSettings?.instagramLink || "",
         tiktokLink: initialSettings?.tiktokLink || "",
-        supportEmail: initialSettings?.supportEmail || ""
+        supportEmail: initialSettings?.supportEmail || "",
+        vpsExpiryDate: initialSettings?.vpsExpiryDate ? new Date(initialSettings.vpsExpiryDate).toISOString().split('T')[0] : ""
     });
     const [blockedIps, setBlockedIps] = useState(initialBlockedIps);
     const [saving, setSaving] = useState(false);
@@ -284,6 +285,24 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                                             className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all"
                                         />
                                     </div>
+                                </div>
+                            </div>
+
+                            {/* VPS Billing Section */}
+                            <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
+                                <div className="flex items-center gap-3">
+                                    <Calendar className="w-4 h-4 text-primary" />
+                                    <span className="text-sm font-bold text-white">VPS Infrastructure Billing</span>
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <span className="text-sm font-bold text-zinc-600 ">VPS Expiry / Renewal Date</span>
+                                    <input
+                                        type="date"
+                                        value={settings.vpsExpiryDate || ""}
+                                        onChange={(e) => setSettings({ ...settings, vpsExpiryDate: e.target.value })}
+                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all [color-scheme:dark]"
+                                    />
+                                    <p className="text-[10px] text-zinc-600 font-medium px-2 italic">* Enter the next billing date to track server uptime and renewal on dashboard.</p>
                                 </div>
                             </div>
                         </div>
