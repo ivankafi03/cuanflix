@@ -31,7 +31,7 @@ export default function PayoutsClient({ user, settings }: { user: any, settings:
                 <div className="lg:col-span-2 flex flex-col gap-4">
                     {/* Balance Card */}
                     <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
                             <div className="flex flex-col gap-1">
                                 <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-1.5">

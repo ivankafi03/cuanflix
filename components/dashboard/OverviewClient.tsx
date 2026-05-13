@@ -110,7 +110,7 @@ export default function OverviewClient({ user }: { user: any }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {/* Balance Card */}
                         <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
-                            <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                            <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                             <div className="flex items-center justify-between relative z-10">
                                 <p className="text-zinc-500 text-xs font-medium">Total Net Balance</p>
                                 <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/10">
@@ -136,7 +136,7 @@ export default function OverviewClient({ user }: { user: any }) {
 
                         {/* Rank Card */}
                         <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group hover:border-blue-500/20 transition-all">
-                            <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                            <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                             <div className="flex items-center justify-between relative z-10">
                                 <p className="text-zinc-500 text-xs font-medium">Global Status</p>
                                 <div className="w-7 h-7 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/10">
@@ -167,7 +167,7 @@ export default function OverviewClient({ user }: { user: any }) {
 
                         {/* Telegram Community Banner */}
                         <div className="sm:col-span-2 bg-gradient-to-r from-blue-600/10 to-primary/5 border border-blue-500/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                            <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[50px] -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all" />
                             
                             <div className="flex items-center gap-4 z-10">
@@ -195,7 +195,7 @@ export default function OverviewClient({ user }: { user: any }) {
                     {/* Available Broadcast Rewards */}
                     {availableBroadcasts.map((b) => (
                         <div key={b.id} className="bg-gradient-to-r from-orange-500/20 via-primary/5 to-transparent border border-orange-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group mb-2">
-                            <div className="absolute inset-0 bg-batik-pink opacity-[0.04] pointer-events-none group-hover:opacity-[0.07] transition-all" />
+                            <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.15] transition-all" />
                             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/10 blur-[60px] -mr-16 -mt-16 group-hover:bg-orange-500/20 transition-all" />
                             
                             <div className="flex items-center gap-5 z-10">
@@ -225,7 +225,7 @@ export default function OverviewClient({ user }: { user: any }) {
                     {/* Welcome Reward Claim (If not claimed) */}
                     {!user.registrationBonusClaimed && (
                         <div className="bg-gradient-to-br from-primary/20 via-primary/5 to-transparent border border-primary/30 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
+                            <div className="absolute inset-0 bg-batik-pink opacity-[0.1] pointer-events-none group-hover:opacity-[0.18] transition-all" />
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-[60px] -mr-16 -mt-16 group-hover:bg-primary/30 transition-all" />
                             
                             <div className="flex items-center gap-5 z-10">
@@ -254,7 +254,7 @@ export default function OverviewClient({ user }: { user: any }) {
 
                     {/* Referral Promo */}
                     <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                         <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-1000 pointer-events-none" />
                         <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
