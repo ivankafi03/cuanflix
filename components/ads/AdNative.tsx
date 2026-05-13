@@ -22,7 +22,7 @@ export default function AdNative({ className = "" }: { className?: string }) {
         loaded.current = true;
 
         const script = document.createElement("script");
-        script.src   = "https://pl29360873.profitablecpmratenetwork.com/cc6b63069d4fbfd8dc3934796f64530a/invoke.js";
+        script.src   = "https://downconvenientmagnetic.com/863f6aef8282a41ad5ebdefcf161468b/invoke.js";
         script.async = true;
         script.setAttribute("data-cfasync", "false");
         containerRef.current.appendChild(script);
@@ -32,12 +32,25 @@ export default function AdNative({ className = "" }: { className?: string }) {
     if (!shouldRender) return null;
 
     return (
-        <div className={`w-full flex justify-center py-4 ${className}`}>
+        <div className={`w-full flex justify-center py-6 px-0 overflow-hidden ${className}`}>
             <div 
-                id="container-cc6b63069d4fbfd8dc3934796f64530a" 
+                id="container-863f6aef8282a41ad5ebdefcf161468b" 
                 ref={containerRef} 
-                className="w-full max-w-full min-h-[250px] flex justify-center items-center"
+                className="w-full max-w-[100vw] min-h-[250px] flex justify-center items-start overflow-x-auto no-scrollbar"
+                style={{
+                    WebkitOverflowScrolling: 'touch',
+                }}
             />
+            <style jsx global>{`
+                #container-863f6aef8282a41ad5ebdefcf161468b,
+                #container-863f6aef8282a41ad5ebdefcf161468b > div,
+                #container-863f6aef8282a41ad5ebdefcf161468b iframe {
+                    max-width: 100% !important;
+                    height: auto !important;
+                    margin: 0 auto !important;
+                    display: block !important;
+                }
+            `}</style>
         </div>
     );
 }
