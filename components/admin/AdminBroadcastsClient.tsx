@@ -157,10 +157,10 @@ export default function AdminBroadcastsClient() {
 
                 {/* List */}
                 <div className="lg:col-span-2">
-                    <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-1 shadow-2xl relative overflow-hidden">
-                        <div className="absolute inset-0 bg-batik-modern opacity-[0.02] pointer-events-none" />
+                    <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-1 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.06] pointer-events-none group-hover:opacity-[0.1] transition-all" />
                         
-                        <div className="p-8">
+                        <div className="p-8 relative z-10">
                             <h3 className="text-sm font-bold text-white mb-6">Active & Past Broadcasts</h3>
                             <div className="flex flex-col gap-4">
                                 {loading ? (

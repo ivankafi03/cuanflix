@@ -67,7 +67,8 @@ export default function AdminChatClient() {
                 <p className="text-sm text-zinc-500">Manage user messages across the platform.</p>
             </div>
 
-            <div className="bg-[#111113] border border-zinc-800 rounded-2xl overflow-hidden">
+            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden relative group">
+                <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
                 {/* Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-800">
                     <div className="flex items-center gap-2">

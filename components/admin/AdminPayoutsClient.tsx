@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Banknote, Check, X, Loader2 } from "lucide-react";
@@ -56,8 +56,8 @@ export default function AdminPayoutsClient() {
                 <p className="text-sm text-zinc-500 font-medium">Global Distribution Queue & Financial Auditing.</p>
             </div>
 
-            <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-8 flex flex-col gap-6 shadow-2xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-batik-modern opacity-[0.02] pointer-events-none" />
+            <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-8 flex flex-col gap-6 shadow-2xl relative overflow-hidden group">
+                <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                 
                 <div className="flex items-center justify-between z-10 mb-2">
                     <h3 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -84,8 +84,9 @@ export default function AdminPayoutsClient() {
                         </div>
                     ) : (
                         withdrawalRequests.map((req, idx) => (
-                            <div key={idx} className="p-6 bg-black/40 border border-white/5 rounded-[2rem] flex flex-col gap-6 hover:border-white/10 transition-all group">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                            <div key={idx} className="p-6 bg-black/40 border border-white/5 rounded-[2rem] flex flex-col gap-6 hover:border-white/10 transition-all group relative overflow-hidden">
+                                <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
                                     <div className="flex items-center gap-5">
                                          <div className="w-12 h-12 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-center text-primary font-bold text-lg shadow-inner">
                                             {req.user?.name?.substring(0, 1)}

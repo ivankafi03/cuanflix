@@ -96,27 +96,41 @@ export default function GhostManager() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Active Population</span>
-                    <span className="text-2xl font-bold text-white tracking-tight">{ghosts.length}</span>
+                {/* Active Population */}
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
+                    <div className="relative z-10">
+                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Active Population</span>
+                        <div className="text-2xl font-bold text-white tracking-tight">{ghosts.length}</div>
+                    </div>
                 </div>
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Ghost Balance</span>
-                    <span className="text-2xl font-bold text-purple-400 tracking-tight">
-                        ${ghosts.reduce((acc, curr) => acc + (curr.balanceWatch || 0), 0).toFixed(2)}
-                    </span>
+
+                {/* Ghost Balance */}
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
+                    <div className="relative z-10">
+                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Ghost Balance</span>
+                        <div className="text-2xl font-bold text-purple-400 tracking-tight">
+                            ${ghosts.reduce((acc, curr) => acc + (curr.balanceWatch || 0), 0).toFixed(2)}
+                        </div>
+                    </div>
                 </div>
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors sm:col-span-2 lg:col-span-1">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Network Status</span>
-                    <div className="flex items-center gap-2">
-                        <span className="text-2xl font-bold text-green-400 tracking-tight">SECURE</span>
-                        <ShieldCheck className="w-5 h-5 text-green-500/50" />
+
+                {/* Network Status */}
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-1 hover:border-white/10 transition-colors sm:col-span-2 lg:col-span-1 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
+                    <div className="relative z-10">
+                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest opacity-70">Network Status</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-2xl font-bold text-green-400 tracking-tight">SECURE</span>
+                            <ShieldCheck className="w-5 h-5 text-green-500/50" />
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div className="bg-[#0F0F11] border border-white/5 rounded-3xl p-1 shadow-2xl relative overflow-hidden group">
-                <div className="absolute inset-0 bg-batik-modern opacity-[0.02] pointer-events-none group-hover:opacity-[0.04] transition-all" />
+                <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-separate border-spacing-0">
                         <thead>

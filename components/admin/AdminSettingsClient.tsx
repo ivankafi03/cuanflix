@@ -96,7 +96,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                 {/* Configuration Panel */}
                 <div className="flex flex-col gap-8">
                     <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-10 flex flex-col gap-8 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-batik-modern opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                         
                         <div className="flex items-center gap-4 z-10">
                             <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary shadow-inner border border-primary/10">
@@ -321,9 +321,9 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
 
                 {/* Security Sidebar */}
                 <div className="flex flex-col gap-8">
-                    <div className="bg-[#0F0F11] border border-red-500/10 rounded-[2.5rem] p-8 flex flex-col gap-8 shadow-2xl relative overflow-hidden">
-                        <div className="absolute inset-0 bg-batik-modern opacity-[0.03] pointer-events-none" />
-                        <div className="flex items-center justify-between z-10">
+                    <div className="bg-[#0F0F11] border border-red-500/10 rounded-[2.5rem] p-8 flex flex-col gap-8 shadow-2xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
+                        <div className="flex items-center justify-between relative z-10">
                             <h3 className="text-[10px] font-bold text-white  flex items-center gap-3">
                                 <ShieldOff className="w-5 h-5 text-red-500" />
                                 Restricted Access Nodes

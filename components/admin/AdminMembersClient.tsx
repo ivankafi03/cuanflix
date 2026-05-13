@@ -164,8 +164,8 @@ export default function AdminMembersClient() {
                 </div>
             </div>
 
-            <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-1 shadow-2xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-batik-modern opacity-[0.02] pointer-events-none" />
+            <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-1 shadow-2xl relative overflow-hidden group">
+                <div className="absolute inset-0 bg-batik-pink opacity-[0.06] pointer-events-none group-hover:opacity-[0.1] transition-all" />
                 
                 <div className="overflow-x-auto no-scrollbar">
                     <table className="w-full border-separate border-spacing-y-2 border-spacing-x-4">
