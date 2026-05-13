@@ -14,6 +14,7 @@ import {
     AlertCircle,
     Send,
     Instagram,
+    Twitter,
     Video,
     Mail,
     Calendar
