@@ -83,6 +83,16 @@ export default function AdScripts() {
                     })();
                 `}
             </Script>
+            {/* Microsoft Clarity - User Behavior Analysis */}
+            <Script id="microsoft-clarity" strategy="afterInteractive">
+                {`
+                    (function(c,l,a,r,i,t,y){
+                        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
+                        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                    })(window, document, "clarity", "script", "wqh6n1t83y");
+                `}
+            </Script>
             <noscript>
                 <a href="/" target="_blank">
                     <img src="https://sstatic1.histats.com/0.gif?5026321&101" alt="histats" style={{ display: 'none' }} />
