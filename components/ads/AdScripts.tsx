@@ -59,13 +59,13 @@ export default function AdScripts() {
             <Script
                 id="adsterra-popunder"
                 src="https://pl29429557.profitablecpmratenetwork.com/ec/06/5a/ec065a7e4c204506aa310f99c17a98a4.js"
-                strategy="lazyOnload"
+                strategy="afterInteractive"
             />
             {/* AdsTerra Social Bar */}
             <Script
                 id="adsterra-social-bar"
                 src="https://pl29429558.profitablecpmratenetwork.com/82/24/c4/8224c42340e4d16455652554fa3261c8.js"
-                strategy="lazyOnload"
+                strategy="afterInteractive"
             />
             {/* Monetag MultiTag - High Priority */}
             <Script

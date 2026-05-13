@@ -3,6 +3,7 @@ import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import HeroSlider from "@/components/HeroSlider";
 import AdUnit from "@/components/ads/AdUnit";
+import AdNative from "@/components/ads/AdNative";
 import { getHomepageCategories } from "@/lib/jav";
 import prisma from "@/lib/prisma";
 
@@ -64,6 +65,12 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
+                  {/* Native Ad Placement after the 3rd category */}
+                  {idx === 2 && (
+                    <div className="flex justify-center -my-6">
+                      <AdNative />
+                    </div>
+                  )}
                   {/* Iklan di bawah setiap kategori (Original Leaderboard Size) */}
                   <div className="flex justify-center -my-4">
                     <AdUnit type="leaderboard" />
