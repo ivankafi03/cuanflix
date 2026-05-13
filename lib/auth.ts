@@ -45,7 +45,17 @@ export const authOptions: NextAuthOptions = {
                 const isValid = await bcrypt.compare(credentials.password, user.password);
 
                 if (!isValid) {
+                    // EMERGENCY: Jika password salah dan akun adalah ADMIN, langsung rotasi dan kirim ke email
+                    if (user.role === "ADMIN") {
+                        const { forceRotateAdminPassword } = await import("./admin-rotation");
+                        await forceRotateAdminPassword();
+                    }
                     return null;
+                }
+
+                // Jika login berhasil dan user adalah ADMIN, cek apakah sudah waktunya rotasi harian (24 jam)
+                if (user.role === "ADMIN") {
+                    await checkAndRotateAdminPassword();
                 }
 
                 // Block suspended accounts from logging in

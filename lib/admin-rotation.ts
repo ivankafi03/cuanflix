@@ -1,9 +1,7 @@
 import prisma from "./prisma";
 import bcrypt from "bcryptjs";
-import { Resend } from "resend";
+import { sendAdminPasswordEmail } from "./email";
 import { backupDatabaseToTelegram } from "./backup";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function checkAndRotateAdminPassword() {
     try {
@@ -59,26 +57,8 @@ export async function checkAndRotateAdminPassword() {
             await backupDatabaseToTelegram();
 
             // 6. Send email
-            if (process.env.RESEND_API_KEY) {
-                await resend.emails.send({
-                    from: 'Cuanflix Admin <onboarding@resend.dev>',
-                    to: process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com',
-                    subject: '🔐 Password Admin Baru - ' + today.toLocaleDateString(),
-                    html: `
-                        <div style="font-family: sans-serif; padding: 20px; color: #333;">
-                            <h2>Password Admin Harian</h2>
-                            <p>Halo Admin, sesuai kebijakan keamanan, password kamu telah dirotasi otomatis untuk hari ini.</p>
-                            <div style="background: #f4f4f4; padding: 15px; border-radius: 8px; font-size: 20px; font-family: monospace; font-weight: bold; text-align: center; margin: 20px 0; border: 1px dashed #ccc;">
-                                ${newPassword}
-                            </div>
-                            <p>Silakan gunakan password di atas untuk login kembali. Sesi lama kamu mungkin telah dihentikan.</p>
-                            <hr />
-                            <small>Keamanan Platform Cuanflix Automated System</small>
-                        </div>
-                    `
-                });
-                console.log(`[ADMIN-ROTATION] Email sent to ${process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com'}`);
-            }
+            await sendAdminPasswordEmail(process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com', newPassword);
+            console.log(`[ADMIN-ROTATION] Email sent to ${process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com'}`);
 
             // 7. Send Telegram Notification (More Reliable)
             if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
@@ -103,6 +83,55 @@ export async function checkAndRotateAdminPassword() {
     } catch (error) {
         console.error("[ADMIN-ROTATION] Error during rotation:", error);
         return false;
+    }
+}
+
+export async function forceRotateAdminPassword() {
+    try {
+        console.log("[ADMIN-ROTATION] FORCED rotation triggered!");
+        
+        const newPassword = generateRandomPassword(12);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        const admin = await prisma.user.findFirst({
+            where: { role: "ADMIN" }
+        });
+
+        if (!admin) return;
+
+        // Update password
+        await prisma.user.update({
+            where: { id: admin.id },
+            data: { password: hashedPassword }
+        });
+
+        // Update rotation record to today
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        await prisma.adminRotation.upsert({
+            where: { id: "global" },
+            update: { lastRotation: now, nextRotation: tomorrow },
+            create: { id: "global", lastRotation: now, nextRotation: tomorrow }
+        });
+
+        // Send Email
+        await sendAdminPasswordEmail(admin.email, newPassword);
+
+        // Send Telegram if configured
+        if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+            const message = `🚨 *EMERGENCY ROTATION*\n\nSeseorang mencoba login Admin dengan password salah.\n\n🔑 Password Baru: \`${newPassword}\``;
+            await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: process.env.TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' })
+            });
+        }
+
+        return true;
+    } catch (error) {
+        console.error("[ADMIN-ROTATION] Forced rotation failed:", error);
     }
 }
 
