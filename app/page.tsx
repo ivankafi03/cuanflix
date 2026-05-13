@@ -39,7 +39,7 @@ export default async function Home() {
       {/* Video Categories */}
       <main className="max-w-[1600px] mx-auto px-4 md:px-8 w-full flex flex-col gap-16 pb-24 -mt-10 relative z-20">
         {categories && categories.length > 0 ? (
-          <div className="flex flex-col gap-14">
+          <div className="flex flex-col gap-6">
             {categories.map((category, idx) => {
               // Hide the featured video from the first category to avoid duplication
               const videosToShow = idx === 0 ? category.videos.slice(1) : category.videos;
@@ -65,10 +65,12 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Premium Native Ad - Every Category */}
-                  <div className="w-full flex justify-center -mx-4 md:mx-0 my-10 overflow-visible">
-                    <AdNative />
-                  </div>
+                  {/* Single Native Ad - Best position after 3rd category */}
+                  {idx === 2 && (
+                    <div className="w-full flex justify-center -mx-4 md:mx-0 my-4 overflow-visible">
+                      <AdNative />
+                    </div>
+                  )}
                 </React.Fragment>
               );
             })}
