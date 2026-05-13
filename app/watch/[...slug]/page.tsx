@@ -187,10 +187,11 @@ export default async function WatchPrettyPage({
                     videoId={path}
                     relatedAnime={relatedAnime}
                 >
-                    {/* Native Banner Ad - Strategic Placement */}
+                    {/* Native Banner Ad - Strategic Placement Above Title */}
                     <AdNative className="mt-8 mb-4" />
 
                     {/* Anime Info Section */}
+
                     <div className="bg-secondary border border-border rounded-xl p-5 md:p-6 shadow-md overflow-hidden relative mt-6">
                         <div className="flex flex-col gap-5 relative z-10">
                             {/* Header Section */}

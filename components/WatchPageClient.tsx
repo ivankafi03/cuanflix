@@ -6,6 +6,7 @@ import WatchEarningManager from "./WatchEarningManager";
 import { VideoServer } from "@/lib/cuanflix";
 import dynamic from "next/dynamic";
 import AdUnit from "./ads/AdUnit";
+import AdNative from "./ads/AdNative";
 import { List, X, ChevronRight, Sparkles, Download } from "lucide-react";
 import Link from "next/link";
 import AnimeCard from "./AnimeCard";
@@ -58,8 +59,6 @@ export default function WatchPageClient({
                     downloads={downloads}
                     onPlay={() => setIsWatching(true)}
                 />
-
-
 
                 {children}
 
