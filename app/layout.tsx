@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: "Cuanflix",
     images: [
       {
-        url: "/og-image-v2.png",
+        url: "/og-image-final.png",
         width: 1200,
         height: 630,
         alt: "Cuanflix - Streaming",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Cuanflix - Premium Streaming Database",
     description: "Streaming tercepat dengan antarmuka premium.",
-    images: ["/og-image-v2.png"],
+    images: ["/og-image-final.png"],
   },
 };
 
