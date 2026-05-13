@@ -1,24 +1,48 @@
-import { MetadataRoute } from 'next'
-import { getLatestVideos } from '@/lib/jav'
+import { MetadataRoute } from 'next';
+import { getHomepageCategories } from '@/lib/jav';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const { videos } = await getLatestVideos()
-    const baseUrl = 'https://cuanflix.site' 
+  const baseUrl = 'https://cuanflix.site';
 
-    const videoLinks = videos.map((video) => ({
-        url: `${baseUrl}/watch/${video.href}`,
-        lastModified: new Date(),
-        changeFrequency: 'daily' as const,
-        priority: 0.8,
-    }))
+  // 1. Static Routes
+  const staticRoutes = [
+    '',
+    '/auth/login',
+    '/auth/register',
+    '/categories/1',
+    '/categories/2',
+    '/categories/3',
+    '/categories/4',
+    '/categories/5',
+    '/categories/6',
+    '/categories/7',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily' as const,
+    priority: route === '' ? 1 : 0.8,
+  }));
 
-    return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'hourly' as const,
-            priority: 1,
-        },
-        ...videoLinks,
-    ]
+  // 2. Dynamic Video Routes from Homepage Categories
+  // Kita ambil semua video yang muncul di beranda untuk awal
+  const categories = await getHomepageCategories();
+  const videoRoutes: any[] = [];
+
+  if (categories && categories.length > 0) {
+    categories.forEach((category) => {
+      category.videos.forEach((video: any) => {
+        videoRoutes.push({
+          url: `${baseUrl}/watch/${video.href}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.6,
+        });
+      });
+    });
+  }
+
+  // Remove duplicates
+  const uniqueVideoRoutes = Array.from(new Map(videoRoutes.map(v => [v.url, v])).values());
+
+  return [...staticRoutes, ...uniqueVideoRoutes];
 }

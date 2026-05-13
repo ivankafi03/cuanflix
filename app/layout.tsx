@@ -39,19 +39,26 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL("https://cuanflix.site"),
   title: {
-    default: "Cuanflix | Nonton JAV Premium",
+    default: "Cuanflix | Nonton JAV Premium Terlengkap & Tercepat",
     template: "%s | Cuanflix"
   },
-  description: "Eksplorasi database video terlengkap dengan Cuanflix. Streaming HD, Cepat, & Estetik.",
-  keywords: ["streaming video", "cuanflix", "hd video", "nonton hd"],
+  description: "Eksplorasi database video JAV premium terlengkap dengan Cuanflix. Streaming HD, Update Setiap Hari, & Estetik. Nikmati pengalaman nonton tanpa batas.",
+  keywords: ["streaming video", "cuanflix", "database jav", "nonton jav", "jav hd", "jav terlengkap", "jav terbaru", "jav sub indo"],
   authors: [{ name: "Cuanflix Team" }],
-
-  other: {
-    monetag: "4b870a568c7fe8aca7b36f2669891e3d",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   openGraph: {
-    title: "Cuanflix - Premium Streaming Database",
-    description: "Database streaming tercepat dan terlengkap dengan antarmuka yang bersih.",
+    title: "Cuanflix - Premium Streaming Database JAV",
+    description: "Database streaming JAV tercepat dan terlengkap dengan antarmuka yang bersih dan modern.",
     url: "https://cuanflix.site",
     siteName: "Cuanflix",
     images: [
@@ -59,7 +66,7 @@ export const metadata: Metadata = {
         url: "/og-image-final.png",
         width: 1200,
         height: 630,
-        alt: "Cuanflix - Streaming",
+        alt: "Cuanflix - Premium JAV Database",
       },
     ],
     locale: "id_ID",
@@ -67,10 +74,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cuanflix - Premium Streaming Database",
-    description: "Streaming tercepat dengan antarmuka premium.",
+    title: "Cuanflix - Premium JAV Streaming",
+    description: "Database JAV terlengkap dengan antarmuka premium.",
     images: ["/og-image-final.png"],
   },
+  verification: {
+    google: "aiLtxrRH6Uyg3og-7jae-IrjRNDR0bnxN1M_Yo5Hbvg",
+  }
 };
 
 export const viewport: Viewport = {

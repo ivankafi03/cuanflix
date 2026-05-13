@@ -1,28 +1,18 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-    const baseUrl = 'https://cuanflix.com'
-
-    return {
-        rules: [
-            {
-                userAgent: 'facebookexternalhit',
-                allow: '/',
-            },
-            {
-                userAgent: '*',
-                allow: '/',
-                disallow: [
-                    '/api/',
-                    '/admin/',
-                    '/dashboard/',
-                    '/auth/',
-                    '/blocked/',
-                    '/watchlist/',
-                    '/search',
-                ],
-            },
-        ],
-        sitemap: `${baseUrl}/sitemap.xml`,
-    }
+  return {
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: [
+        '/admin/',
+        '/dashboard/',
+        '/api/',
+        '/_next/',
+        '/auth/',
+      ],
+    },
+    sitemap: 'https://cuanflix.site/sitemap.xml',
+  };
 }
