@@ -46,15 +46,6 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
                 {data.map((anime, index) => (
                     <React.Fragment key={anime.id}>
                         <AnimeCard {...anime} />
-                        {/* Native Ad: Insert every 10 items */}
-                        {(index + 1) % 10 === 0 && (
-                            <div className="aspect-[2/3] bg-zinc-900/40 rounded-2xl border border-white/5 p-1 flex items-center justify-center overflow-hidden">
-                                <div className="w-full scale-[0.8] md:scale-100 flex flex-col items-center">
-                                    <div id="container-863f6aef8282a41ad5ebdefcf161468b"></div>
-                                    <script async={true} data-cfasync="false" src="https://downconvenientmagnetic.com/863f6aef8282a41ad5ebdefcf161468b/invoke.js"></script>
-                                </div>
-                            </div>
-                        )}
                     </React.Fragment>
                 ))}
             </div>

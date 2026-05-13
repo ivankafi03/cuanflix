@@ -67,15 +67,8 @@ export default function AdScripts() {
                 src="https://pl29429558.profitablecpmratenetwork.com/82/24/c4/8224c42340e4d16455652554fa3261c8.js"
                 strategy="afterInteractive"
             />
-            {/* Monetag MultiTag - High Priority */}
-            <Script
-                id="monetag-multitag"
-                src="https://quge5.com/88/tag.min.js"
-                data-zone="238726"
-                strategy="afterInteractive"
-                data-cfasync="false"
-                async={true}
-            />
+            {/* Monetag MultiTag - Removed because of rejection */}
+
             {/* Histats Tracker - Optimized for Next.js SPA */}
             <Script id="histats-tracker" strategy="lazyOnload" key={pathname}>
                 {`
