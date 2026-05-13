@@ -256,17 +256,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                 </div>
             </div>
 
-            {/* Banner ads below server switcher */}
-            <div className="w-full flex justify-center py-2 bg-white/5 rounded-xl border border-white/5">
-                <div className="hidden md:block">
-                    <AdUnit type="leaderboard" />
-                </div>
-                <div className="block md:hidden">
-                    <AdUnit type="mobile" />
-                </div>
-            </div>
-
-
+            {/* Iklan lama dihapus karena sudah ada AdNative di page.tsx */}
         </div>
     );
 }

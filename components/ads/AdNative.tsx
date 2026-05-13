@@ -32,23 +32,41 @@ export default function AdNative({ className = "" }: { className?: string }) {
     if (!shouldRender) return null;
 
     return (
-        <div className={`w-full flex justify-center py-6 px-0 overflow-hidden ${className}`}>
+        <div className={`w-full flex justify-center py-8 overflow-visible ${className}`}>
             <div 
                 id="container-863f6aef8282a41ad5ebdefcf161468b" 
                 ref={containerRef} 
-                className="w-full max-w-[100vw] min-h-[250px] flex justify-center items-start overflow-x-auto no-scrollbar"
-                style={{
-                    WebkitOverflowScrolling: 'touch',
-                }}
+                className="ad-native-wrapper flex justify-center items-start min-h-[280px]"
             />
             <style jsx global>{`
-                #container-863f6aef8282a41ad5ebdefcf161468b,
-                #container-863f6aef8282a41ad5ebdefcf161468b > div,
+                .ad-native-wrapper {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    display: flex !important;
+                    justify-content: center !important;
+                    overflow: visible !important;
+                }
+                /* Teknik Anti-Kepotong: Jika iklan lebih lebar dari layar, dia otomatis zoom-out */
+                #container-863f6aef8282a41ad5ebdefcf161468b > div {
+                    max-width: 95vw !important;
+                    margin: 0 auto !important;
+                    display: block !important;
+                }
+                @media (max-width: 400px) {
+                    #container-863f6aef8282a41ad5ebdefcf161468b {
+                        transform: scale(0.9);
+                        transform-origin: center top;
+                    }
+                }
+                @media (max-width: 350px) {
+                    #container-863f6aef8282a41ad5ebdefcf161468b {
+                        transform: scale(0.85);
+                        transform-origin: center top;
+                    }
+                }
                 #container-863f6aef8282a41ad5ebdefcf161468b iframe {
                     max-width: 100% !important;
                     height: auto !important;
-                    margin: 0 auto !important;
-                    display: block !important;
                 }
             `}</style>
         </div>
