@@ -83,12 +83,19 @@ export default async function WatchPrettyPage({
 
     if (path.startsWith('jav/')) {
         const id = path.split('/').pop() || '';
-        watchData = await getJavWatchData(id);
-        const detail = await getJavDetail(id);
-        seriesDetail = detail;
+        const [watchRes, detailRes] = await Promise.all([
+            getJavWatchData(id),
+            getJavDetail(id)
+        ]);
+        watchData = watchRes;
+        seriesDetail = detailRes;
     } else {
-        watchData = await getWatchPageData(url);
-        seriesDetail = await getAnimeDetail(url);
+        const [watchRes, detailRes] = await Promise.all([
+            getWatchPageData(url),
+            getAnimeDetail(url)
+        ]);
+        watchData = watchRes;
+        seriesDetail = detailRes;
     }
 
     // Fetch related anime based on the first genre
