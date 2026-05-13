@@ -65,10 +65,12 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Native Ad Placement after EVERY category */}
-                  <div className="w-full flex justify-center -mx-4 md:mx-0 my-8 overflow-visible">
-                    <AdNative />
-                  </div>
+                  {/* Single Native Ad - Best position after 3rd category */}
+                  {idx === 2 && (
+                    <div className="w-full flex justify-center -mx-4 md:mx-0 my-10 overflow-visible">
+                      <AdNative />
+                    </div>
+                  )}
                 </React.Fragment>
               );
             })}
