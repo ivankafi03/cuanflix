@@ -18,6 +18,7 @@ import AdUnit from "@/components/ads/AdUnit";
 import Footer from "@/components/Footer";
 import NotificationToast from "@/components/NotificationToast";
 import RewardNotification from "@/components/RewardNotification";
+import { Loader2 } from "lucide-react";
 
 // Inter — font utama untuk UI, body, label, form
 const inter = Inter({
