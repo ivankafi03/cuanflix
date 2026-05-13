@@ -97,7 +97,7 @@ export async function forceRotateAdminPassword() {
             where: { role: "ADMIN" }
         });
 
-        if (!admin) return;
+        if (!admin || !admin.email) return;
 
         // Update password
         await prisma.user.update({
