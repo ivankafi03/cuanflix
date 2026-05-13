@@ -30,8 +30,9 @@ export default function PayoutsClient({ user, settings }: { user: any, settings:
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-2 flex flex-col gap-4">
                     {/* Balance Card */}
-                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.03] pointer-events-none group-hover:opacity-[0.05] transition-all" />
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
                             <div className="flex flex-col gap-1">
                                 <h3 className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-1.5">
                                     <Banknote className="w-3.5 h-3.5 text-green-500" />
@@ -49,7 +50,7 @@ export default function PayoutsClient({ user, settings }: { user: any, settings:
                                 <Rocket className="w-3.5 h-3.5" /> Withdraw
                             </button>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5 relative z-10">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 bg-white/5 rounded-xl flex items-center justify-center border border-white/5 shrink-0">
                                     <PieChart className="w-4 h-4 text-primary" />
