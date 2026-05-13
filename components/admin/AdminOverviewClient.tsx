@@ -88,13 +88,14 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 {stats.map((stat, i) => (
                     <div key={i} className="bg-[#0F0F11] border border-white/5 p-4 rounded-2xl flex flex-col gap-3 relative overflow-hidden group hover:border-white/10 transition-all">
-                        <div className="flex items-center justify-between">
+                        <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
+                        <div className="flex items-center justify-between relative z-10">
                             <div className={`w-7 h-7 rounded-lg flex items-center justify-center bg-white/5`}>
                                 <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
                             </div>
                             <span className="text-[9px] bg-white/5 px-2 py-0.5 rounded-md text-zinc-600 font-semibold border border-white/5">LIVE</span>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col relative z-10">
                             <p className="text-zinc-500 text-[10px] font-medium">{stat.label}</p>
                             <h3 className="text-2xl font-bold text-white tracking-tighter">{stat.value}</h3>
                         </div>
@@ -105,7 +106,8 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
             {/* Infrastructure Health & VPS Info */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                 <div className="lg:col-span-2 bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-6 relative overflow-hidden group">
-                    <div className="flex items-center justify-between">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
+                    <div className="flex items-center justify-between relative z-10">
                         <div className="flex flex-col gap-0.5">
                             <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.15em] flex items-center gap-1.5">
                                 <Activity className="w-3.5 h-3.5 text-green-400" />
@@ -165,7 +167,8 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                 </div>
 
                 {/* VPS Billing Card */}
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                     <div className="absolute top-0 right-0 p-4 opacity-10">
                         <Server className="w-16 h-16 text-white" />
                     </div>
@@ -207,8 +210,9 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
             </div>
 
             {/* Chart Section */}
-            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-5 relative overflow-hidden">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-5 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-batik-pink opacity-[0.05] pointer-events-none group-hover:opacity-[0.08] transition-all" />
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative z-10">
                     <div className="flex flex-col gap-0.5">
                         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.15em] flex items-center gap-1.5">
                             <AreaChartIcon className="w-3.5 h-3.5 text-primary" />
@@ -228,7 +232,7 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                     </div>
                 </div>
 
-                <div className="h-[220px] w-full">
+                <div className="h-[220px] w-full relative z-10">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={chartData}>
                             <defs>
@@ -280,8 +284,9 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Rankings Sidebar */}
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden">
-                    <div className="flex items-center gap-2">
+                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
+                    <div className="flex items-center gap-2 relative z-10">
                         <div className="p-1.5 bg-primary/10 rounded-lg">
                             <TrendingUp className="w-3.5 h-3.5 text-primary" />
                         </div>
@@ -318,13 +323,14 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
                 </div>
 
                 {/* System Activity */}
-                <div className="lg:col-span-2 bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden">
-                    <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                <div className="lg:col-span-2 bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
+                    <h3 className="text-sm font-semibold text-white flex items-center gap-2 relative z-10">
                         <Play className="w-3.5 h-3.5 text-primary" />
                         Live Platform Traffic
                     </h3>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 relative z-10">
                         {watchHistory.length === 0 ? (
                             <div className="col-span-full py-12 flex flex-col items-center justify-center opacity-20 gap-3">
                                 <History className="w-8 h-8" />
