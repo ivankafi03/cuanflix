@@ -8,7 +8,8 @@ import {
     Play, 
     Share2, 
     Trophy, 
-    Banknote 
+    Banknote,
+    BookmarkPlus
 } from "lucide-react";
 
 export default function NavTabs() {
@@ -18,6 +19,7 @@ export default function NavTabs() {
         { id: "overview", label: "Ringkasan", icon: LayoutDashboard, href: "/dashboard" },
         { id: "watch", label: "Nonton", icon: Play, href: "/dashboard/watch" },
         { id: "share", label: "Bagikan", icon: Share2, href: "/dashboard/share" },
+        { id: "collector", label: "Koleksi", icon: BookmarkPlus, href: "/dashboard/collector" },
         { id: "leaderboard", label: "Ranking", icon: Trophy, href: "/dashboard/leaderboard" },
         { id: "payouts", label: "Penarikan", icon: Banknote, href: "/dashboard/payouts" }
     ];
