@@ -126,6 +126,10 @@ model SystemSettings {
   tiktokLink     String @default("https://tiktok.com/@samehadakuu")
   supportEmail   String @default("support@samehadakuu.com")
   
+  // SC Promo
+  scPromoLink    String @default("https://t.me/pongo_official")
+  scPromoPrice   String @default("150") // in USD or your currency string
+  
   vpsExpiryDate   DateTime? // Manual input for VPS billing tracking
   updatedAt      DateTime @updatedAt
 }

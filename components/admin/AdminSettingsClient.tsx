@@ -11,13 +11,15 @@ import {
     Trash2, 
     ShieldCheck,
     Hammer,
+    Tag,
     AlertCircle,
     Send,
     Instagram,
     Twitter,
     Video,
     Mail,
-    Calendar
+    Calendar,
+    ShoppingCart
 } from "lucide-react";
 import { useToast } from "../ToastContext";
 
@@ -36,7 +38,9 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
         instagramLink: initialSettings?.instagramLink || "",
         tiktokLink: initialSettings?.tiktokLink || "",
         supportEmail: initialSettings?.supportEmail || "",
-        vpsExpiryDate: initialSettings?.vpsExpiryDate ? new Date(initialSettings.vpsExpiryDate).toISOString().split('T')[0] : ""
+        vpsExpiryDate: initialSettings?.vpsExpiryDate ? new Date(initialSettings.vpsExpiryDate).toISOString().split('T')[0] : "",
+        scPromoLink: initialSettings?.scPromoLink || "https://t.me/pongo_official",
+        scPromoPrice: initialSettings?.scPromoPrice || "150"
     });
     const [blockedIps, setBlockedIps] = useState(initialBlockedIps);
     const [saving, setSaving] = useState(false);
@@ -285,6 +289,46 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                                             placeholder="support@yourdomain.com"
                                             className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all"
                                         />
+                                    </div>
+                                </div>
+
+                                {/* SC Sales Promotion */}
+                                <div className="col-span-full pt-6 border-t border-white/5 flex flex-col gap-6">
+                                    <div className="flex items-center gap-3">
+                                        <ShoppingCart className="w-4 h-4 text-primary" />
+                                        <span className="text-sm font-bold text-white">Source Code (SC) Sales Promotion</span>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="flex flex-col gap-3">
+                                            <span className="text-sm font-bold text-zinc-600 ">Promo Contact Link (Telegram)</span>
+                                            <div className="relative group/input">
+                                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within/input:text-primary transition-colors">
+                                                    <Send className="w-4 h-4" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={settings.scPromoLink || ""}
+                                                    onChange={(e) => setSettings({ ...settings, scPromoLink: e.target.value })}
+                                                    placeholder="https://t.me/your_handle"
+                                                    className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <span className="text-sm font-bold text-zinc-600 ">Display Price (USD)</span>
+                                            <div className="relative group/input">
+                                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within/input:text-primary transition-colors">
+                                                    <Tag className="w-4 h-4" />
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={settings.scPromoPrice || ""}
+                                                    onChange={(e) => setSettings({ ...settings, scPromoPrice: e.target.value })}
+                                                    placeholder="150"
+                                                    className="w-full bg-white/5 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40 transition-all"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
