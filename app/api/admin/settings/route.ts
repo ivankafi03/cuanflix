@@ -71,7 +71,9 @@ export async function POST(req: Request) {
             instagramLink,
             tiktokLink,
             supportEmail,
-            vpsExpiryDate
+            vpsExpiryDate,
+            scPromoLink,
+            scPromoPrice
         } = data;
 
         const updated = await prisma.systemSettings.update({
@@ -91,6 +93,8 @@ export async function POST(req: Request) {
                 tiktokLink: tiktokLink !== undefined ? tiktokLink : "https://tiktok.com/@cuanflix",
                 supportEmail: supportEmail !== undefined ? supportEmail : "support@cuanflix.com",
                 vpsExpiryDate: vpsExpiryDate ? new Date(vpsExpiryDate) : null,
+                scPromoLink: scPromoLink !== undefined ? scPromoLink : "https://t.me/pongo_official",
+                scPromoPrice: scPromoPrice !== undefined ? scPromoPrice : "150",
             }
         });
 
