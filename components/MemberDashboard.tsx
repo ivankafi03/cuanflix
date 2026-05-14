@@ -33,24 +33,12 @@ import ConfirmModal from "./ConfirmModal";
 import { useToast } from "./ToastContext";
 import WithdrawModal from "./WithdrawModal";
 
-// Beautiful In-lined Batik Pattern Component
-const BatikPattern = ({ opacity = 0.1 }: { opacity?: number }) => (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ opacity }}>
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <pattern id="batikKawung" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-                    <circle cx="40" cy="40" r="38" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.3" />
-                    <circle cx="40" cy="40" r="20" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.2" />
-                    <path d="M40 0v80M0 40h80" stroke="white" strokeWidth="0.5" strokeOpacity="0.2" />
-                    <circle cx="0" cy="0" r="20" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.1" />
-                    <circle cx="80" cy="0" r="20" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.1" />
-                    <circle cx="0" cy="80" r="20" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.1" />
-                    <circle cx="80" cy="80" r="20" fill="none" stroke="white" strokeWidth="1" strokeOpacity="0.1" />
-                </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#batikKawung)" />
-        </svg>
-    </div>
+// Beautiful Batik Pattern Component — Pink Soft (sama seperti admin)
+const BatikPattern = ({ opacity = 0.08 }: { opacity?: number }) => (
+    <div
+        className="absolute inset-0 bg-batik-pink pointer-events-none overflow-hidden group-hover:opacity-[1.5] transition-all"
+        style={{ opacity }}
+    />
 );
 
 export default function MemberDashboard({ user }: { user: any }) {
