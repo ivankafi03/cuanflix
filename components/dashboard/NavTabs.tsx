@@ -9,19 +9,21 @@ import {
     Share2, 
     Trophy, 
     Banknote,
-    BookmarkPlus
+    BookmarkPlus,
+    Search
 } from "lucide-react";
 
 export default function NavTabs() {
     const pathname = usePathname();
 
     const tabs = [
-        { id: "overview", label: "Ringkasan", icon: LayoutDashboard, href: "/dashboard" },
-        { id: "watch", label: "Nonton", icon: Play, href: "/dashboard/watch" },
-        { id: "share", label: "Bagikan", icon: Share2, href: "/dashboard/share" },
-        { id: "collector", label: "Koleksi", icon: BookmarkPlus, href: "/dashboard/collector" },
-        { id: "leaderboard", label: "Ranking", icon: Trophy, href: "/dashboard/leaderboard" },
-        { id: "payouts", label: "Penarikan", icon: Banknote, href: "/dashboard/payouts" }
+        { id: "overview",   label: "Ringkasan", icon: LayoutDashboard, href: "/dashboard" },
+        { id: "watch",      label: "Nonton",    icon: Play,            href: "/dashboard/watch" },
+        { id: "share",      label: "Bagikan",   icon: Share2,          href: "/dashboard/share" },
+        { id: "collector",  label: "Koleksi",   icon: BookmarkPlus,    href: "/dashboard/collector" },
+        { id: "leaderboard",label: "Ranking",   icon: Trophy,          href: "/dashboard/leaderboard" },
+        { id: "payouts",    label: "Penarikan", icon: Banknote,        href: "/dashboard/payouts" },
+        { id: "carilink",   label: "Cari Link", icon: Search,          href: "/dashboard/carilink" },
     ];
 
     return (
