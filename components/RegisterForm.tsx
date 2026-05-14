@@ -18,8 +18,19 @@ export default function RegisterForm() {
     const [error, setError] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
-    const referrerId = searchParams.get("ref");
+    const [referrerId, setReferrerId] = useState<string | null>(null);
     const { showToast } = useToast();
+
+    // Check URL first, then fallback to localStorage
+    React.useEffect(() => {
+        const urlRef = searchParams.get("ref");
+        if (urlRef) {
+            setReferrerId(urlRef);
+        } else {
+            const savedRef = localStorage.getItem("cuan_referrer");
+            if (savedRef) setReferrerId(savedRef);
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

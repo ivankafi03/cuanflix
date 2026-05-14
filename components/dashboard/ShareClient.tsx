@@ -109,7 +109,17 @@ export default function ShareClient({ user }: { user: any }) {
             ? collectedLinks.filter(l => selectedIds.has(l.id))
             : collectedLinks;
         if (!toCopy.length) { showToast("No links!", "error"); setCopying(false); return; }
-        navigator.clipboard.writeText(toCopy.map(l => `${l.videoTitle}: ${l.videoUrl}`).join("\n"));
+        
+        const refCode = user?.id?.substring(0, 8);
+        const text = toCopy.map(l => {
+            let url = l.videoUrl;
+            if (refCode && !url.includes("ref=")) {
+                url += (url.includes("?") ? "&" : "?") + `ref=${refCode}`;
+            }
+            return `${l.videoTitle}: ${url}`;
+        }).join("\n");
+
+        navigator.clipboard.writeText(text);
         showToast(`Copied ${toCopy.length} links!`, "success");
         setTimeout(() => setCopying(false), 1000);
     };

@@ -77,7 +77,8 @@ export default function CariLinkClient({ user }: { user: any }) {
         if (addedIds.has(video.videoId) || adding.has(video.videoId)) return;
         setAdding(prev => new Set(prev).add(video.videoId));
         try {
-            const watchUrl = `${origin}/watch/${video.videoId}`;
+            const refCode = user?.id?.substring(0, 8);
+            const watchUrl = `${origin}/watch/${video.videoId}${refCode ? `?ref=${refCode}` : ""}`;
             const res = await fetch("/api/links", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

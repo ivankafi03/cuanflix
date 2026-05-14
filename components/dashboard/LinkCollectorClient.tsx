@@ -72,7 +72,11 @@ export default function LinkCollectorClient({ user }: { user: any }) {
         }
 
         // FORMAT: Hanya URL saja, satu per baris (Rapi kebawah)
-        const text = toCopy.map(l => `${origin}/watch/${l.videoId}`).join("\n");
+        const refCode = user?.id?.substring(0, 8);
+        const text = toCopy.map(l => {
+            const baseUrl = `${origin}/watch/${l.videoId}`;
+            return refCode ? `${baseUrl}?ref=${refCode}` : baseUrl;
+        }).join("\n");
         
         navigator.clipboard.writeText(text);
         setCopying(true);
@@ -199,7 +203,7 @@ export default function LinkCollectorClient({ user }: { user: any }) {
                                             {link.videoTitle}
                                         </h4>
                                         <p className="text-[10px] text-zinc-600 font-mono mt-1">
-                                            {origin}/watch/{link.videoId}
+                                            {origin}/watch/{link.videoId}{user?.id ? `?ref=${user.id.substring(0, 8)}` : ""}
                                         </p>
                                     </div>
 
@@ -226,7 +230,7 @@ export default function LinkCollectorClient({ user }: { user: any }) {
                             : collectedLinks
                         ).map(l => (
                             <div key={l.id} className="truncate">
-                                {origin}/watch/{l.videoId}
+                                {origin}/watch/{l.videoId}{user?.id ? `?ref=${user.id.substring(0, 8)}` : ""}
                             </div>
                         ))}
                     </div>

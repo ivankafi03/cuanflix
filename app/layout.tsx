@@ -19,6 +19,7 @@ import Footer from "@/components/Footer";
 import NotificationToast from "@/components/NotificationToast";
 import RewardNotification from "@/components/RewardNotification";
 import NavigationProgressWrapper from "@/components/NavigationProgressWrapper";
+import ReferralTracker from "@/components/ReferralTracker";
 import { Loader2 } from "lucide-react";
 
 // Inter — font utama untuk UI, body, label, form
@@ -149,6 +150,7 @@ export default async function RootLayout({
       <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} suppressHydrationWarning>
         <div className="fixed inset-0 bg-dot-grid opacity-20 pointer-events-none z-[-1]" />
         <Providers>
+          <ReferralTracker />
           <NavigationProgressWrapper />
           <Navbar />
           <main className="flex-grow min-h-screen">
