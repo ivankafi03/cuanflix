@@ -86,6 +86,8 @@ model ReferralView {
   ipAddress   String   // Anti-fraud: prevent same IP abuse
   userAgent   String?
   duration    Int      @default(0) // Dwell time in seconds
+  country     String?  // Country of viewer (from ip-api.com)
+  city        String?  // City of viewer
   
   isValid     Boolean  @default(false) // Whether it met the 60s criteria
   isSkimmed   Boolean  @default(false) // Whether this view was "swallowed" by admin

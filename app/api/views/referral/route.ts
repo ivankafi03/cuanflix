@@ -91,7 +91,7 @@ export async function POST(req: Request) {
         }
 
         // 2. Create Referral View
-        await prisma.referralView.create({
+        const newView = await prisma.referralView.create({
             data: {
                 referrerId: actualReferrerId,
                 videoId: videoId,
@@ -99,6 +99,28 @@ export async function POST(req: Request) {
                 userAgent: userAgent.substring(0, 500),
             }
         });
+
+        // 2b. Async geo-lookup (non-blocking — never delays response)
+        if (ip && ip !== "unknown") {
+            (async () => {
+                try {
+                    const geoRes = await fetch(`http://ip-api.com/json/${ip}?fields=country,city,status`, {
+                        signal: AbortSignal.timeout(3000)
+                    });
+                    if (geoRes.ok) {
+                        const geo = await geoRes.json();
+                        if (geo.status === "success") {
+                            await prisma.referralView.update({
+                                where: { id: newView.id },
+                                data: { country: geo.country, city: geo.city }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    // Geo lookup failed — non-critical, ignore
+                }
+            })();
+        }
 
         // 3. Reward based on CPM
         const settings = await prisma.systemSettings.findUnique({ where: { id: "global" } });
