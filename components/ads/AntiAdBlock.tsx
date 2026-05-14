@@ -3,10 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { ShieldAlert, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function AntiAdBlock() {
+    const pathname = usePathname() || "";
     const [isBlocked, setIsBlocked] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+
+    // Jangan tampilkan di halaman dashboard, admin, atau auth
+    const isRestricted = pathname.startsWith("/dashboard") || pathname.startsWith("/admin") || pathname.startsWith("/auth");
 
     useEffect(() => {
         // Simple AdBlock detection
@@ -28,7 +33,7 @@ export default function AntiAdBlock() {
         return () => clearTimeout(timer);
     }, []);
 
-    if (!isBlocked || !isVisible) return null;
+    if (!isBlocked || !isVisible || isRestricted) return null;
 
     return (
         <AnimatePresence>
