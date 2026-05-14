@@ -321,42 +321,6 @@ export default function ShareClient({ user }: { user: any }) {
                 </div>
             </div>
 
-            {/* Link Collection */}
-            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-semibold text-white flex items-center gap-1.5">
-                        <LinkIcon className="w-3.5 h-3.5 text-primary" />
-                        Koleksi Link ({collectedLinks.length})
-                    </h3>
-                    <button
-                        onClick={() => setSelectedIds(selectedIds.size === collectedLinks.length ? new Set() : new Set(collectedLinks.map(l => l.id)))}
-                        className="text-[9px] font-semibold text-zinc-500 uppercase tracking-wide hover:text-white transition-colors"
-                    >
-                        {selectedIds.size === collectedLinks.length ? "Batalkan" : "Pilih Semua"}
-                    </button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[320px] overflow-y-auto no-scrollbar">
-                    {collectedLinks.length === 0 && (
-                        <div className="col-span-full py-12 flex flex-col items-center justify-center opacity-25 gap-3">
-                            <LinkIcon className="w-8 h-8 text-zinc-600" />
-                            <p className="text-[10px] font-semibold uppercase tracking-wide text-center">Tonton video untuk kumpulkan link!</p>
-                        </div>
-                    )}
-                    {collectedLinks.map((link, idx) => (
-                        <div key={idx} onClick={() => toggleSelect(link.id)}
-                            className={`flex items-center gap-3 p-3 border rounded-xl transition-all cursor-pointer ${selectedIds.has(link.id) ? "bg-primary/10 border-primary/30" : "bg-black/40 border-white/5 hover:border-white/15"}`}>
-                            <div className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${selectedIds.has(link.id) ? "bg-primary border-primary" : "border-white/10"}`}>
-                                {selectedIds.has(link.id) && <Check className="w-2.5 h-2.5 text-white stroke-[3]" />}
-                            </div>
-                            <div className="flex flex-col min-w-0">
-                                <span className="text-xs font-semibold text-white truncate">{link.videoTitle}</span>
-                                <span className="text-[9px] text-zinc-600">Hits: {link.viewCount || 0}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
             <ConfirmModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
