@@ -114,7 +114,7 @@ export default function PayoutsClient({ user, settings }: { user: any, settings:
                     <div className="flex flex-col gap-4">
                         <div className="flex flex-col gap-1">
                             <span className="text-[10px] font-semibold text-primary uppercase">Waktu Verifikasi</span>
-                            <p className="text-[10px] text-zinc-500 leading-relaxed">Proses verifikasi dilakukan seminggu sekali.</p>
+                            <p className="text-[10px] text-zinc-500 leading-relaxed">Proses verifikasi dilakukan setiap hari Senin.</p>
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-[10px] font-semibold text-blue-400 uppercase">Metode Pembayaran</span>
