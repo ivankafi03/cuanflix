@@ -4,15 +4,84 @@ import prisma from "./prisma";
 const SOURCE_URL = "https://nontonasik.my.id/jav-domain/";
 const BAD_VIDEO_TTL = 12 * 60 * 60 * 1000; // 12 jam sebelum retry
 
-/** Tandai video sebagai broken (tidak punya server) */
-async function markBadVideo(id: string): Promise<void> {
+/**
+ * Hapus video rusak dari SEMUA listing cache secara langsung.
+ * Dipanggil saat member membuka video yang tidak punya server.
+ * Efek: video langsung hilang dari listing tanpa harus tunggu cache expire.
+ */
+async function removeVideoFromAllCaches(id: string): Promise<void> {
     try {
+        // 1. Tandai sebagai bad (untuk filterBadIds di listing builder)
         await prisma.contentCache.upsert({
             where: { key: `jav_bad_${id}` },
             update: { data: '{"bad":true}', updatedAt: new Date() },
             create: { key: `jav_bad_${id}`, data: '{"bad":true}' }
         });
-    } catch (_) { /* non-critical */ }
+
+        // 2. Ambil SEMUA listing cache yang mungkin mengandung video ini
+        const listingCaches = await prisma.contentCache.findMany({
+            where: {
+                OR: [
+                    { key: { startsWith: 'jav_latest_page_' } },
+                    { key: { startsWith: 'jav_category_' } },
+                    { key: 'homepage_categories' },
+                ]
+            },
+            select: { key: true, data: true }
+        });
+
+        // 3. Untuk setiap cache, hapus video dengan id ini dari array videos
+        const updates: Promise<any>[] = [];
+        for (const cache of listingCaches) {
+            try {
+                const parsed = JSON.parse(cache.data);
+                let changed = false;
+
+                // Format: { videos: [...], totalPages, total }
+                if (Array.isArray(parsed?.videos)) {
+                    const before = parsed.videos.length;
+                    parsed.videos = parsed.videos.filter((v: any) => {
+                        const vId = v.href?.replace('jav/', '') || v.link?.split('/').pop();
+                        return vId !== String(id);
+                    });
+                    if (parsed.videos.length < before) {
+                        parsed.total = Math.max(0, (parsed.total || 0) - 1);
+                        changed = true;
+                    }
+                }
+
+                // Format: [{ title, videos: [...] }, ...] (homepage_categories)
+                if (Array.isArray(parsed) && parsed[0]?.videos) {
+                    for (const cat of parsed) {
+                        if (Array.isArray(cat.videos)) {
+                            const before = cat.videos.length;
+                            cat.videos = cat.videos.filter((v: any) => {
+                                const vId = v.href?.replace('jav/', '') || v.link?.split('/').pop();
+                                return vId !== String(id);
+                            });
+                            if (cat.videos.length < before) changed = true;
+                        }
+                    }
+                }
+
+                if (changed) {
+                    updates.push(
+                        prisma.contentCache.update({
+                            where: { key: cache.key },
+                            data: { data: JSON.stringify(parsed) }
+                        })
+                    );
+                }
+            } catch (_) { /* skip cache yang corrupt */ }
+        }
+
+        if (updates.length > 0) {
+            await Promise.all(updates);
+            console.log(`[JAV] Video ${id} dihapus dari ${updates.length} cache listing.`);
+        }
+    } catch (e) {
+        console.error('[JAV] removeVideoFromAllCaches error:', e);
+    }
 }
 
 /** Ambil set ID video yang sudah ditandai bad dari daftar ID yang diberikan */
@@ -654,10 +723,10 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
             servers.push(...fallback);
         }
 
-        // ── Solution A: Tandai sebagai bad jika tetap tidak ada server ──
+        // ── Hapus dari semua listing cache secara langsung ──
         if (servers.length === 0) {
-            console.warn(`[JAV] Tidak ada server untuk id=${id}, ditandai bad.`);
-            markBadVideo(id).catch(() => {});
+            console.warn(`[JAV] Tidak ada server untuk id=${id}. Menghapus dari semua cache listing...`);
+            removeVideoFromAllCaches(id).catch(() => {});
             return null;
         }
 
