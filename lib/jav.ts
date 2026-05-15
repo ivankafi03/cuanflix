@@ -2,6 +2,87 @@ import * as cheerio from 'cheerio';
 import prisma from "./prisma";
 
 const SOURCE_URL = "https://nontonasik.my.id/jav-domain/";
+const BAD_VIDEO_TTL = 12 * 60 * 60 * 1000; // 12 jam sebelum retry
+
+/** Tandai video sebagai broken (tidak punya server) */
+async function markBadVideo(id: string): Promise<void> {
+    try {
+        await prisma.contentCache.upsert({
+            where: { key: `jav_bad_${id}` },
+            update: { data: '{"bad":true}', updatedAt: new Date() },
+            create: { key: `jav_bad_${id}`, data: '{"bad":true}' }
+        });
+    } catch (_) { /* non-critical */ }
+}
+
+/** Ambil set ID video yang sudah ditandai bad dari daftar ID yang diberikan */
+async function filterBadIds(ids: string[]): Promise<Set<string>> {
+    if (ids.length === 0) return new Set();
+    try {
+        const entries = await prisma.contentCache.findMany({
+            where: { key: { in: ids.map(id => `jav_bad_${id}`) } },
+            select: { key: true, updatedAt: true }
+        });
+        const badIds = new Set<string>();
+        const now = Date.now();
+        for (const e of entries) {
+            if (now - new Date(e.updatedAt).getTime() < BAD_VIDEO_TTL) {
+                badIds.add(e.key.replace('jav_bad_', ''));
+            }
+        }
+        return badIds;
+    } catch (_) { return new Set(); }
+}
+
+/** Solution B: Cari server dari sumber alternatif berdasarkan movie code */
+async function getFallbackServers(movieCode: string): Promise<VideoServer[]> {
+    if (!movieCode) return [];
+    const servers: VideoServer[] = [];
+    const code = movieCode.trim().toUpperCase();
+    const codeLower = code.toLowerCase();
+
+    // Fallback 1: jable.tv
+    try {
+        const jableUrl = `https://jable.tv/videos/${codeLower}/`;
+        const html = await fetchWithTimeout(jableUrl, { timeout: 12000, retries: 1 });
+        if (html) {
+            // jable memakai HLS — wrap dalam proxy player kita
+            const hlsMatch = html.match(/hlsUrl\s*=\s*["'](https?:\/\/[^"']+\.m3u8[^"']*)["']/i) ||
+                             html.match(/source\s*:\s*["'](https?:\/\/[^"']+\.m3u8[^"']*)["']/i);
+            if (hlsMatch) {
+                servers.push({ name: 'Jable HD', iframe: `/api/hls-player?url=${encodeURIComponent(hlsMatch[1])}` });
+            }
+            // Juga cek iframe langsung
+            const $j = cheerio.load(html);
+            const iframeSrc = $j('iframe[src]').first().attr('src') || '';
+            if (iframeSrc.startsWith('http') && !servers.some(s => s.iframe === iframeSrc)) {
+                servers.push({ name: 'Jable Player', iframe: iframeSrc });
+            }
+        }
+    } catch (_) { /* ignore */ }
+
+    if (servers.length > 0) return servers;
+
+    // Fallback 2: missav.ws
+    try {
+        const missavUrl = `https://missav.ws/en/${codeLower}`;
+        const html = await fetchWithTimeout(missavUrl, { timeout: 12000, retries: 1 });
+        if (html && !html.includes('404') && html.length > 5000) {
+            // Cari m3u8 stream
+            const m3u8Match = html.match(/["'](https?:\/\/[^"']+\.m3u8[^"']*)["']/i);
+            if (m3u8Match) {
+                servers.push({ name: 'Missav HD', iframe: `/api/hls-player?url=${encodeURIComponent(m3u8Match[1])}` });
+            }
+            const $m = cheerio.load(html);
+            const iframeSrc = $m('iframe[src]').first().attr('src') || '';
+            if (iframeSrc.startsWith('http') && !servers.some(s => s.iframe === iframeSrc)) {
+                servers.push({ name: 'Missav Player', iframe: iframeSrc });
+            }
+        }
+    } catch (_) { /* ignore */ }
+
+    return servers;
+}
 
 // Interfaces to match lib/anime.ts
 export interface AnimeLatest {
@@ -209,31 +290,27 @@ async function refreshLatestVideosCache(page: number): Promise<SearchResult> {
         const totalPages = data?.pagecount || 1;
         const total = data?.total || 0;
 
-        const result = {
-            videos: list.map((item: any) => ({
-                title: cleanTitle(item.name || ''),
-                image: item.poster_url || item.thumb_url || '',
-                link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
-                episode: item.movie_code || '',
-                rating: '0.0',
-                type: 'JAV',
-                href: `jav/${item.id}`
-            })),
-            totalPages,
-            total,
-        };
+        const mapped = list.map((item: any) => ({
+            title: cleanTitle(item.name || ''),
+            image: item.poster_url || item.thumb_url || '',
+            link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
+            episode: item.movie_code || '',
+            rating: '0.0',
+            type: 'JAV',
+            href: `jav/${item.id}`
+        }));
 
-        // Update DB Cache
+        // Solution A: filter video yang sudah ditandai bad
+        const ids = list.map((item: any) => String(item.id));
+        const badIds = await filterBadIds(ids);
+        const videos = mapped.filter((_: any, i: number) => !badIds.has(String(list[i]?.id)));
+
+        const result = { videos, totalPages, total: total - badIds.size };
+
         await prisma.contentCache.upsert({
             where: { key: `jav_latest_page_${page}` },
-            update: {
-                data: JSON.stringify(result),
-                updatedAt: new Date()
-            },
-            create: {
-                key: `jav_latest_page_${page}`,
-                data: JSON.stringify(result)
-            }
+            update: { data: JSON.stringify(result), updatedAt: new Date() },
+            create: { key: `jav_latest_page_${page}`, data: JSON.stringify(result) }
         });
 
         return result;
@@ -570,9 +647,17 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
             }
         }
 
-        // Jika masih tidak ada server, return null (akan muncul "Video Not Available")
+        // ── Solution B: Fallback ke sumber lain jika masih kosong ──
+        if (servers.length === 0 && video?.movie_code) {
+            console.log(`[JAV] Primary empty, trying fallback for ${video.movie_code}...`);
+            const fallback = await getFallbackServers(video.movie_code);
+            servers.push(...fallback);
+        }
+
+        // ── Solution A: Tandai sebagai bad jika tetap tidak ada server ──
         if (servers.length === 0) {
-            console.warn(`[JAV] Tidak ada server ditemukan untuk id=${id}, url=${url}`);
+            console.warn(`[JAV] Tidak ada server untuk id=${id}, ditandai bad.`);
+            markBadVideo(id).catch(() => {});
             return null;
         }
 
@@ -630,16 +715,22 @@ export async function searchJav(query: string, page: number = 1): Promise<Search
         const totalPages = finalData?.pagecount || 1;
         const total = finalData?.total || 0;
 
+        // Solution A: filter bad videos dari search results
+        const ids = list.map((item: any) => String(item.id));
+        const badIds = await filterBadIds(ids);
+
         return {
-            videos: list.map((item: any) => ({
-                title: cleanTitle(item.name || ''),
-                image: item.poster_url || item.thumb_url || '',
-                link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
-                episode: item.movie_code || item.type_name || '',
-                rating: '0.0',
-                type: item.type_name || 'JAV',
-                href: `jav/${item.id}`
-            })),
+            videos: list
+                .filter((item: any) => !badIds.has(String(item.id)))
+                .map((item: any) => ({
+                    title: cleanTitle(item.name || ''),
+                    image: item.poster_url || item.thumb_url || '',
+                    link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
+                    episode: item.movie_code || item.type_name || '',
+                    rating: '0.0',
+                    type: item.type_name || 'JAV',
+                    href: `jav/${item.id}`
+                })),
             totalPages,
             total,
         };
