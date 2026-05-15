@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getSlugFromUrl } from "@/lib/cuanflix";
+import { getSlugFromUrl } from "@/lib/jav";
 import WatchlistButton from "./WatchlistButton";
 
 interface HeroProps {

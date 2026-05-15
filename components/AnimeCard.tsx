@@ -4,7 +4,7 @@ import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ClientImage from "./ClientImage";
-import { getSlugFromUrl } from "@/lib/cuanflix";
+import { getSlugFromUrl } from "@/lib/jav";
 
 interface AnimeCardProps {
     id: number;

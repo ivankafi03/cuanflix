@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 import WatchEarningManager from "./WatchEarningManager";
-import { VideoServer } from "@/lib/cuanflix";
+import { VideoServer } from "@/lib/jav";
 import dynamic from "next/dynamic";
 import AdUnit from "./ads/AdUnit";
 import AdNative from "./ads/AdNative";

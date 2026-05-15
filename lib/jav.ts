@@ -761,6 +761,16 @@ export interface SearchResult {
     total: number;
 }
 
+export function getSlugFromUrl(url: string | undefined): string {
+    if (!url) return '';
+    try {
+        const urlObj = new URL(url.startsWith('http') ? url : `https://cuanflix.site/${url.replace(/^\/+/, '')}`);
+        return urlObj.pathname.replace(/^\/+|\/+$/g, '');
+    } catch (e) {
+        return url.replace(/^\/+|\/+$/g, '');
+    }
+}
+
 export async function searchJav(query: string, page: number = 1): Promise<SearchResult> {
     try {
         const url = page === 1 

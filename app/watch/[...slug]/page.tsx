@@ -1,19 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import { MessageSquare, List, ThumbsUp, Heart, Share2, Info, Sparkles, Play, Layers } from "lucide-react";
+import { Info, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getWatchPageData, getUrlFromSlug, getSlugFromUrl, getAnimeDetail, searchAnime, getLatestAnime } from "@/lib/cuanflix";
-import { getJavWatchData, getJavDetail, searchJav } from "@/lib/jav";
-import VideoPlayer from "@/components/VideoPlayer";
-import ReportButton from "@/components/ReportButton";
+import { getJavWatchData, searchJav, getSlugFromUrl } from "@/lib/jav";
 import WatchActions from "@/components/WatchActions";
-import WatchEarningManager from "@/components/WatchEarningManager";
 import HistoryLogger from "@/components/HistoryLogger";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import WatchPageClient from "@/components/WatchPageClient";
-import AdUnit from "@/components/ads/AdUnit";
 import AdNative from "@/components/ads/AdNative";
 
 export async function generateMetadata({
@@ -24,18 +19,16 @@ export async function generateMetadata({
     const { slug } = await params;
     const path = slug.join('/');
 
-    const url = getUrlFromSlug(path);
     let watchData: any = null;
     
     if (path.startsWith('jav/')) {
         const id = path.split('/').pop() || '';
         watchData = await getJavWatchData(id);
     } else {
-        watchData = await getWatchPageData(url);
+        return { title: "Not Found", description: "" };
     }
 
-    // Guess a readable title from the slug, or use watchData.title if available
-    const title = watchData?.title || path.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || "Watch Anime";
+    const title = watchData?.title || path.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || "Watch";
 
     return {
         title: `Watch ${title} Online - Cuanflix`,
@@ -63,70 +56,33 @@ export default async function WatchPrettyPage({
         }
     }
 
-    // Fix for slugs like 'anime/blue-lock-episode-nagi' in watch route
-    if (path.startsWith('anime/')) {
-        const cleanSlug = path.replace(/^anime\//, '');
-        const isEpisode = cleanSlug.includes('-episode-');
-
-        if (isEpisode) {
-            // It's an episode, redirect to the clean version
-            redirect(`/watch/${cleanSlug}`);
-        } else {
-            // It's a series, redirect to the anime detail page
-            redirect(`/anime/${cleanSlug}`);
-        }
+    if (!path.startsWith('jav/')) {
+        redirect('/');
     }
 
-    const url = getUrlFromSlug(path);
     let watchData: any = null;
-    let seriesDetail: any = null;
+    const id = path.split('/').pop() || '';
+    watchData = await getJavWatchData(id);
 
-    if (path.startsWith('jav/')) {
-        const id = path.split('/').pop() || '';
-        const [watchRes, detailRes] = await Promise.all([
-            getJavWatchData(id),
-            getJavDetail(id)
-        ]);
-        watchData = watchRes;
-        seriesDetail = detailRes;
-    } else {
-        const [watchRes, detailRes] = await Promise.all([
-            getWatchPageData(url),
-            getAnimeDetail(url)
-        ]);
-        watchData = watchRes;
-        seriesDetail = detailRes;
-    }
-
-    // Fetch related anime based on the first genre
+    // Fetch related anime based on a generic category
     let relatedAnime: any[] = [];
     try {
-        if (path.startsWith('jav/')) {
-            const { videos: results } = await searchJav('School'); // Default category for related
-            relatedAnime = results.slice(0, 6).map((item, idx) => ({
-                id: idx + 1,
-                title: item.title,
-                image: item.image,
-                rating: 0,
-                episodes: 1,
-                episodeRaw: item.episode,
-                type: 'JAV',
-                href: `/watch/${item.href}`
-            }));
-        } else if (seriesDetail && seriesDetail.genres && seriesDetail.genres.length > 0) {
-            relatedAnime = await searchAnime(seriesDetail.genres[0]);
-        }
-        
-        // Fallback: If no related by genre, get latest/popular anime
-        if (relatedAnime.length < 3) {
-            const latest = await getLatestAnime();
-            relatedAnime = latest.slice(0, 6);
-        }
+        const { videos: results } = await searchJav('School'); // Default category for related
+        relatedAnime = results.slice(0, 6).map((item, idx) => ({
+            id: idx + 1,
+            title: item.title,
+            image: item.image,
+            rating: 0,
+            episodes: 1,
+            episodeRaw: item.episode,
+            type: 'JAV',
+            href: `/watch/${item.href}`
+        }));
 
         // Remove current anime from related
         relatedAnime = relatedAnime.filter(a => !(a.link || a.href || '').includes(path)).slice(0, 6);
     } catch (e) {
-        console.error("Failed to fetch related anime", e);
+        console.error("Failed to fetch related", e);
     }
 
     if (!watchData || !watchData.servers || watchData.servers.length === 0) {
@@ -150,8 +106,6 @@ export default async function WatchPrettyPage({
 
     return (
         <div className="min-h-screen bg-background pb-12">
-            {/* Earning Manager moved inside WatchPageClient */}
-
             {/* Log watch history */}
             <HistoryLogger
                 videoId={path}
@@ -161,9 +115,6 @@ export default async function WatchPrettyPage({
             />
 
             <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-[80px] md:pt-[100px] flex flex-col gap-4">
-                
-
-
                 {/* Guest Call to Action Banner - Smaller & More Elegant */}
                 {!session && (
                     <div className="mb-4 bg-white/5 border border-white/10 rounded-2xl p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative group backdrop-blur-sm">
@@ -197,8 +148,6 @@ export default async function WatchPrettyPage({
                     {/* Native Banner Ad - Strategic Placement Above Title */}
                     <AdNative className="mt-8 mb-4" />
 
-                    {/* Anime Info Section */}
-
                     <div className="bg-secondary border border-border rounded-xl p-5 md:p-6 shadow-md overflow-hidden relative mt-6">
                         <div className="flex flex-col gap-5 relative z-10">
                             {/* Header Section */}
@@ -223,7 +172,7 @@ export default async function WatchPrettyPage({
                                         rating: parseFloat(watchData.rating) > 0 ? parseFloat(watchData.rating) : 0,
                                         episodes: parseInt(watchData.episode) || 0,
                                         type: watchData.type,
-                                        href: url
+                                        href: `/watch/${path}`
                                     }}
                                 />
                             </div>
