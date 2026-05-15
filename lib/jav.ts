@@ -32,6 +32,9 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
 
         // 3. Untuk setiap cache, hapus video dengan id ini dari array videos
         const updates: Promise<any>[] = [];
+        let shouldRefreshHomepage = false;
+        const pagesToRefresh = new Set<number>();
+
         for (const cache of listingCaches) {
             try {
                 const parsed = JSON.parse(cache.data);
@@ -71,6 +74,14 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
                             data: { data: JSON.stringify(parsed) }
                         })
                     );
+                    
+                    // Tandai cache mana yang harus di-refresh di background untuk replenish slot yang kosong
+                    if (cache.key === 'homepage_categories') {
+                        shouldRefreshHomepage = true;
+                    } else if (cache.key.startsWith('jav_latest_page_')) {
+                        const pageNum = parseInt(cache.key.replace('jav_latest_page_', ''), 10);
+                        if (!isNaN(pageNum)) pagesToRefresh.add(pageNum);
+                    }
                 }
             } catch (_) { /* skip cache yang corrupt */ }
         }
@@ -78,6 +89,16 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
         if (updates.length > 0) {
             await Promise.all(updates);
             console.log(`[JAV] Video ${id} dihapus dari ${updates.length} cache listing.`);
+            
+            // Trigger background refresh agar slot yang kosong terisi lagi
+            if (shouldRefreshHomepage && typeof refreshHomepageCache === 'function') {
+                refreshHomepageCache().catch(e => console.error("Error replenishing homepage:", e));
+            }
+            if (typeof refreshLatestVideosCache === 'function') {
+                for (const page of pagesToRefresh) {
+                    refreshLatestVideosCache(page).catch(e => console.error(`Error replenishing page ${page}:`, e));
+                }
+            }
         }
     } catch (e) {
         console.error('[JAV] removeVideoFromAllCaches error:', e);
