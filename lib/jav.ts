@@ -411,108 +411,186 @@ export async function getJavDetail(id: string): Promise<AnimeDetail | null> {
     }
 }
 
+/**
+ * Ekstrak semua iframe/embed URL dari string HTML secara agresif.
+ * Ini adalah safety net jika semua metode lain gagal.
+ */
+function extractIframesFromHtml(html: string): string[] {
+    const results: string[] = [];
+    // Match <iframe src="..."> dan variasi lazy loading
+    const iframeRegex = /<iframe[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/gi;
+    let match;
+    while ((match = iframeRegex.exec(html)) !== null) {
+        const src = match[1];
+        if (src && src.startsWith('http') && !src.includes('google') && !src.includes('facebook')) {
+            results.push(src);
+        }
+    }
+    // Match link_embed atau embed_url di dalam script tags
+    const embedRegex = /(?:link_embed|embed_url|iframe_src|play_url|stream_url)["']?:\s*["']([^"']+)["']/gi;
+    while ((match = embedRegex.exec(html)) !== null) {
+        const src = match[1];
+        if (src && src.startsWith('http') && !results.includes(src)) {
+            results.push(src);
+        }
+    }
+    return results;
+}
+
+/**
+ * Deep search semua nilai dalam object Nuxt yang terlihat seperti iframe/embed URL.
+ */
+function deepFindEmbedUrls(obj: any, visited = new Set<any>()): string[] {
+    if (!obj || typeof obj !== 'object' || visited.has(obj)) return [];
+    visited.add(obj);
+
+    const results: string[] = [];
+    const embedKeys = ['link_embed', 'embed_url', 'play_url', 'url', 'iframe', 'stream_url', 'video_url', 'file'];
+
+    for (const key of Object.keys(obj)) {
+        const val = obj[key];
+        if (typeof val === 'string' && val.startsWith('http') && (
+            val.includes('embed') || val.includes('player') || val.includes('iframe') ||
+            val.includes('.mp4') || val.includes('stream') || val.includes('video')
+        )) {
+            if (embedKeys.includes(key.toLowerCase()) || val.length > 20) {
+                results.push(val);
+            }
+        } else if (typeof val === 'object') {
+            results.push(...deepFindEmbedUrls(val, visited));
+        }
+    }
+    return [...new Set(results)];
+}
+
 export async function getJavWatchData(id: string): Promise<WatchPageData | null> {
     try {
         const url = `${SOURCE_URL}videos/${id}`;
         const html = await fetchWithTimeout(url);
-        const dataObj = extractNuxtObject(html);
-        
-        const video = dataObj?.[`video-detail-${id}`] || 
-                      Object.values(dataObj || {}).find((v: any) => v?.id == id && v?.movie_code);
-        
-        if (!video) return null;
-
-        const servers: VideoServer[] = [];
-        
-        // 1. Try to get from video.play_url
-        if (video.play_url || video.url) {
-            servers.push({ name: 'Direct Server', iframe: video.play_url || video.url });
-        }
-
-        // 2. Try to get from video.episodes (Nuxt nested structure)
-        if (video.episodes?.server_data) {
-            const serverData = video.episodes.server_data;
-            for (const key of Object.keys(serverData)) {
-                const ep = serverData[key];
-                if (ep.link_embed) {
-                    servers.push({ 
-                        name: `${video.episodes.server_name || 'Server'} (${key})`, 
-                        iframe: ep.link_embed 
-                    });
-                }
-            }
-        }
-        
         if (!html) return null;
-        const $ = cheerio.load(html);
-        const iframeSrc = $('iframe').attr('src');
-        if (iframeSrc && !servers.some(s => s.iframe === iframeSrc)) {
-            servers.push({ name: 'Backup Server', iframe: iframeSrc });
-        }
 
-        function resolveSafelink(link: string): string {
-            if (!link) return "";
-            try {
-                const urlObj = new URL(link);
-                const pathParts = urlObj.pathname.split('/');
-                const lastPart = pathParts[pathParts.length - 1];
-                if (lastPart && lastPart.length > 20 && /^[A-Za-z0-9+/=]+$/.test(lastPart)) {
-                    const decoded = Buffer.from(lastPart, 'base64').toString('utf-8');
-                    if (decoded.startsWith('http')) return decoded;
-                }
-                const urlParam = urlObj.searchParams.get('url') || urlObj.searchParams.get('link');
-                if (urlParam && urlParam.startsWith('http')) return urlParam;
-                if (urlParam && /^[A-Za-z0-9+/=]+$/.test(urlParam)) {
-                    const decoded = Buffer.from(urlParam, 'base64').toString('utf-8');
-                    if (decoded.startsWith('http')) return decoded;
-                }
-            } catch (e) {}
-            return link;
-        }
+        const dataObj = extractNuxtObject(html);
+        const servers: VideoServer[] = [];
+        let video: any = null;
 
-        async function extractDirectVideo(playUrl: string): Promise<string> {
-            if (!playUrl) return "";
-            try {
-                // If it's already a direct mp4, return it
-                if (playUrl.includes('.mp4')) return playUrl;
+        // ── Strategi 1: Key canonical `video-detail-{id}` ──
+        if (dataObj) {
+            video = dataObj[`video-detail-${id}`];
 
-                // For upload18.org / videy.li / etc.
-                if (playUrl.includes('upload18.org') || playUrl.includes('videy.li') || playUrl.includes('doodstream')) {
-                    const html = await fetchWithTimeout(playUrl);
-                    if (!html) return playUrl;
-                    
-                    // Match .mp4 links in the HTML or scripts
-                    const mp4Match = html.match(/https?:\/\/[^"']+\.mp4[^"']*/i);
-                    if (mp4Match) return mp4Match[0];
-                    
-                    // Fallback for doodstream patterns
-                    const doodMatch = html.match(/pass_md5\/([^"']+)/i);
-                    if (doodMatch) return playUrl; // Still need the landing page for complex ones
-                }
-            } catch (e) {
-                console.error("Extraction error:", e);
+            // ── Strategi 2: Scan semua values, cari yang punya id atau movie_code ──
+            if (!video) {
+                video = Object.values(dataObj).find((v: any) =>
+                    v && typeof v === 'object' && (
+                        String(v?.id) === String(id) ||
+                        v?.movie_code
+                    ) && (v?.name || v?.title)
+                );
             }
-            return playUrl;
+
+            // ── Strategi 3: Cari object apa saja yang punya embed/play URL ──
+            if (!video) {
+                const allEmbeds = deepFindEmbedUrls(dataObj);
+                for (const embed of allEmbeds) {
+                    if (!servers.some(s => s.iframe === embed)) {
+                        servers.push({ name: `Server ${servers.length + 1}`, iframe: embed });
+                    }
+                }
+            }
         }
 
+        // Ekstrak server dari object video yang ditemukan
+        if (video) {
+            // play_url / url langsung
+            for (const field of ['play_url', 'url', 'embed_url', 'stream_url', 'video_url']) {
+                if (video[field] && typeof video[field] === 'string' && video[field].startsWith('http')) {
+                    if (!servers.some(s => s.iframe === video[field])) {
+                        servers.push({ name: 'Server 1', iframe: video[field] });
+                    }
+                }
+            }
+
+            // episodes.server_data (struktur lama)
+            if (video.episodes?.server_data && typeof video.episodes.server_data === 'object') {
+                const serverData = video.episodes.server_data;
+                let serverIdx = servers.length + 1;
+                for (const key of Object.keys(serverData)) {
+                    const ep = serverData[key];
+                    const embedUrl = ep?.link_embed || ep?.url || ep?.iframe;
+                    if (embedUrl && !servers.some(s => s.iframe === embedUrl)) {
+                        servers.push({
+                            name: `${video.episodes.server_name || 'Server'} ${serverIdx}`,
+                            iframe: embedUrl
+                        });
+                        serverIdx++;
+                    }
+                }
+            }
+
+            // episodes sebagai array
+            if (Array.isArray(video.episodes)) {
+                let serverIdx = servers.length + 1;
+                for (const ep of video.episodes) {
+                    const embedUrl = ep?.link_embed || ep?.url || ep?.embed_url;
+                    if (embedUrl && !servers.some(s => s.iframe === embedUrl)) {
+                        servers.push({ name: `Server ${serverIdx}`, iframe: embedUrl });
+                        serverIdx++;
+                    }
+                }
+            }
+
+            // Deep search seluruh object video
+            if (servers.length === 0) {
+                const deepUrls = deepFindEmbedUrls(video);
+                for (const embed of deepUrls) {
+                    if (!servers.some(s => s.iframe === embed)) {
+                        servers.push({ name: `Server ${servers.length + 1}`, iframe: embed });
+                    }
+                }
+            }
+        }
+
+        // ── Strategi 4: Parse HTML langsung (fallback agresif) ──
+        if (servers.length === 0) {
+            const $ = cheerio.load(html);
+            $('iframe').each((_, el) => {
+                const src = $(el).attr('src') || $(el).attr('data-src') || $(el).attr('data-lazy-src');
+                if (src && src.startsWith('http') && !servers.some(s => s.iframe === src)) {
+                    servers.push({ name: `Server ${servers.length + 1}`, iframe: src });
+                }
+            });
+        }
+
+        // ── Strategi 5: Regex scan seluruh HTML untuk embed URL ──
+        if (servers.length === 0) {
+            const htmlEmbeds = extractIframesFromHtml(html);
+            for (const embed of htmlEmbeds) {
+                if (!servers.some(s => s.iframe === embed)) {
+                    servers.push({ name: `Server ${servers.length + 1}`, iframe: embed });
+                }
+            }
+        }
+
+        // Jika masih tidak ada server, return null (akan muncul "Video Not Available")
+        if (servers.length === 0) {
+            console.warn(`[JAV] Tidak ada server ditemukan untuk id=${id}, url=${url}`);
+            return null;
+        }
+
+        // Susun downloads
         const downloads: any[] = [];
-        if (video.play_url || video.url) {
-            const rawLink = video.play_url || video.url;
-            const directLink = await extractDirectVideo(rawLink);
-            
+        const primaryUrl = video?.play_url || video?.url || servers[0]?.iframe || '';
+        if (primaryUrl) {
             downloads.push({
-                format: "Premium HD",
-                links: [
-                    { name: "Direct Download", link: resolveSafelink(directLink) }
-                ]
+                format: 'Premium HD',
+                links: [{ name: 'Direct Download', link: primaryUrl }]
             });
         }
 
         return {
-            title: cleanTitle(video.name),
-            poster: video.poster_url || video.thumb_url || '',
+            title: cleanTitle(video?.name || video?.title || `JAV ${id}`),
+            poster: video?.poster_url || video?.thumb_url || video?.cover || '',
             rating: '0.0',
-            episode: video.movie_code,
+            episode: video?.movie_code || id,
             type: 'JAV',
             servers,
             downloads
