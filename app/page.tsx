@@ -41,8 +41,8 @@ export default async function Home() {
         {categories && categories.length > 0 ? (
           <div className="flex flex-col gap-6">
             {categories.map((category, idx) => {
-              // Hide the featured video from the first category to avoid duplication
-              const videosToShow = idx === 0 ? category.videos.slice(1) : category.videos;
+              // Ensure exactly 9 videos are shown per row. First category skips 1 (used in slider).
+              const videosToShow = idx === 0 ? category.videos.slice(1, 10) : category.videos.slice(0, 9);
               if (videosToShow.length === 0) return null;
 
               const javData = videosToShow.map((item: any, index: number) => ({

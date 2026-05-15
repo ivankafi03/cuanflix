@@ -509,7 +509,7 @@ async function refreshHomepageCache(): Promise<HomepageCategory[]> {
                 if (searchResults.videos.length > 0) {
                     return {
                         title: tag,
-                        videos: searchResults.videos.slice(0, 10)
+                        videos: searchResults.videos.slice(0, 15) // Simpan 15 video sebagai buffer (cadangan jika ada yang rusak sebelum refresh selesai)
                     };
                 }
             } catch (e) {
