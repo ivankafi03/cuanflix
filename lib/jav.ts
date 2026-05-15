@@ -24,7 +24,7 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
                 OR: [
                     { key: { startsWith: 'jav_latest_page_' } },
                     { key: { startsWith: 'jav_category_' } },
-                    { key: 'homepage_categories' },
+                    { key: 'homepage_categories_v2' },
                 ]
             },
             select: { key: true, data: true }
@@ -76,7 +76,7 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
                     );
                     
                     // Tandai cache mana yang harus di-refresh di background untuk replenish slot yang kosong
-                    if (cache.key === 'homepage_categories') {
+                    if (cache.key === 'homepage_categories_v2') {
                         shouldRefreshHomepage = true;
                     } else if (cache.key.startsWith('jav_latest_page_')) {
                         const pageNum = parseInt(cache.key.replace('jav_latest_page_', ''), 10);
@@ -456,7 +456,7 @@ export async function getVideosByCategory(categoryId: string, page: number = 1):
 
 
 export async function getHomepageCategories(): Promise<HomepageCategory[]> {
-    const CACHE_KEY = "homepage_categories";
+    const CACHE_KEY = "homepage_categories_v2";
     const REVALIDATE_MS = 60 * 60 * 1000; // 1 hour
 
     try {
@@ -522,13 +522,13 @@ async function refreshHomepageCache(): Promise<HomepageCategory[]> {
         
         if (fetchedCategories.length > 0) {
             await prisma.contentCache.upsert({
-                where: { key: "homepage_categories" },
+                where: { key: "homepage_categories_v2" },
                 update: {
                     data: JSON.stringify(fetchedCategories),
                     updatedAt: new Date()
                 },
                 create: {
-                    key: "homepage_categories",
+                    key: "homepage_categories_v2",
                     data: JSON.stringify(fetchedCategories)
                 }
             });
