@@ -50,69 +50,49 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
     const $ = cheerio.load(html);
     const videos: AgcVideo[] = [];
 
-    // Pola umum untuk situs WordPress/custom PHP
-    $('article, .video-item, .item, .post, [class*="video"], [class*="post"], [class*="thumb"]').each((_, el) => {
+    // Struktur: .video-list .video-card
+    $('.video-list .video-card, .video-card').each((_, el) => {
         const $el = $(el);
 
-        const linkEl = $el.find('a[href]').first();
-        const href = linkEl.attr('href') || '';
-        if (!href || !href.startsWith(SOURCE_URL)) return;
+        const href = $el.attr('href') || $el.find('a').first().attr('href') || '';
+        if (!href) return;
 
         const title = (
-            $el.find('h1, h2, h3, h4, .title, [class*="title"], [class*="name"]').first().text().trim() ||
-            linkEl.attr('title') || ''
+            $el.find('.title').first().text().trim() ||
+            $el.find('h3, h4, [class*="title"]').first().text().trim() ||
+            $el.attr('title') || ''
         ).replace(/\s+/g, ' ').trim();
 
-        if (!title || !href) return;
+        if (!title || title.length < 3) return;
 
         const image = (
-            $el.find('img').first().attr('data-src') ||
+            $el.find('.thumbnail').first().attr('src') ||
+            $el.find('.thumbnail').first().attr('data-src') ||
             $el.find('img').first().attr('src') ||
+            $el.find('img').first().attr('data-src') ||
             ''
         );
 
-        const slug = href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '');
+        const duration = $el.find('.duration').text().trim();
+
+        // Buat slug dari href
+        const cleanHref = href.startsWith('http') 
+            ? href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '')
+            : href.replace(/^\/+|\/+$/g, '');
+
+        if (!cleanHref) return;
 
         videos.push({
             title,
             image,
-            href: `agc/${slug}`,
+            href: `agc/${cleanHref}`,
+            episode: duration || '',
             type: 'Video',
         });
     });
 
-    // Fallback: cari semua link dengan thumbnail jika pola di atas kosong
-    if (videos.length === 0) {
-        $('a[href]').each((_, el) => {
-            const $el = $(el);
-            const href = $el.attr('href') || '';
-            const img = $el.find('img').first();
-            
-            if (!href.startsWith(SOURCE_URL) || !img.length) return;
-            
-            const title = (
-                img.attr('alt') || 
-                $el.attr('title') || 
-                $el.text().trim()
-            ).trim();
-
-            if (!title || title.length < 5) return;
-
-            const image = img.attr('data-src') || img.attr('src') || '';
-            const slug = href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '');
-            
-            if (slug && slug.length > 2) {
-                videos.push({
-                    title,
-                    image,
-                    href: `agc/${slug}`,
-                    type: 'Video',
-                });
-            }
-        });
-    }
-
-    return videos.slice(0, 20);
+    console.log(`[AGC] Found ${videos.length} videos from homepage`);
+    return videos.slice(0, 24);
 }
 
 /**
