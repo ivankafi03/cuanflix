@@ -5,6 +5,7 @@ import HeroSlider from "@/components/HeroSlider";
 import AdUnit from "@/components/ads/AdUnit";
 import AdNative from "@/components/ads/AdNative";
 import { getHomepageCategories } from "@/lib/jav";
+import { getXNXXCategories } from "@/lib/xnxx";
 import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -26,10 +27,14 @@ const CATEGORY_MAP: Record<string, string> = {
 
 export default async function Home() {
   const settings = await prisma.systemSettings.findFirst();
-  const categories = await getHomepageCategories();
+  const javCategories = await getHomepageCategories();
+  const xnxxCategories = await getXNXXCategories();
+  
+  // Combine categories, maybe shuffle or prioritize JAV
+  const categories = [...javCategories, ...xnxxCategories];
   
   // Ambil 5 video dari kategori pertama untuk slider
-  const sliderVideos = categories?.[0]?.videos?.slice(0, 5) || [];
+  const sliderVideos = javCategories?.[0]?.videos?.slice(0, 5) || [];
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -52,7 +57,7 @@ export default async function Home() {
                 rating: 0,
                 episodes: 1,
                 episodeRaw: item.episode,
-                type: "JAV",
+                type: item.type || "JAV",
                 href: `/watch/${item.href}`,
               }));
 

@@ -4,6 +4,7 @@ import { Info, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getJavWatchData, searchJav, getSlugFromUrl } from "@/lib/jav";
+import { getXNXXWatchData } from "@/lib/xnxx";
 import WatchActions from "@/components/WatchActions";
 import HistoryLogger from "@/components/HistoryLogger";
 import { getServerSession } from "next-auth";
@@ -24,6 +25,9 @@ export async function generateMetadata({
     if (path.startsWith('jav/')) {
         const id = path.split('/').pop() || '';
         watchData = await getJavWatchData(id);
+    } else if (path.startsWith('xnxx/')) {
+        const id = path.split('/').pop() || '';
+        watchData = await getXNXXWatchData(id);
     } else {
         return { title: "Not Found", description: "" };
     }
@@ -56,18 +60,24 @@ export default async function WatchPrettyPage({
         }
     }
 
-    if (!path.startsWith('jav/')) {
+    if (!path.startsWith('jav/') && !path.startsWith('xnxx/')) {
         redirect('/');
     }
 
     let watchData: any = null;
     const id = path.split('/').pop() || '';
-    watchData = await getJavWatchData(id);
+    
+    if (path.startsWith('jav/')) {
+        watchData = await getJavWatchData(id);
+    } else {
+        watchData = await getXNXXWatchData(id);
+    }
 
     // Fetch related anime based on a generic category
     let relatedAnime: any[] = [];
     try {
-        const { videos: results } = await searchJav('School'); // Default category for related
+        const query = path.startsWith('jav/') ? 'School' : 'Asian';
+        const { videos: results } = await searchJav(query); // Default category for related
         relatedAnime = results.slice(0, 6).map((item, idx) => ({
             id: idx + 1,
             title: item.title,
@@ -75,7 +85,7 @@ export default async function WatchPrettyPage({
             rating: 0,
             episodes: 1,
             episodeRaw: item.episode,
-            type: 'JAV',
+            type: item.type || 'JAV',
             href: `/watch/${item.href}`
         }));
 
