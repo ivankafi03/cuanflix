@@ -90,6 +90,36 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         });
     });
 
+    // Fallback: Cari semua link yang mengandung /watch/?v=
+    if (videos.length === 0) {
+        $('a[href*="/watch/?v="]').each((_, el) => {
+            const $el = $(el);
+            const href = $el.attr('href') || '';
+            const title = $el.text().trim() || $el.attr('title') || '';
+            
+            // Coba cari gambar di dalam <a>, parent, atau previous sibling
+            const $img = $el.find('img').first();
+            let image = $img.attr('data-src') || $img.attr('src') || '';
+            
+            // Jika tidak ada gambar di dalam <a>, cari di DOM terdekat
+            if (!image) {
+                const $parent = $el.parent();
+                image = $parent.find('img').attr('data-src') || $parent.find('img').attr('src') || '';
+            }
+
+            const vMatch = href.match(/v=([^&]+)/);
+            if (vMatch && title.length > 3 && !videos.find(v => v.href === `agc/${vMatch[1]}`)) {
+                videos.push({
+                    title,
+                    image: image || '/placeholder-poster.png', // Gambar default jika gagal
+                    href: `agc/${vMatch[1]}`,
+                    episode: '',
+                    type: 'Video',
+                });
+            }
+        });
+    }
+
     console.log(`[AGC] Found ${videos.length} videos from homepage`);
     return videos.slice(0, 24);
 }
