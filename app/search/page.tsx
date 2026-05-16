@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { searchJav } from "@/lib/jav";
+import { searchXNXX } from "@/lib/xnxx";
 import { redirect } from "next/navigation";
 import { Search, Database } from "lucide-react";
 import Pagination from "@/components/Pagination";
@@ -19,9 +20,20 @@ export default async function SearchPage({
         redirect("/");
     }
 
-    const { videos, totalPages, total } = await searchJav(query, currentPage);
+    const [javResult, xnxxResult] = await Promise.all([
+        searchJav(query, currentPage),
+        searchXNXX(query, currentPage)
+    ]);
 
-    const mappedData = videos.map((item: any, index: number) => ({
+    const combinedVideos = [
+        ...(javResult?.videos || []),
+        ...(xnxxResult?.videos || [])
+    ];
+
+    const total = (javResult?.total || 0) + (xnxxResult?.total || 0);
+    const totalPages = Math.max(javResult?.totalPages || 1, xnxxResult?.totalPages || 1);
+
+    const mappedData = combinedVideos.map((item: any, index: number) => ({
         id: index + 1,
         title: item.title,
         image: item.image,
