@@ -167,6 +167,30 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
 }
 
 /**
+ * Scrape halaman spesifik untuk pagination (View All)
+ */
+export async function getAgcPage(page: number = 1): Promise<{ videos: AgcVideo[], totalPages: number }> {
+    const url = page === 1 ? SOURCE_URL : `${SOURCE_URL}/page/${page}`;
+    const urlFallback = page === 1 ? SOURCE_URL : `${SOURCE_URL}/?page=${page}`;
+    
+    // Coba /page/x dulu, kalau gagal coba /?page=x
+    let html = await fetchPage(url);
+    let videos = html ? extractVideosFromHtml(html) : [];
+    
+    if (videos.length === 0 && page > 1) {
+        html = await fetchPage(urlFallback);
+        videos = html ? extractVideosFromHtml(html) : [];
+    }
+    
+    // Karena kita tidak tahu total halamannya secara pasti, kita asumsikan halamannya ada 100
+    // Jika ada video, berarti halaman tersebut masih valid.
+    return {
+        videos,
+        totalPages: videos.length > 0 ? page + 5 : page
+    };
+}
+
+/**
  * Scrape halaman video untuk mendapatkan embed URL / M3U8
  */
 export async function getAgcWatchData(slug: string): Promise<{

@@ -16,6 +16,7 @@ export const metadata = {
 };
 
 const CATEGORY_MAP: Record<string, string> = {
+  "Video Terbaru": "/indo", // AGC Bokep
   "Censored": "/categories/1",
   "Uncensored": "/categories/2",
   "Uncensored Leaked": "/categories/3",
