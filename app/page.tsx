@@ -29,10 +29,13 @@ export default async function Home() {
   const settings = await prisma.systemSettings.findFirst();
   const javCategories = await getHomepageCategories();
   const agcCategories = await getAgcCategories();
-  const categories = [...javCategories, ...agcCategories];
   
-  // Ambil 5 video dari kategori pertama untuk slider
+  // Taruh AGC di atas JAV
+  const categories = [...agcCategories, ...javCategories];
+  
+  // Ambil 5 video dari kategori JAV pertama untuk slider (karena cover JAV lebih HD)
   const sliderVideos = javCategories?.[0]?.videos?.slice(0, 5) || [];
+  const sliderCategoryTitle = javCategories?.[0]?.title;
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -44,8 +47,9 @@ export default async function Home() {
         {categories && categories.length > 0 ? (
           <div className="flex flex-col gap-6">
             {categories.map((category, idx) => {
-              // Ensure exactly 9 videos are shown per row. First category skips 1 (used in slider).
-              const videosToShow = idx === 0 ? category.videos.slice(1, 10) : category.videos.slice(0, 9);
+              // Skip 1 video pertama jika kategori ini yang dipakai di slider
+              const isSliderCategory = category.title === sliderCategoryTitle;
+              const videosToShow = isSliderCategory ? category.videos.slice(1, 10) : category.videos.slice(0, 9);
               if (videosToShow.length === 0) return null;
 
               const javData = videosToShow.map((item: any, index: number) => ({
