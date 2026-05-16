@@ -242,10 +242,12 @@ export async function getXNXXWatchData(id: string): Promise<WatchPageData | null
             title = title.replace(/- XNXX\.COM/i, '').trim();
         }
 
-        const embedUrl = `${SOURCE_URL}/embed/${id}`;
+        // XNXX allows direct embedding. We use a mirror to bypass local ISP blocks for the player.
+        const embedUrl = `https://www.xnxx.health/embed/${id}`;
 
         const servers: VideoServer[] = [
-            { name: "XNXX Premium", iframe: embedUrl }
+            { name: "XNXX Premium", iframe: embedUrl },
+            { name: "XNXX Backup", iframe: `https://www.xnxx3.com/embed/${id}` }
         ];
 
         return {
