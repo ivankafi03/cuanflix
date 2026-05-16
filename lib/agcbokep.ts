@@ -75,10 +75,9 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
 
         const duration = $el.find('.duration').text().trim();
 
-        // Buat slug dari href
-        const cleanHref = href.startsWith('http') 
-            ? href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '')
-            : href.replace(/^\/+|\/+$/g, '');
+        // Buat slug dari href: ambil parameter v= jika ada
+        const vMatch = href.match(/v=([^&]+)/);
+        const cleanHref = vMatch ? vMatch[1] : href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '').replace('watch/', '');
 
         if (!cleanHref) return;
 
@@ -118,7 +117,7 @@ export async function getAgcWatchData(slug: string): Promise<{
         }
     } catch {}
 
-    const url = `${SOURCE_URL}/${slug}`;
+    const url = `${SOURCE_URL}/watch/?v=${slug}`;
     const html = await fetchPage(url);
     if (!html) return null;
 
