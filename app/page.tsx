@@ -5,6 +5,7 @@ import HeroSlider from "@/components/HeroSlider";
 import AdUnit from "@/components/ads/AdUnit";
 import AdNative from "@/components/ads/AdNative";
 import { getHomepageCategories } from "@/lib/jav";
+import { getAgcCategories } from "@/lib/agcbokep";
 import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,8 @@ const CATEGORY_MAP: Record<string, string> = {
 export default async function Home() {
   const settings = await prisma.systemSettings.findFirst();
   const javCategories = await getHomepageCategories();
-  const categories = [...javCategories];
+  const agcCategories = await getAgcCategories();
+  const categories = [...javCategories, ...agcCategories];
   
   // Ambil 5 video dari kategori pertama untuk slider
   const sliderVideos = javCategories?.[0]?.videos?.slice(0, 5) || [];

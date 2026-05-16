@@ -4,6 +4,7 @@ import { Info, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getJavWatchData, searchJav, getSlugFromUrl } from "@/lib/jav";
+import { getAgcWatchData } from "@/lib/agcbokep";
 import WatchActions from "@/components/WatchActions";
 import HistoryLogger from "@/components/HistoryLogger";
 import { getServerSession } from "next-auth";
@@ -24,8 +25,10 @@ export async function generateMetadata({
     if (path.startsWith('jav/')) {
         const id = path.split('/').pop() || '';
         watchData = await getJavWatchData(id);
+    } else if (path.startsWith('agc/')) {
+        const slug = path.replace('agc/', '');
+        watchData = await getAgcWatchData(slug);
     } else if (path.startsWith('dood/')) {
-        const id = path.split('/').pop() || '';
         return {
             title: `Watch Video Online - Cuanflix`,
             description: `Stream video in HD quality for free on Cuanflix.`,
@@ -62,7 +65,7 @@ export default async function WatchPrettyPage({
         }
     }
 
-    if (!path.startsWith('jav/') && !path.startsWith('dood/')) {
+    if (!path.startsWith('jav/') && !path.startsWith('agc/') && !path.startsWith('dood/')) {
         redirect('/');
     }
 
@@ -71,19 +74,20 @@ export default async function WatchPrettyPage({
     
     if (path.startsWith('jav/')) {
         watchData = await getJavWatchData(id);
+    } else if (path.startsWith('agc/')) {
+        const slug = path.replace('agc/', '');
+        watchData = await getAgcWatchData(slug);
     } else if (path.startsWith('dood/')) {
         // Doodstream embed
-        const doodId = id;
         watchData = {
-            title: `Video ${doodId}`,
+            title: `Video ${id}`,
             poster: '',
             rating: '0.0',
-            episode: doodId,
+            episode: id,
             type: 'Doodstream',
             servers: [
-                { name: 'Doodstream', iframe: `https://dood.la/e/${doodId}` },
-                { name: 'Doodstream Mirror', iframe: `https://dood.re/e/${doodId}` },
-                { name: 'Doodstream Fast', iframe: `https://dood.pm/e/${doodId}` },
+                { name: 'Doodstream', iframe: `https://dood.la/e/${id}` },
+                { name: 'Doodstream Mirror', iframe: `https://dood.re/e/${id}` },
             ],
             downloads: []
         };

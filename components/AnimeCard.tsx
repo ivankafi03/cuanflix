@@ -21,11 +21,14 @@ export default function AnimeCard({ id, title, image, rating, episodes, episodeR
     const router = useRouter();
     const [isNavigating, setIsNavigating] = useState(false);
 
-    const isAdult = type === "JAV" || type === "Hentai" || type === "XNXX" || href?.includes("/jav/") || href?.includes("/xnxx/");
+    const isAdult = type === "JAV" || type === "Hentai" || type === "XNXX" || type === "Video" || type === "Doodstream" ||
+        href?.includes("/jav/") || href?.includes("/xnxx/") || href?.includes("/agc/") || href?.includes("/dood/");
     const slug = getSlugFromUrl(href);
     const cleanSlug = slug?.replace(/^anime\//, "").replace(/^watch\//, "");
     const detailHref = cleanSlug
-        ? (isAdult || cleanSlug.startsWith("jav/") || cleanSlug.startsWith("xnxx/")) ? `/watch/${cleanSlug}` : `/anime/${cleanSlug}`
+        ? (isAdult || cleanSlug.startsWith("jav/") || cleanSlug.startsWith("agc/") || cleanSlug.startsWith("dood/")) 
+            ? `/watch/${cleanSlug}` 
+            : `/anime/${cleanSlug}`
         : isAdult ? `/jav` : `/anime/${id}`;
 
     const epLabel = episodeRaw ? episodeRaw : `EP ${episodes}`;
