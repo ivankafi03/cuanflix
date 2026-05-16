@@ -2,14 +2,15 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-    await prisma.contentCache.deleteMany({
+    const deleted = await prisma.contentCache.deleteMany({
         where: { 
-            key: {
-                in: ['homepage_categories', 'homepage_categories_xnxx']
-            }
+            OR: [
+                { key: { in: ['homepage_categories', 'homepage_categories_xnxx'] } },
+                { key: { contains: 'xnxx_watch_' } }
+            ]
         }
     });
-    console.log('All homepage caches deleted successfully!');
+    console.log(`Successfully deleted ${deleted.count} cache entries!`);
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect());
