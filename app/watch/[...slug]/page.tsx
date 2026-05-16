@@ -4,7 +4,6 @@ import { Info, Sparkles } from "lucide-react";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getJavWatchData, searchJav, getSlugFromUrl } from "@/lib/jav";
-import { getXNXXWatchData } from "@/lib/xnxx";
 import WatchActions from "@/components/WatchActions";
 import HistoryLogger from "@/components/HistoryLogger";
 import { getServerSession } from "next-auth";
@@ -25,9 +24,12 @@ export async function generateMetadata({
     if (path.startsWith('jav/')) {
         const id = path.split('/').pop() || '';
         watchData = await getJavWatchData(id);
-    } else if (path.startsWith('xnxx/')) {
+    } else if (path.startsWith('dood/')) {
         const id = path.split('/').pop() || '';
-        watchData = await getXNXXWatchData(id);
+        return {
+            title: `Watch Video Online - Cuanflix`,
+            description: `Stream video in HD quality for free on Cuanflix.`,
+        };
     } else {
         return { title: "Not Found", description: "" };
     }
@@ -60,7 +62,7 @@ export default async function WatchPrettyPage({
         }
     }
 
-    if (!path.startsWith('jav/') && !path.startsWith('xnxx/')) {
+    if (!path.startsWith('jav/') && !path.startsWith('dood/')) {
         redirect('/');
     }
 
@@ -69,8 +71,22 @@ export default async function WatchPrettyPage({
     
     if (path.startsWith('jav/')) {
         watchData = await getJavWatchData(id);
-    } else {
-        watchData = await getXNXXWatchData(id);
+    } else if (path.startsWith('dood/')) {
+        // Doodstream embed
+        const doodId = id;
+        watchData = {
+            title: `Video ${doodId}`,
+            poster: '',
+            rating: '0.0',
+            episode: doodId,
+            type: 'Doodstream',
+            servers: [
+                { name: 'Doodstream', iframe: `https://dood.la/e/${doodId}` },
+                { name: 'Doodstream Mirror', iframe: `https://dood.re/e/${doodId}` },
+                { name: 'Doodstream Fast', iframe: `https://dood.pm/e/${doodId}` },
+            ],
+            downloads: []
+        };
     }
 
     // Fetch related anime based on a generic category
