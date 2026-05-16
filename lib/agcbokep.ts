@@ -120,6 +120,26 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         });
     }
 
+    // Fallback 2: Regex murni jika video dimuat via JSON / script
+    if (videos.length === 0) {
+        const watchRegex = /href="\/watch\/\?v=([^"]+)"/g;
+        let match;
+        while ((match = watchRegex.exec(html)) !== null) {
+            const slug = match[1];
+            if (!videos.find(v => v.href === `agc/${slug}`)) {
+                // Ekstrak judul dengan membersihkan slug
+                const title = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                videos.push({
+                    title,
+                    image: '/placeholder-poster.png', // Fallback gambar
+                    href: `agc/${slug}`,
+                    episode: '',
+                    type: 'Video',
+                });
+            }
+        }
+    }
+
     console.log(`[AGC] Found ${videos.length} videos from homepage`);
     return videos.slice(0, 24);
 }
