@@ -42,19 +42,15 @@ async function fetchPage(url: string, referer?: string): Promise<string | null> 
 }
 
 /**
- * Scrape halaman utama untuk mendapatkan daftar video
+ * Ekstrak video dari string HTML (mendukung DOM & Regex)
  */
-async function scrapeHomepage(): Promise<AgcVideo[]> {
-    const html = await fetchPage(SOURCE_URL);
-    if (!html) return [];
-
+function extractVideosFromHtml(html: string): AgcVideo[] {
     const $ = cheerio.load(html);
     const videos: AgcVideo[] = [];
 
-    // Struktur: .video-list .video-card
+    // 1. Coba dari DOM
     $('.video-list .video-card, .video-card').each((_, el) => {
         const $el = $(el);
-
         const href = $el.attr('href') || $el.find('a').first().attr('href') || '';
         if (!href) return;
 
@@ -75,8 +71,6 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         );
 
         const duration = $el.find('.duration').text().trim();
-
-        // Buat slug dari href: ambil parameter v= jika ada
         const vMatch = href.match(/v=([^&]+)/);
         const cleanHref = vMatch ? vMatch[1] : href.replace(SOURCE_URL, '').replace(/^\/+|\/+$/g, '').replace('watch/', '');
 
@@ -91,18 +85,14 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         });
     });
 
-    // Fallback: Cari semua link yang mengandung /watch/?v=
+    // 2. Fallback: Cari semua link yang mengandung /watch/?v=
     if (videos.length === 0) {
         $('a[href*="/watch/?v="]').each((_, el) => {
             const $el = $(el);
             const href = $el.attr('href') || '';
             const title = $el.text().trim() || $el.attr('title') || '';
-            
-            // Coba cari gambar di dalam <a>, parent, atau previous sibling
             const $img = $el.find('img').first();
             let image = $img.attr('data-src') || $img.attr('src') || '';
-            
-            // Jika tidak ada gambar di dalam <a>, cari di DOM terdekat
             if (!image) {
                 const $parent = $el.parent();
                 image = $parent.find('img').attr('data-src') || $parent.find('img').attr('src') || '';
@@ -112,7 +102,7 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
             if (vMatch && title.length > 3 && !videos.find(v => v.href === `agc/${vMatch[1]}`)) {
                 videos.push({
                     title,
-                    image: image || '/placeholder-poster.png', // Gambar default jika gagal
+                    image: image || '/placeholder-poster.png',
                     href: `agc/${vMatch[1]}`,
                     episode: '',
                     type: 'Video',
@@ -121,18 +111,17 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         });
     }
 
-    // Fallback 2: Regex murni jika video dimuat via JSON / script
+    // 3. Fallback 2: Regex murni
     if (videos.length === 0) {
         const watchRegex = /href="\/watch\/\?v=([^"]+)"/g;
         let match;
         while ((match = watchRegex.exec(html)) !== null) {
             const slug = match[1];
             if (!videos.find(v => v.href === `agc/${slug}`)) {
-                // Ekstrak judul dengan membersihkan slug
                 const title = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 videos.push({
                     title,
-                    image: '/placeholder-poster.png', // Fallback gambar
+                    image: '/placeholder-poster.png',
                     href: `agc/${slug}`,
                     episode: '',
                     type: 'Video',
@@ -141,8 +130,40 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
         }
     }
 
-    console.log(`[AGC] Found ${videos.length} videos from homepage`);
-    return videos.slice(0, 24);
+    return videos;
+}
+
+/**
+ * Scrape halaman utama untuk mendapatkan daftar video
+ */
+async function scrapeHomepage(): Promise<AgcVideo[]> {
+    const urlsToScrape = [
+        SOURCE_URL,
+        `${SOURCE_URL}/categories/bokep-terbaru`,
+        `${SOURCE_URL}/categories/bokep-indo`,
+        `${SOURCE_URL}/categories?category=Bokep+Viral`,
+        `${SOURCE_URL}/categories?category=Bokep+SMP`,
+    ];
+
+    const htmlPromises = urlsToScrape.map(url => fetchPage(url));
+    const htmlResults = await Promise.all(htmlPromises);
+
+    const allVideos: AgcVideo[] = [];
+    const uniqueSlugs = new Set<string>();
+
+    for (const html of htmlResults) {
+        if (!html) continue;
+        const videos = extractVideosFromHtml(html);
+        for (const v of videos) {
+            if (!uniqueSlugs.has(v.href)) {
+                uniqueSlugs.add(v.href);
+                allVideos.push(v);
+            }
+        }
+    }
+
+    console.log(`[AGC] Found ${allVideos.length} unique videos from multiple pages`);
+    return allVideos.slice(0, 36); // Ambil maksimal 36 video
 }
 
 /**
