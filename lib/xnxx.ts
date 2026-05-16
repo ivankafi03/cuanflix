@@ -248,6 +248,8 @@ export async function getXNXXWatchData(id: string): Promise<WatchPageData | null
         const servers: VideoServer[] = [
             { name: "XNXX Premium", iframe: embedUrl },
             { name: "XNXX Backup", iframe: `https://www.xnxx3.com/embed/${id}` },
+            { name: "XVideo Mirror (Fast)", iframe: `https://www.xvideos.red/embedframe/${id}` },
+            { name: "XVideo Backup", iframe: `https://www.xvideos.com/embedframe/${id}` },
             { name: "Google Proxy (Anti-Blokir)", iframe: `https://www-xnxx-com.translate.goog/embed/${id}?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp` }
         ];
 
