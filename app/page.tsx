@@ -31,8 +31,8 @@ export default async function Home() {
   const javCategories = await getHomepageCategories();
   const agcCategories = await getAgcCategories();
   
-  // Taruh AGC di atas JAV
-  const categories = [...agcCategories, ...javCategories];
+  // Taruh AGC di atas JAV, lalu potong agar hanya tampil 3 kategori saja di beranda
+  const categories = [...agcCategories, ...javCategories].slice(0, 3);
   
   // Ambil 5 video dari kategori JAV pertama untuk slider (karena cover JAV lebih HD)
   const sliderVideos = javCategories?.[0]?.videos?.slice(0, 5) || [];
