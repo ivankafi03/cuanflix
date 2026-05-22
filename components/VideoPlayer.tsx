@@ -6,7 +6,6 @@ import { VideoServer } from "@/lib/jav";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import AdUnit from "@/components/ads/AdUnit";
 
 const DIRECT_LINK = "https://downconvenientmagnetic.com/ua2u1rp3?key=56592622f6fffcc72f2baf8f80cc95c2";
 
@@ -157,13 +156,6 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                         </button>
                     </div>
 
-                    {/* Ad inside overlay - Klik ke-4 */}
-                    <div className="bg-zinc-900/80 border border-white/10 rounded-2xl p-4 overflow-hidden shadow-2xl">
-                        <p className="text-zinc-600 text-[9px] uppercase tracking-[0.2em] text-center mb-3">Sponsor Offer</p>
-                        <div className="flex items-center justify-center min-w-[300px] min-h-[250px]">
-                            <AdUnit type="native" />
-                        </div>
-                    </div>
                 </div>
             )}
 

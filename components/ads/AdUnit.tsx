@@ -79,7 +79,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
     }, [shouldRender, config.key, config.height, config.width, type, pathname]);
 
     // ── Conditional render AFTER all hooks ───────────────────────────
-    if (!shouldRender) return null;
+    if (!shouldRender || type === "native") return null;
 
     const isInternalAd = (session?.user as any)?.internalAdMode;
 

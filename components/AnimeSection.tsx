@@ -2,8 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import AnimeCard from "./AnimeCard";
-import AdUnit from "./ads/AdUnit";
-import { useSession } from "next-auth/react";
 
 interface AnimeData {
     id: number;

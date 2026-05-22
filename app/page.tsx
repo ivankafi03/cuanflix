@@ -2,8 +2,6 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import HeroSlider from "@/components/HeroSlider";
-import AdUnit from "@/components/ads/AdUnit";
-import AdNative from "@/components/ads/AdNative";
 import { getHomepageCategories } from "@/lib/jav";
 import { getAgcCategories } from "@/lib/agcbokep";
 import prisma from "@/lib/prisma";
@@ -73,12 +71,6 @@ export default async function Home() {
                     data={javData}
                     href={sectionHref}
                   />
-                  {/* Single Native Ad - Best position after 3rd category */}
-                  {idx === 2 && (
-                    <div className="w-full flex justify-center -mx-4 md:mx-0 my-4 overflow-visible">
-                      <AdNative />
-                    </div>
-                  )}
                 </React.Fragment>
               );
             })}

@@ -13,8 +13,6 @@ import { authOptions } from "@/lib/auth";
 import AdScripts from "@/components/ads/AdScripts";
 import AntiAdBlock from "@/components/ads/AntiAdBlock";
 import AdblockDetector from "@/components/ads/AdblockDetector";
-import AdUnit from "@/components/ads/AdUnit";
-
 import Footer from "@/components/Footer";
 import NotificationToast from "@/components/NotificationToast";
 import RewardNotification from "@/components/RewardNotification";
