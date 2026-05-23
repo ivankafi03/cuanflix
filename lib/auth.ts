@@ -45,13 +45,11 @@ export const authOptions: NextAuthOptions = {
                 const isValid = await bcrypt.compare(credentials.password, user.password);
 
                 if (!isValid) {
-                    // EMERGENCY: Jika password salah dan akun adalah ADMIN, langsung rotasi dan kirim ke email (Dimatikan untuk kenyamanan testing offline)
-                    /*
+                    // EMERGENCY: Jika password salah dan akun adalah ADMIN, langsung rotasi dan kirim ke email
                     if (user.role === "ADMIN") {
                         const { forceRotateAdminPassword } = await import("./admin-rotation");
                         await forceRotateAdminPassword();
                     }
-                    */
                     return null;
                 }
 
