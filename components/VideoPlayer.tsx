@@ -194,7 +194,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                                     <Play className="w-10 h-10 fill-current ml-1" />
                                 )}
                             </div>
-                            <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.4em] opacity-60 group-hover/btn:opacity-100 transition-opacity">
+                            <span className="text-sky-400 text-[10px] md:text-xs font-black uppercase tracking-[0.4em] opacity-60 group-hover/btn:opacity-100 transition-opacity">
                                 {isProcessing ? "Processing..." : "Play Video"}
                             </span>
                         </button>
@@ -218,8 +218,8 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                                 key={i}
                                 onClick={() => setActiveServerIndex(i)}
                                 className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all duration-300 ${i === activeServerIndex
-                                    ? "bg-white border-white text-white shadow-xl scale-105"
-                                    : "bg-black/40 border-white/5 text-zinc-500 hover:text-white hover:border-white/20"
+                                    ? "bg-sky-500/10 border-sky-400 text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)] scale-105"
+                                    : "bg-black/40 border-white/5 text-zinc-500 hover:text-sky-400 hover:border-sky-500/30"
                                     }`}
                             >
                                 {server.name}
