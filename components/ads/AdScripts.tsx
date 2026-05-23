@@ -14,7 +14,7 @@ export default function AdScripts() {
     useEffect(() => { setMounted(true); }, []);
 
     const isAdmin = (session?.user as any)?.role === "ADMIN";
-    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || isAdmin;
+    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || pathname.startsWith("/login") || pathname.startsWith("/register") || isAdmin;
 
     // ── HOOK 2: toggle body class and cleanup ads ────────────────────
     useEffect(() => {
