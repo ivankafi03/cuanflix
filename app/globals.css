@@ -166,12 +166,12 @@ div[class*="bg-batik-"]:hover {
 .admin-page iframe:not(.video-player-iframe),
 .admin-page script[src*="profitablecpm"],
 .admin-page script[src*="quge5"],
-.admin-page div[style*="width: 728px"],
-.admin-page div[style*="width: 300px"],
-.admin-page div[style*="width: 320px"],
-.admin-page div[style*="height: 90px"],
-.admin-page div[style*="height: 250px"],
-.admin-page div[style*="height: 50px"] {
+.admin-page div[style*="width: 728px"]:not(.skip-ad-banner),
+.admin-page div[style*="width: 300px"]:not(.skip-ad-banner),
+.admin-page div[style*="width: 320px"]:not(.skip-ad-banner),
+.admin-page div[style*="height: 90px"]:not(.skip-ad-banner),
+.admin-page div[style*="height: 250px"]:not(.skip-ad-banner),
+.admin-page div[style*="height: 50px"]:not(.skip-ad-banner) {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;

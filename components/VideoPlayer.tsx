@@ -157,8 +157,8 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                         </button>
 
                         {/* Banner Iklan di dalam Layar Hitung Mundur */}
-                        <div className="mt-4 flex justify-center max-w-full overflow-hidden rounded-xl border border-white/5">
-                            <AdUnit type="rectangle" />
+                        <div className="mt-4 flex justify-center max-w-full overflow-hidden rounded-xl border border-white/5 skip-ad-banner">
+                            <AdUnit type="rectangle" className="skip-ad-banner" />
                         </div>
                     </div>
 

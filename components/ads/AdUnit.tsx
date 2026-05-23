@@ -51,6 +51,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
 
             // ISOLATED IFRAME METHOD - PREVENTS GLOBAL VARIABLE CONFLICTS
             const iframe = document.createElement('iframe');
+            iframe.className = "video-player-iframe skip-ad-iframe";
             iframe.width = finalWidth.toString();
             iframe.height = finalHeight.toString();
             iframe.frameBorder = "0";
