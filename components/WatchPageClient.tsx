@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import VideoPlayer from "./VideoPlayer";
-import AdUnit from "./ads/AdUnit";
 import WatchEarningManager from "./WatchEarningManager";
 import { VideoServer } from "@/lib/jav";
 import { List, X, ChevronRight, Sparkles, Download } from "lucide-react";
@@ -81,11 +80,7 @@ export default function WatchPageClient({
                     onPlay={() => setIsWatching(true)}
                 />
 
-                {isWatching && (
-                    <div className="mt-6 flex justify-center">
-                        <AdUnit type="leaderboard" />
-                    </div>
-                )}
+
 
                 {children}
 

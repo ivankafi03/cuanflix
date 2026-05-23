@@ -6,6 +6,7 @@ import { VideoServer } from "@/lib/jav";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import AdUnit from "./ads/AdUnit";
 
 const DIRECT_LINK = "https://downconvenientmagnetic.com/ua2u1rp3?key=56592622f6fffcc72f2baf8f80cc95c2";
 
@@ -154,6 +155,11 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                         >
                             Skip Ad
                         </button>
+
+                        {/* Banner Iklan di dalam Layar Hitung Mundur */}
+                        <div className="mt-4 flex justify-center max-w-full overflow-hidden rounded-xl border border-white/5">
+                            <AdUnit type="rectangle" />
+                        </div>
                     </div>
 
                 </div>
