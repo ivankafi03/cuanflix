@@ -14,18 +14,30 @@ export async function GET() {
         const settings = await prisma.systemSettings.findFirst() || { minWithdrawal: 10.00 };
         const threshold = settings.minWithdrawal;
 
-        // 2. Ambil 1 bot acak
+        // 2. Ambil semua bot acak dari DB
         const bots = await prisma.user.findMany({
             where: { isBot: true },
             select: { name: true, balanceWatch: true }
         });
 
-        if (bots.length === 0) {
-            return NextResponse.json({ active: false });
-        }
+        let randomBot;
+        let botBalance;
 
-        const randomBot = bots[Math.floor(Math.random() * bots.length)];
-        const botBalance = randomBot.balanceWatch || 0;
+        if (bots.length === 0) {
+            // Fallback nama-nama Indonesia untuk bot penarikan palsu (social proof) jika database kosong dari bot
+            const fallbackNames = [
+                "Aditya Pratama", "Siti Rahma", "Budi Santoso", "Dewi Lestari", "Rian Hidayat",
+                "Eka Wijaya", "Indah Novitasari", "Ferry Setiawan", "Rina Amelia", "Andi Saputra",
+                "Mega Utami", "Taufik Rahman", "Lia Lestari", "Hendra Kurniawan", "Yanti Puspitasari",
+                "Rudi Hermawan", "Dina Mariana", "Denny Prasetyo", "Maya Kartika", "Aris Munandar"
+            ];
+            const randomName = fallbackNames[Math.floor(Math.random() * fallbackNames.length)];
+            botBalance = Math.random() * 45 + 5; // $5.00 - $50.00
+            randomBot = { name: randomName, balanceWatch: botBalance };
+        } else {
+            randomBot = bots[Math.floor(Math.random() * bots.length)];
+            botBalance = randomBot.balanceWatch || 0;
+        }
 
         // 3. Logika untuk Tamu (Guest) -> Withdraw Notifications (High/Low Random)
         if (isGuest) {
