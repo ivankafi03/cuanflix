@@ -163,7 +163,7 @@ div[class*="bg-batik-"]:hover {
 .admin-page [class*="ad-"],
 .admin-page [class*="banner"],
 .admin-page [class*="ad-unit"],
-.admin-page iframe,
+.admin-page iframe:not(.video-player-iframe),
 .admin-page script[src*="profitablecpm"],
 .admin-page script[src*="quge5"],
 .admin-page div[style*="width: 728px"],

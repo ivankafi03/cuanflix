@@ -208,7 +208,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                 ) : (
                     <iframe
                         src={servers[activeServerIndex].iframe}
-                        className="w-full h-full"
+                        className="w-full h-full video-player-iframe"
                         allowFullScreen
                         frameBorder="0"
                     />
