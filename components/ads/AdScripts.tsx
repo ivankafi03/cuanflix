@@ -13,8 +13,8 @@ export default function AdScripts() {
     // ── HOOK 1: set mounted ──────────────────────────────────────────
     useEffect(() => { setMounted(true); }, []);
 
-    const isAdmin = (session?.user as any)?.role === "ADMIN";
-    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || pathname.startsWith("/login") || pathname.startsWith("/register") || isAdmin;
+    const isMember = !!session?.user;
+    const isRestricted = pathname.startsWith("/admin") || pathname.startsWith("/dashboard") || pathname.startsWith("/auth") || pathname.startsWith("/login") || pathname.startsWith("/register") || isMember;
 
     // ── HOOK 2: toggle body class and cleanup ads ────────────────────
     useEffect(() => {
@@ -47,9 +47,6 @@ export default function AdScripts() {
     // ── Conditional render AFTER all hooks ───────────────────────────
     if (!mounted || status === "loading") return null;
 
-    // Jika member login, matikan iklan Popunder/Pop-up (Script-level)
-    const isMember = !!session?.user;
-    
     // Guardian tetap render null di restricted page untuk scripts
     if (isRestricted) return null;
 
