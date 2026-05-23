@@ -80,6 +80,9 @@ export async function POST(req: Request) {
 
         // Create user and handle referral bonus in a transaction
         await prisma.$transaction(async (tx) => {
+            const settings = await tx.systemSettings.findUnique({ where: { id: "global" } });
+            const welcomeBonus = settings?.welcomeBonus || 1.00;
+
             const newUser = await tx.user.create({
                 data: {
                     name,
@@ -88,14 +91,24 @@ export async function POST(req: Request) {
                     role: "MEMBER",
                     balanceWatch: 0,
                     balanceReferral: 0,
+                    balanceBonus: welcomeBonus, // Instant Welcome Bonus!
+                    registrationBonusClaimed: true, // Marked as claimed
                     referredById: referrer?.id || null,
                     registrationIp: ip,
                     deviceFingerprint: fingerprint || null,
                 }
             });
 
+            // Catat log pendapatan bonus selamat datang untuk pengguna baru
+            await tx.earningLog.create({
+                data: {
+                    userId: newUser.id,
+                    amount: welcomeBonus,
+                    type: "BONUS"
+                }
+            });
+
             if (referrer) {
-                const settings = await tx.systemSettings.findUnique({ where: { id: "global" } });
                 const bonus = settings?.registrationBonus || 0.10;
 
                 await tx.user.update({
