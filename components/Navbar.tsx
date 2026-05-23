@@ -113,17 +113,20 @@ export default function Navbar() {
                                     >
                                         <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(244,114,182,0.6)]" />
                                         <span className="text-slate-100 font-black text-xs md:text-sm italic uppercase tracking-wide">
-                                            {scrollingTexts[textIndex].includes(" Dapat ") ? (
-                                                scrollingTexts[textIndex].split(" Dapat ").map((part, i) => (
-                                                    <React.Fragment key={i}>
-                                                        {i === 1 ? <span className="text-primary"> Dapat {part}</span> : part}
-                                                    </React.Fragment>
-                                                ))
-                                            ) : (
-                                                scrollingTexts[textIndex].includes("Login!") ? (
-                                                    <>Yuk <span className="text-primary">Login!</span></>
-                                                ) : scrollingTexts[textIndex]
-                                            )}
+                                            {(() => {
+                                                const activeText = scrollingTexts[textIndex] || scrollingTexts[0] || "";
+                                                if (activeText.includes(" Dapat ")) {
+                                                    return activeText.split(" Dapat ").map((part, i) => (
+                                                        <React.Fragment key={i}>
+                                                            {i === 1 ? <span className="text-primary"> Dapat {part}</span> : part}
+                                                        </React.Fragment>
+                                                    ));
+                                                } else if (activeText.includes("Login!")) {
+                                                    return <>Yuk <span className="text-primary">Login!</span></>;
+                                                } else {
+                                                    return activeText;
+                                                }
+                                            })()}
                                         </span>
                                     </motion.div>
                                 </AnimatePresence>
