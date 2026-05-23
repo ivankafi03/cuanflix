@@ -102,7 +102,7 @@ export default function CommentSection({ videoId }: CommentSectionProps) {
                             <button
                                 type="submit"
                                 disabled={submitting || !newComment.trim()}
-                                className="flex items-center gap-2 px-6 py-2.5 bg-primary text-black font-black text-[10px] uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                             >
                                 <Send className="w-3.5 h-3.5" />
                                 {submitting ? "Sending..." : "Post Comment"}

@@ -85,19 +85,19 @@ export default function AdminOverviewClient({ initialData }: { initialData: any 
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
                 {stats.map((stat, i) => (
-                    <div key={i} className="bg-[#0F0F11] border border-white/5 p-4 rounded-2xl flex flex-col gap-3 relative overflow-hidden group hover:border-white/10 transition-all">
+                    <div key={i} className="bg-[#0F0F11] border border-white/5 p-3 sm:p-4 rounded-2xl flex flex-col gap-2.5 sm:gap-3 relative overflow-hidden group hover:border-white/10 transition-all">
                         <div className="absolute inset-0 bg-batik-pink opacity-[0.08] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                         <div className="flex items-center justify-between relative z-10">
-                            <div className={`w-7 h-7 rounded-lg flex items-center justify-center bg-white/5`}>
+                            <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-white/5">
                                 <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
                             </div>
-                            <span className="text-[9px] bg-white/5 px-2 py-0.5 rounded-md text-zinc-600 font-semibold border border-white/5">LIVE</span>
+                            <span className="text-[8px] sm:text-[9px] bg-white/5 px-1.5 sm:px-2 py-0.5 rounded-md text-zinc-600 font-semibold border border-white/5">LIVE</span>
                         </div>
                         <div className="flex flex-col relative z-10">
-                            <p className="text-zinc-500 text-[10px] font-medium">{stat.label}</p>
-                            <h3 className="text-2xl font-bold text-white tracking-tighter">{stat.value}</h3>
+                            <p className="text-zinc-500 text-[9px] sm:text-[10px] font-medium">{stat.label}</p>
+                            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tighter">{stat.value}</h3>
                         </div>
                     </div>
                 ))}

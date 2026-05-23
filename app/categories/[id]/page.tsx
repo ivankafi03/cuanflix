@@ -54,11 +54,11 @@ export default async function CategoryPage({
 
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-xs">
-                    <Link href="/categories" className="text-zinc-600 hover:text-zinc-400 transition-colors" prefetch={false}>
+                    <Link href="/categories" className="text-slate-400 hover:text-slate-200 transition-colors" prefetch={false}>
                         Categories
                     </Link>
-                    <span className="text-zinc-800">/</span>
-                    <span className="text-zinc-400">{genre?.name ?? `Genre ${id}`}</span>
+                    <span className="text-white/20">/</span>
+                    <span className="text-slate-300">{genre?.name ?? `Genre ${id}`}</span>
                 </div>
 
                 {/* Header */}
@@ -66,7 +66,7 @@ export default async function CategoryPage({
                     {genre && <span className="text-3xl">{genre.emoji}</span>}
                     <div>
                         <h1 className="text-2xl font-bold text-white">{genre?.name ?? `Genre ${id}`}</h1>
-                        <p className="text-zinc-600 text-sm mt-0.5">
+                        <p className="text-slate-400 text-sm mt-0.5">
                             {total > 0 ? `${total.toLocaleString()} videos` : ""} — Page {currentPage.toLocaleString()} of {totalPages.toLocaleString()}
                         </p>
                     </div>

@@ -66,7 +66,7 @@ export default function AntiAdBlock() {
                             <div className="flex items-center gap-3 mt-2">
                                 <button 
                                     onClick={() => window.location.reload()}
-                                    className="px-4 py-2 bg-primary text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all"
+                                    className="px-4 py-2 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all"
                                 >
                                     Saya Sudah Matikan
                                 </button>

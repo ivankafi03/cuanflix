@@ -121,7 +121,7 @@ export default function WatchClient({ user }: { user: any }) {
                             <button
                                 key={t.id}
                                 onClick={() => setChartTab(t.id as any)}
-                                className={`px-3 py-1.5 text-[9px] font-bold rounded-md transition-all ${chartTab === t.id ? "bg-primary text-black" : "text-zinc-500 hover:text-white"}`}
+                                className={`px-3 py-1.5 text-[9px] font-bold rounded-md transition-all ${chartTab === t.id ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-zinc-500 hover:text-white"}`}
                             >
                                 {t.label}
                             </button>

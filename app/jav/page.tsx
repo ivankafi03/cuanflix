@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { getLatestVideos } from "@/lib/jav";
@@ -17,19 +17,20 @@ export default function JavPage({
     searchParams: Promise<{ page?: string }>;
 }) {
     return (
-        <div className="flex flex-col min-h-screen bg-[#0A0A0B]">
-            {/* Visual Background */}
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-full bg-dot-grid opacity-20" />
-                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full animate-pulse" />
-            </div>
+        <div className="flex flex-col min-h-screen bg-transparent">
+            {/* Visual Background (Glows and ambient dots) */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-500/10 via-transparent to-transparent pointer-events-none z-0" />
+            
+            {/* Ambient Background Grid Pattern (Subtle) */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none z-0" />
 
-            <main className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-10 pt-32 pb-32 relative">
-                
-                {/* Async Content Wrapper */}
+            <Suspense fallback={
+                <div className="max-w-7xl mx-auto px-4 md:px-8 w-full pt-32 pb-32">
+                    <div className="h-96 bg-zinc-100 animate-pulse rounded-[2.5rem]" />
+                </div>
+            }>
                 <JavContent searchParams={searchParams} />
-
-            </main>
+            </Suspense>
         </div>
     );
 }
@@ -52,24 +53,24 @@ async function JavContent({ searchParams }: { searchParams: Promise<{ page?: str
     }));
 
     return (
-        <>
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="flex flex-col w-full relative z-10">
+            {/* Header Area (Transparent) */}
+            <div className="max-w-7xl mx-auto px-4 md:px-8 w-full pt-32 pb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/5 rounded-full w-fit">
+                    <div className="flex items-center gap-2 px-3 py-1 bg-white/[0.05] border border-white/[0.08] rounded-full w-fit">
                         <Database className="w-3.5 h-3.5 text-primary" />
-                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Premium Archive</span>
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Premium Archive</span>
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter uppercase leading-none">
+                    <h1 className="text-3xl md:text-5xl font-black text-slate-100 tracking-tighter uppercase leading-none">
                         Explore <span className="text-primary italic">Database.</span>
                     </h1>
-                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-1">
                         Found {total.toLocaleString()} Videos &bull; Page {currentPage} of {totalPages}
                     </p>
                 </div>
                 <Link 
                     href="/" 
-                    className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/5 rounded-2xl text-xs font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition-all uppercase tracking-widest group"
+                    className="flex items-center gap-2 px-6 py-3 bg-white/[0.05] border border-white/[0.08] rounded-2xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/[0.1] transition-all uppercase tracking-widest group shadow-sm"
                     prefetch={false}
                 >
                     <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -77,28 +78,34 @@ async function JavContent({ searchParams }: { searchParams: Promise<{ page?: str
                 </Link>
             </div>
 
-            {/* Banner Iklan */}
-            <div className="flex justify-center mt-8 -mb-4">
-                <AdUnit type="leaderboard" />
-            </div>
-
-            {/* Video Grid */}
-            <div className="min-h-[60vh]">
-                {javData.length > 0 ? (
-                    <AnimeSection title="" data={javData} />
-                ) : (
-                    <div className="flex flex-col items-center justify-center py-40 gap-4 bg-white/5 rounded-[3rem] border border-white/5 border-dashed">
-                        <Database className="w-12 h-12 text-zinc-800" />
-                        <p className="text-zinc-600 text-sm font-black uppercase tracking-widest">No data available on this page</p>
+            {/* Dark Content Wrapper */}
+            <div className="bg-[#0a0a0f] relative z-20 w-full border-t border-white/[0.06] flex-grow pb-32">
+                <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 flex flex-col gap-8">
+                    
+                    {/* Banner Iklan */}
+                    <div className="flex justify-center -mt-4 mb-4">
+                        <AdUnit type="leaderboard" />
                     </div>
-                )}
+
+                    {/* Video Grid */}
+                    <div className="min-h-[50vh]">
+                        {javData.length > 0 ? (
+                            <AnimeSection title="" data={javData} />
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-40 gap-4 bg-white/[0.02] rounded-[3rem] border border-white/10 border-dashed">
+                                <Database className="w-12 h-12 text-slate-500" />
+                                <p className="text-slate-400 text-sm font-black uppercase tracking-widest">No data available on this page</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <Pagination 
+                        currentPage={currentPage} 
+                        totalPages={totalPages} 
+                        baseUrl="/jav" 
+                    />
+                </div>
             </div>
-            <Pagination 
-                currentPage={currentPage} 
-                totalPages={totalPages} 
-                baseUrl="/jav" 
-            />
-        </>
+        </div>
     );
 }
-

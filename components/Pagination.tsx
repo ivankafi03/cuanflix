@@ -41,7 +41,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                 {currentPage > 1 ? (
                     <Link 
                         href={getLink(currentPage - 1)} 
-                        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-black transition-all border border-white/10 group"
+                        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-white transition-all border border-white/10 group"
                     >
                         <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                     </Link>
@@ -60,7 +60,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                             href={getLink(item)}
                             className={`min-w-[48px] h-12 flex items-center justify-center rounded-2xl px-4 text-sm font-black transition-all border ${
                                 item === currentPage
-                                    ? "bg-primary text-black border-primary shadow-[0_10px_30px_rgba(244,114,182,0.3)] scale-110 z-10"
+                                    ? "bg-primary text-white border-primary shadow-[0_10px_30px_rgba(244,114,182,0.3)] scale-110 z-10"
                                     : "bg-white/5 text-zinc-500 border-white/10 hover:bg-white/10 hover:text-white"
                             }`}
                         >
@@ -72,7 +72,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                 {currentPage < totalPages ? (
                     <Link 
                         href={getLink(currentPage + 1)} 
-                        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-black transition-all border border-white/10 group"
+                        className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-white transition-all border border-white/10 group"
                     >
                         <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
                     </Link>

@@ -13,10 +13,8 @@ const RATE_WINDOW_MS = 60_000;
 const MIN_WATCH_SECONDS = 55;
 // Max seconds a token stays valid (30 minutes)
 const MAX_TOKEN_AGE_MS = 30 * 60_000;
-// Anomaly threshold: flag if user earns more than this many rewards in 24h
-const ANOMALY_THRESHOLD = 50;
-// Velocity: max watch rewards per hour per user
-const MAX_HOURLY_REWARDS = 8;
+// Anomaly threshold: flag if user earns more than this many rewards in 24h (Raised to 600 to support hard grinding)
+const ANOMALY_THRESHOLD = 600;
 
 function checkRateLimit(ip: string): boolean {
     const now = Date.now();
@@ -143,18 +141,23 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Already rewarded for this video recently" }, { status: 429 });
         }
 
-        // Velocity check: max rewards per jam
-        const hourlyRewards = await prisma.earningLog.count({
+        // Sequential check (Anti-Multi-Tab): claim jeda minimal MIN_WATCH_SECONDS dari klaim sebelumnya
+        const lastWatchClaim = await prisma.earningLog.findFirst({
             where: {
                 userId: session.user.id,
-                type: "WATCH",
-                createdAt: { gt: new Date(Date.now() - 3600000) }
+                type: "WATCH"
+            },
+            orderBy: {
+                createdAt: "desc"
             }
         });
 
-        if (hourlyRewards >= MAX_HOURLY_REWARDS) {
-            await prisma.watchToken.update({ where: { token }, data: { usedAt: new Date() } });
-            return NextResponse.json({ error: "Hourly limit reached" }, { status: 429 });
+        if (lastWatchClaim) {
+            const timeSinceLastClaimMs = now - lastWatchClaim.createdAt.getTime();
+            if (timeSinceLastClaimMs < MIN_WATCH_SECONDS * 1000) {
+                await prisma.watchToken.update({ where: { token }, data: { usedAt: new Date() } });
+                return NextResponse.json({ error: "Simultaneous watch sessions detected. Please watch videos sequentially." }, { status: 429 });
+            }
         }
 
         // Get reward amount from system settings

@@ -81,7 +81,7 @@ export default function WatchlistButton({ anime, variant = "default", size = "de
             onClick={toggleWatchlist}
             suppressHydrationWarning
             className={`${sizeClasses} rounded-xl font-semibold flex items-center gap-2 transition-all border ${currentIsSaved
-                ? "bg-white border-white text-black shadow-xl"
+                ? "bg-white/10 border-white/30 text-white shadow-xl"
                 : "bg-white/5 hover:bg-white/10 text-white border-white/10"
                 } ${className}`}
         >

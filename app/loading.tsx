@@ -3,8 +3,8 @@ import Logo from "@/components/Logo";
 
 export default function Loading() {
     return (
-        <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center">
-            <div className="flex flex-col items-center gap-6">
+        <div className="fixed inset-0 z-[100] bg-[#0a0a0f] flex items-center justify-center overflow-hidden">
+            <div className="flex flex-col items-center gap-6 relative z-10">
                 {/* Ikon Pulsing Mewah */}
                 <div className="relative">
                     <div className="w-16 h-16 bg-primary/20 rounded-2xl animate-pulse blur-xl absolute inset-0" />
@@ -15,7 +15,7 @@ export default function Loading() {
                 
                 {/* Teks Pulsing */}
                 <div className="flex flex-col items-center gap-2">
-                    <h2 className="text-2xl font-black text-white italic tracking-tighter animate-pulse">
+                    <h2 className="text-2xl font-black text-slate-100 italic tracking-tighter animate-pulse">
                         CUAN<span className="text-primary">FLIX</span>
                     </h2>
                     <div className="flex items-center gap-1.5">

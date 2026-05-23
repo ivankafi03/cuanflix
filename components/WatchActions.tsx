@@ -75,7 +75,7 @@ export default function WatchActions({ anime }: WatchActionsProps) {
             <button
                 onClick={handleLike}
                 className={`px-4 py-2 rounded-xl flex items-center gap-2 text-[11px] font-black uppercase tracking-wider transition-all border ${liked
-                    ? "bg-primary border-primary text-black shadow-lg shadow-primary/20"
+                    ? "bg-primary border-primary text-white shadow-lg shadow-primary/20"
                     : "bg-white/5 hover:bg-white/10 border-white/10 text-white"
                     }`}
             >

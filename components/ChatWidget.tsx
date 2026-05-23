@@ -96,9 +96,12 @@ export default function ChatWidget() {
     };
 
     const isWatchPage = mounted && pathname.startsWith("/watch");
-    const bottomStyle = mounted && window.innerWidth < 1024 && isWatchPage
-        ? (rewardVisible ? "132px" : "60px") 
-        : "6px";
+    const isDashboard = mounted && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"));
+    const bottomStyle = isWatchPage
+        ? (mounted && window.innerWidth < 1024 ? (rewardVisible ? "132px" : "60px") : "24px")
+        : isDashboard
+            ? "96px"
+            : "24px";
 
     return (
         <div 
@@ -152,7 +155,7 @@ export default function ChatWidget() {
                                     <div className={`max-w-[85%] px-3 py-2 rounded-2xl text-xs font-medium leading-relaxed ${msg.isAdmin
                                         ? "bg-primary/10 border border-primary/20 text-white rounded-tl-none"
                                         : msg.user.name === session?.user?.name
-                                            ? "bg-white text-black rounded-tr-none"
+                                            ? "bg-primary/20 border border-primary/30 text-white rounded-tr-none"
                                             : "bg-white/5 border border-white/5 text-zinc-300 rounded-tl-none"
                                         }`}>
                                         {msg.content}
@@ -176,7 +179,7 @@ export default function ChatWidget() {
                                 <button
                                     type="submit"
                                     disabled={loading || !input.trim()}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary text-black rounded-lg hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary text-white rounded-lg hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 transition-all"
                                 >
                                     {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                                 </button>
@@ -193,7 +196,7 @@ export default function ChatWidget() {
             {/* Toggle Button */}
             <button
                 onClick={toggleOpen}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all relative pointer-events-auto active:scale-90 hover:scale-105 ${isOpen ? "bg-white text-black rotate-90" : "bg-primary text-black"
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all relative pointer-events-auto active:scale-90 hover:scale-105 ${isOpen ? "bg-white/10 text-white rotate-90" : "bg-primary text-white"
                     }`}
             >
                 {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}

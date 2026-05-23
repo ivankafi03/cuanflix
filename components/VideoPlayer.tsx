@@ -150,7 +150,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                         <button 
                             onClick={skipAd}
                             disabled={countdown > 0}
-                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${countdown > 0 ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-white text-black hover:scale-105 shadow-xl'}`}
+                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${countdown > 0 ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-primary text-white hover:scale-105 shadow-xl shadow-primary/20'}`}
                         >
                             Skip Ad
                         </button>
@@ -187,7 +187,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                             disabled={isProcessing}
                             className="relative group/btn flex flex-col items-center gap-4"
                         >
-                            <div className="w-20 h-20 md:w-24 md:h-24 bg-primary text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(244,114,182,0.3)] group-hover/btn:scale-110 active:scale-95 transition-all duration-500">
+                            <div className="w-20 h-20 md:w-24 md:h-24 bg-primary text-white rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(244,114,182,0.3)] group-hover/btn:scale-110 active:scale-95 transition-all duration-500">
                                 {isProcessing ? (
                                     <div className="w-8 h-8 border-4 border-black/30 border-t-black rounded-full animate-spin" />
                                 ) : (
@@ -211,13 +211,6 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
 
             {/* Server Switcher & Download */}
             <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between px-1">
-                    <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest leading-none">Select Video Server</span>
-                    <div className="flex items-center gap-4">
-                        <span className="text-[10px] font-black text-primary uppercase tracking-widest leading-none bg-primary/10 px-2 py-0.5 rounded-lg">HD Multi</span>
-                    </div>
-                </div>
-                
                 <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex flex-wrap gap-2">
                         {servers.map((server, i) => (
@@ -225,7 +218,7 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
                                 key={i}
                                 onClick={() => setActiveServerIndex(i)}
                                 className={`px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest border transition-all duration-300 ${i === activeServerIndex
-                                    ? "bg-white border-white text-black shadow-xl scale-105"
+                                    ? "bg-white border-white text-white shadow-xl scale-105"
                                     : "bg-black/40 border-white/5 text-zinc-500 hover:text-white hover:border-white/20"
                                     }`}
                             >
@@ -236,14 +229,14 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
 
                     <Link
                         href={`/download?url=${encodeURIComponent(downloads?.[0]?.links?.[0]?.link || servers[activeServerIndex].iframe)}&title=${encodeURIComponent(pathname.split('/').pop() || 'Video Content')}`}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-black rounded-xl text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 group shadow-lg shadow-primary/20"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 group shadow-lg shadow-primary/20 animate-pulse"
                     >
                         <svg className="w-4 h-4 group-hover:animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4" />
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
-                        {downloads && downloads.length > 0 ? "Direct Download" : "Download Video"}
+                        download
                     </Link>
                 </div>
             </div>

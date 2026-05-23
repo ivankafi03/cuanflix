@@ -69,8 +69,8 @@ export default function CategoriesPage() {
                         <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter uppercase leading-[0.9]">
                             Explore <span className="text-primary italic">Everything.</span>
                         </h1>
-                        <p className="text-zinc-600 text-[11px] md:text-sm font-bold uppercase tracking-widest leading-relaxed">
-                            Meticulously indexed <span className="text-zinc-400">500+ unique genres</span> & labels.
+                        <p className="text-slate-500 text-[11px] md:text-sm font-bold uppercase tracking-widest leading-relaxed">
+                            Meticulously indexed <span className="text-slate-400">500+ unique genres</span> & labels.
                         </p>
                     </div>
                 </div>
@@ -83,7 +83,7 @@ export default function CategoriesPage() {
                                 <LayoutGrid className="w-4 h-4 text-primary" />
                                 <h2 className="text-base md:text-xl font-black text-white uppercase tracking-tight">{group.title}</h2>
                             </div>
-                            <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest">{group.description}</p>
+                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{group.description}</p>
                         </div>
                         
                         <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-3 md:grid md:grid-cols-4 lg:grid-cols-7 md:gap-4 pb-2">
@@ -101,7 +101,7 @@ export default function CategoriesPage() {
                                         <span className="text-[11px] md:text-sm font-black text-white tracking-tight uppercase">
                                             {item.name}
                                         </span>
-                                        <span className="text-[9px] text-zinc-600 font-bold group-hover:text-primary transition-colors">
+                                        <span className="text-[9px] text-slate-500 font-bold group-hover:text-primary transition-colors">
                                             {item.count} Titles
                                         </span>
                                     </div>
@@ -123,7 +123,7 @@ export default function CategoriesPage() {
                             <TrendingUp className="w-3.5 h-3.5 text-primary" />
                             <h2 className="text-[14px] md:text-lg font-black text-white uppercase tracking-tight">Trending Topics</h2>
                         </div>
-                        <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">Highly searched labels</p>
+                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Highly searched labels</p>
                     </div>
 
                     <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-3 md:grid md:grid-cols-4 md:gap-4 pb-2">
@@ -133,10 +133,10 @@ export default function CategoriesPage() {
                                 href={`/search?q=${encodeURIComponent(tag.name)}`}
                                 className="group flex flex-shrink-0 w-[160px] md:w-auto items-center justify-between px-4 py-3.5 md:px-6 md:py-4 rounded-xl bg-zinc-900/20 border border-white/5 hover:border-primary/20 hover:bg-primary/[0.02] transition-all duration-300"
                             >
-                                <span className="text-[10px] md:text-xs font-bold text-zinc-400 group-hover:text-primary transition-colors uppercase tracking-wider truncate mr-2">
+                                <span className="text-[10px] md:text-xs font-bold text-slate-400 group-hover:text-primary transition-colors uppercase tracking-wider truncate mr-2">
                                     {tag.name}
                                 </span>
-                                <span className="text-[9px] font-black text-zinc-700 group-hover:text-primary/60 transition-all">
+                                <span className="text-[9px] font-black text-slate-500 group-hover:text-primary/60 transition-all">
                                     {tag.count}
                                 </span>
                             </Link>

@@ -127,7 +127,7 @@ function DownloadContent() {
                                             <motion.div key="r" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="flex flex-col items-center gap-8">
                                                 <button 
                                                     onClick={handleDownload}
-                                                    className="w-32 h-32 md:w-40 md:h-40 bg-primary text-black rounded-[2.5rem] shadow-[0_20px_50px_rgba(244,114,182,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center group relative overflow-hidden"
+                                                    className="w-32 h-32 md:w-40 md:h-40 bg-primary text-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(244,114,182,0.3)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center group relative overflow-hidden"
                                                 >
                                                     <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500" />
                                                     <Download className="w-12 h-12 md:w-16 md:h-16 relative z-10 group-hover:animate-bounce" />

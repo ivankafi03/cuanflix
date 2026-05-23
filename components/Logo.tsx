@@ -44,8 +44,8 @@ export default function Logo({ className = "", size = "md", showText = true }: L
                 {/* Gradients */}
                 <defs>
                     <linearGradient id="paint0_linear" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#f472b6" /> {/* Pastel Pink */}
-                        <stop offset="1" stopColor="#e81cff" /> {/* Deep Pink/Purple accent */}
+                        <stop stopColor="#0ea5e9" /> {/* Premium Sky Blue */}
+                        <stop offset="1" stopColor="#2563eb" /> {/* Deep Royal Blue */}
                     </linearGradient>
                 </defs>
             </svg>

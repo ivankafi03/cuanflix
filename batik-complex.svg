@@ -1,0 +1,24 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#0EA5E9" stroke-width="2.2" opacity="0.85">
+    <!-- Center Mandala -->
+    <path d="M60 10 L65 30 L85 35 L68 45 L72 60 L60 50 L48 60 L52 45 L35 35 L55 30 Z" />
+    <circle cx="60" cy="60" r="30" stroke-dasharray="4 4" />
+    <circle cx="60" cy="60" r="40" />
+    <path d="M60 20 Q80 20 80 40 Q80 60 60 60 Q40 60 40 40 Q40 20 60 20 Z" />
+    <path d="M60 60 Q80 60 80 80 Q80 100 60 100 Q40 100 40 80 Q40 60 60 60 Z" />
+    <path d="M20 60 Q20 40 40 40 Q60 40 60 60 Q60 80 40 80 Q20 80 20 60 Z" />
+    <path d="M60 60 Q60 40 80 40 Q100 40 100 60 Q100 80 80 80 Q60 80 60 60 Z" />
+    <!-- Overlapping Diamonds -->
+    <path d="M60 0 L120 60 L60 120 L0 60 Z" />
+    <path d="M60 20 L100 60 L60 100 L20 60 Z" />
+    <!-- Corners -->
+    <circle cx="0" cy="0" r="20" />
+    <circle cx="120" cy="0" r="20" />
+    <circle cx="0" cy="120" r="20" />
+    <circle cx="120" cy="120" r="20" />
+    <circle cx="0" cy="0" r="10" />
+    <circle cx="120" cy="0" r="10" />
+    <circle cx="0" cy="120" r="10" />
+    <circle cx="120" cy="120" r="10" />
+  </g>
+</svg>

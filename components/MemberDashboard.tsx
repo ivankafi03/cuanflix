@@ -354,7 +354,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         { id: 'month', label: 'This Month' },
                                         { id: 'all', label: 'All Time' }
                                     ].map(range => (
-                                        <button key={range.id} onClick={() => setTimeRange(range.id)} className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${timeRange === range.id ? 'bg-white text-black shadow' : 'text-zinc-500 hover:text-white'}`}>
+                                        <button key={range.id} onClick={() => setTimeRange(range.id)} className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${timeRange === range.id ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-zinc-500 hover:text-white'}`}>
                                             {range.label}
                                         </button>
                                     ))}
@@ -505,7 +505,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                                 { id: "watch", label: "Watch", color: "bg-blue-500" },
                                                 { id: "referral", label: "Share", color: "bg-green-500" }
                                             ].map((cat) => (
-                                                <button key={cat.id} onClick={() => setRankType(cat.id)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${rankType === cat.id ? `${cat.color} text-black shadow` : 'bg-white/5 text-zinc-400 hover:text-white'}`}>
+                                                <button key={cat.id} onClick={() => setRankType(cat.id)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${rankType === cat.id ? `${cat.color} text-white shadow-lg shadow-primary/20` : 'bg-white/5 text-zinc-400 hover:text-white'}`}>
                                                     {cat.label}
                                                 </button>
                                             ))}
@@ -568,7 +568,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         </div>
                                     </div>
                                     <div className="flex flex-wrap gap-3 z-10">
-                                        <button onClick={() => setIsWithdrawModalOpen(true)} className="px-5 py-2.5 bg-white text-black font-semibold text-xs rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                                        <button onClick={() => setIsWithdrawModalOpen(true)} className="px-5 py-2.5 bg-primary text-white shadow-lg shadow-primary/20 font-semibold text-xs rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
                                             <Rocket className="w-3.5 h-3.5" /> Withdraw Balance
                                         </button>
                                         <div className="px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl flex items-center gap-2">

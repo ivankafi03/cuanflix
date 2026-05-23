@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
     Share2, Link as LinkIcon, Copy, Trash2, Check, Rocket,
-    AlertCircle, Globe, TrendingUp, Users, DollarSign, BarChart2, Eye
+    AlertCircle, Globe, TrendingUp, Users, DollarSign, BarChart2, Eye, Plus
 } from "lucide-react";
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -136,7 +137,7 @@ export default function ShareClient({ user }: { user: any }) {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                     <button onClick={copySelectedLinks} disabled={copying || !collectedLinks.length}
-                        className="px-4 py-2 bg-white text-black font-bold text-xs uppercase tracking-wide rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 disabled:opacity-50">
+                        className="px-4 py-2 bg-primary text-white shadow-lg shadow-primary/20 font-bold text-xs uppercase tracking-wide rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 disabled:opacity-50">
                         {copying ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
                         {selectedIds.size > 0 ? `Copy (${selectedIds.size})` : "Copy All"}
                     </button>
@@ -159,7 +160,18 @@ export default function ShareClient({ user }: { user: any }) {
                         <BatikPattern />
                         <div className="flex items-center justify-between relative z-10">
                             <p className="text-[9px] font-semibold text-zinc-500 uppercase tracking-wide">{item.label}</p>
-                            <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
+                            <div className="flex items-center gap-1.5">
+                                {item.label === "Total Link" && (
+                                    <Link 
+                                        href="/dashboard/carilink"
+                                        className="p-1 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary hover:text-white hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/5 cursor-pointer relative z-20"
+                                        title="Tambah Koleksi Link"
+                                    >
+                                        <Plus className="w-3 h-3 stroke-[3]" />
+                                    </Link>
+                                )}
+                                <item.icon className={`w-3.5 h-3.5 ${item.color}`} />
+                            </div>
                         </div>
                         <div className="relative z-10">
                             <h3 className={`text-xl font-bold tracking-tighter ${item.color}`}>{item.value}</h3>

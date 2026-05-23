@@ -41,8 +41,8 @@ export default function Icon() {
             {/* Gradients */}
             <defs>
                 <linearGradient id="paint0_linear" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#f472b6" />
-                    <stop offset="1" stopColor="#e81cff" />
+                    <stop stopColor="#0ea5e9" />
+                    <stop offset="1" stopColor="#2563eb" />
                 </linearGradient>
             </defs>
         </svg>

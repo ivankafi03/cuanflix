@@ -188,10 +188,10 @@ export default function CariLinkClient({ user }: { user: any }) {
                 {!loading && videos.length > 0 && (
                     <>
                         {/* Table header */}
-                        <div className="flex items-center gap-3 px-5 py-3 border-b border-white/5 bg-white/[0.02] relative z-10">
-                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-8 text-center">#</span>
+                        <div className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-3 border-b border-white/5 bg-white/[0.02] relative z-10">
+                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-6 sm:w-8 text-center shrink-0">#</span>
                             <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] flex-1">Judul Video</span>
-                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-24 text-right">Aksi</span>
+                            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-20 sm:w-24 text-right shrink-0">Aksi</span>
                         </div>
 
                         <div className="divide-y divide-white/[0.03] relative z-10">
@@ -204,20 +204,20 @@ export default function CariLinkClient({ user }: { user: any }) {
                                 return (
                                     <div
                                         key={`${video.videoId}-${idx}`}
-                                        className={`flex items-center gap-3 px-5 py-3.5 transition-all group ${isJustAdded ? "bg-green-500/5" : isAdded ? "bg-white/[0.01]" : "hover:bg-white/[0.025]"}`}
+                                        className={`flex items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-3 transition-all group ${isJustAdded ? "bg-green-500/5" : isAdded ? "bg-white/[0.01]" : "hover:bg-white/[0.025]"}`}
                                     >
                                         {/* Row number */}
-                                        <span className="text-[9px] font-bold text-zinc-700 w-8 text-center shrink-0">
+                                        <span className="text-[9px] font-bold text-zinc-700 w-6 sm:w-8 text-center shrink-0">
                                             {rowNum}
                                         </span>
 
                                         {/* Title + episode */}
                                         <div className="flex-1 min-w-0">
-                                            <p className={`text-sm font-semibold truncate transition-colors leading-snug ${isAdded ? "text-zinc-500" : "text-white group-hover:text-primary/90"}`}>
+                                            <p className={`text-xs sm:text-sm font-semibold truncate transition-colors leading-snug ${isAdded ? "text-zinc-500" : "text-white group-hover:text-primary/90"}`}>
                                                 {video.title}
                                             </p>
                                             {video.episode && (
-                                                <span className="text-[9px] text-zinc-600 font-medium">{video.episode}</span>
+                                                <span className="text-[8.5px] sm:text-[9px] text-zinc-600 font-medium">{video.episode}</span>
                                             )}
                                         </div>
 
@@ -225,19 +225,19 @@ export default function CariLinkClient({ user }: { user: any }) {
                                         <button
                                             onClick={() => addToCollection(video)}
                                             disabled={isAdded || isAdding}
-                                            className={`shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[9px] font-black uppercase tracking-wide transition-all ${isAdded
+                                            className={`shrink-0 flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[8.5px] sm:text-[9px] font-black uppercase tracking-wide transition-all ${isAdded
                                                 ? "bg-transparent text-zinc-600 cursor-default"
                                                 : isAdding
                                                     ? "bg-primary/10 text-primary/50 cursor-wait"
-                                                    : "bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-black hover:shadow-[0_0_12px_rgba(244,114,182,0.4)] hover:scale-105 active:scale-95"
+                                                    : "bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-white hover:shadow-[0_0_12px_rgba(244,114,182,0.4)] hover:scale-105 active:scale-95"
                                                 }`}
                                         >
                                             {isAdded ? (
-                                                <><Check className="w-3.5 h-3.5 stroke-[3] text-green-500" /> <span className="text-green-600">Saved</span></>
+                                                <><Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3] text-green-500" /> <span className="text-green-600">Saved</span></>
                                             ) : isAdding ? (
-                                                <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Adding</>
+                                                <><Loader2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" /> Adding</>
                                             ) : (
-                                                <><Plus className="w-3.5 h-3.5 stroke-[3]" /> Koleksi</>
+                                                <><Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" /> Koleksi</>
                                             )}
                                         </button>
                                     </div>
@@ -250,32 +250,34 @@ export default function CariLinkClient({ user }: { user: any }) {
 
             {/* Pagination */}
             {totalPages > 1 && !loading && (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                     <button
                         onClick={() => handlePageChange(page - 1)}
                         disabled={page <= 1}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#0F0F11] border border-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:border-white/15 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-[#0F0F11] border border-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:border-white/15 transition-all disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
                     >
-                        <ChevronLeft className="w-3.5 h-3.5" /> Sebelumnya
+                        <ChevronLeft className="w-3.5 h-3.5" /> 
+                        <span className="hidden sm:inline">Sebelumnya</span>
                     </button>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 justify-center">
                         {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                             const p = i + 1;
                             return (
                                 <button key={p} onClick={() => handlePageChange(p)}
-                                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${p === page ? "bg-primary text-black" : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white"}`}>
+                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-bold transition-all shrink-0 ${p === page ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white"}`}>
                                     {p}
                                 </button>
                             );
                         })}
-                        {totalPages > 5 && <span className="text-zinc-600 text-xs">...</span>}
+                        {totalPages > 5 && <span className="text-zinc-600 text-xs shrink-0 select-none px-1">...</span>}
                     </div>
                     <button
                         onClick={() => handlePageChange(page + 1)}
                         disabled={page >= totalPages}
-                        className="flex items-center gap-2 px-4 py-2.5 bg-[#0F0F11] border border-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:border-white/15 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        className="flex items-center justify-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-[#0F0F11] border border-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:border-white/15 transition-all disabled:opacity-30 disabled:cursor-not-allowed shrink-0"
                     >
-                        Selanjutnya <ChevronRight className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Selanjutnya</span> 
+                        <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                 </div>
             )}

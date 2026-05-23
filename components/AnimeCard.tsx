@@ -55,7 +55,7 @@ export default function AnimeCard({ id, title, image, rating, episodes, episodeR
     return (
         <div className="group flex flex-col gap-2">
             <div
-                className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-secondary block shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                className="relative aspect-[4/5] overflow-hidden rounded-xl sm:rounded-[2rem] bg-secondary block shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
                 onMouseEnter={handleMouseEnter}
                 onClick={handleClick}
             >
@@ -112,11 +112,17 @@ export default function AnimeCard({ id, title, image, rating, episodes, episodeR
                 )}
             </div>
 
-            {/* Title */}
-            <div className="px-1 mt-1" onClick={handleClick} onMouseEnter={handleMouseEnter}>
-                <h3 className="text-xs sm:text-sm font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors leading-snug drop-shadow-sm cursor-pointer">
+            {/* Title and Metadata */}
+            <div className="px-1 mt-1 flex flex-col gap-1" onClick={handleClick} onMouseEnter={handleMouseEnter}>
+                <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] leading-none mb-0.5">
+                    {type}
+                </span>
+                <h3 className="text-xs sm:text-sm font-bold text-slate-100 line-clamp-1 group-hover:text-primary transition-colors leading-snug drop-shadow-sm cursor-pointer">
                     {title}
                 </h3>
+                <span className="text-[10px] text-slate-500 font-medium leading-none">
+                    {epLabel}
+                </span>
             </div>
         </div>
     );

@@ -124,7 +124,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                                 <button
                                     disabled={!method}
                                     onClick={() => setStep(2)}
-                                    className="w-full py-4 bg-white text-black font-black text-[9px] uppercase tracking-[0.3em] rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
+                                    className="w-full py-4 bg-white text-white font-black text-[9px] uppercase tracking-[0.3em] rounded-2xl flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
                                 >
                                     Continue
                                     <ChevronRight className="w-3.5 h-3.5" />
@@ -205,7 +205,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, minWithdrawal,
                                     <span className="font-medium lowercase text-[9px] mt-1 block">Please wait for admin processing (1-24 hours).</span>
                                 </p>
                             </div>
-                            <button onClick={onClose} className="w-full py-4.5 bg-white text-black font-black text-xs uppercase tracking-[0.4em] rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all mt-4">OK</button>
+                            <button onClick={onClose} className="w-full py-4 bg-primary/10 border border-primary/30 text-white font-black text-xs uppercase tracking-[0.4em] rounded-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all mt-4">OK</button>
                         </div>
                     )}
                 </div>

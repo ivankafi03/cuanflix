@@ -3,9 +3,15 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import PayoutsClient from "@/components/dashboard/PayoutsClient";
+import { redirect } from "next/navigation";
 
 export default async function PayoutsPage() {
     const session = await getServerSession(authOptions) as any;
+    
+    if (!session || !session.user) {
+        redirect("/auth/login");
+    }
+
     const user = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: {

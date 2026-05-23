@@ -60,49 +60,7 @@ export default function WatchPageClient({
 
                 {children}
 
-                {/* Real Download Links Section */}
-                {downloads && downloads.length > 0 && (
-                    <div className="mt-8 bg-zinc-900/50 border border-white/5 rounded-3xl p-6 md:p-8 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -translate-y-1/2 translate-x-1/2 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700" />
-                        
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
-                                <Download className="w-5 h-5 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-black text-white uppercase tracking-tighter">Direct Downloads</h3>
-                                <p className="text-zinc-500 text-[10px] font-medium uppercase tracking-widest">Choose your preferred quality</p>
-                            </div>
-                        </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {downloads.map((dl, i) => (
-                                <div key={i} className="bg-black/40 border border-white/5 rounded-2xl p-4 flex flex-col gap-3 hover:border-white/10 transition-all">
-                                    <div className="flex items-center justify-between">
-                                        <span className="px-2 py-0.5 bg-primary/10 rounded-md text-[9px] font-black text-primary uppercase tracking-wider">
-                                            {dl.format}
-                                        </span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {dl.links.map((link: any, j: number) => (
-                                            <Link 
-                                                key={j}
-                                                href={`/download?url=${encodeURIComponent(link.link)}&title=${encodeURIComponent(videoId.replace(/-/g, ' '))}`}
-                                                className="flex-1 min-w-[80px] px-3 py-2 bg-zinc-800 hover:bg-white hover:text-black rounded-xl text-[10px] font-black uppercase tracking-wider text-center transition-all active:scale-95"
-                                            >
-                                                {link.name}
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                        
-                        <p className="mt-6 text-[9px] text-zinc-600 font-medium italic text-center">
-                            Note: Downloads are hosted by external providers. Please use an ad-blocker for a smoother experience.
-                        </p>
-                    </div>
-                )}
 
                 {/* Related Anime Section - Matching Homepage Style */}
                 {relatedAnime.length > 0 && (
@@ -113,7 +71,7 @@ export default function WatchPageClient({
                                 Rekomendasi Untukmu
                             </h3>
                         </div>
-                        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                        <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6 md:gap-8">
                             {relatedAnime.map((anime: any, idx: number) => (
                                 <AnimeCard 
                                     key={idx}

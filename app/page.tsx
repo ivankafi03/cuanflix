@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import HeroSlider from "@/components/HeroSlider";
+import HowItWorks from "@/components/HowItWorks";
+import FAQSection from "@/components/FAQSection";
 import { getHomepageCategories } from "@/lib/jav";
 import { getAgcCategories } from "@/lib/agcbokep";
 import prisma from "@/lib/prisma";
@@ -37,59 +39,55 @@ export default async function Home() {
   const sliderCategoryTitle = javCategories?.[0]?.title;
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-transparent">
       <h1 className="sr-only">Cuanflix — Premium Database</h1>
 
       {sliderVideos.length > 0 && <HeroSlider videos={sliderVideos} />}
-      {/* Video Categories */}
-      <main className="max-w-[1600px] mx-auto px-4 md:px-8 w-full flex flex-col gap-16 pb-24 -mt-10 relative z-20">
-        {categories && categories.length > 0 ? (
-          <div className="flex flex-col gap-6">
-            {categories.map((category, idx) => {
-              // Skip 1 video pertama jika kategori ini yang dipakai di slider
-              const isSliderCategory = category.title === sliderCategoryTitle;
-              const videosToShow = isSliderCategory ? category.videos.slice(1, 10) : category.videos.slice(0, 9);
-              if (videosToShow.length === 0) return null;
 
-              const javData = videosToShow.map((item: any, index: number) => ({
-                id: index + 1,
-                title: item.title,
-                image: item.image,
-                rating: 0,
-                episodes: 1,
-                episodeRaw: item.episode,
-                type: item.type || "JAV",
-                href: `/watch/${item.href}`,
-              }));
+      {/* Container Utama konten bawah */}
+      <div className="bg-[#0a0a0f] relative z-20 w-full border-t border-white/[0.06]">
+        {/* Video Categories */}
+        <main id="kategori-video" className="max-w-[1600px] mx-auto px-4 md:px-8 w-full flex flex-col gap-16 pb-4 pt-8">
+          {categories && categories.length > 0 ? (
+            <div className="flex flex-col gap-6">
+              {categories.map((category, idx) => {
+                // Skip 1 video pertama jika kategori ini yang dipakai di slider
+                const isSliderCategory = category.title === sliderCategoryTitle;
+                const videosToShow = isSliderCategory ? category.videos.slice(1, 10) : category.videos.slice(0, 9);
+                if (videosToShow.length === 0) return null;
 
-              const sectionHref = CATEGORY_MAP[category.title] || `/search?q=${encodeURIComponent(category.title)}`;
+                const javData = videosToShow.map((item: any, index: number) => ({
+                  id: index + 1,
+                  title: item.title,
+                  image: item.image,
+                  rating: 0,
+                  episodes: 1,
+                  episodeRaw: item.episode,
+                  type: item.type || "JAV",
+                  href: `/watch/${item.href}`,
+                }));
 
-              return (
-                <React.Fragment key={idx}>
-                  <AnimeSection
-                    title={category.title}
-                    data={javData}
-                    href={sectionHref}
-                  />
-                </React.Fragment>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="h-72 bg-white/5 animate-pulse rounded-xl" />
-        )}
-      </main>
+                const sectionHref = CATEGORY_MAP[category.title] || `/search?q=${encodeURIComponent(category.title)}`;
 
-      {/* Footer */}
-      <footer className="border-t border-border bg-secondary/30 py-12 px-6 text-center">
-        <p className="text-muted-foreground text-sm max-w-lg mx-auto leading-relaxed font-medium">
-          The ultimate database for Japanese content. Fast, modern, and aesthetic exploration experience.
-        </p>
-        <div className="flex items-center justify-center gap-6 mt-6 text-muted-foreground text-xs font-semibold">
-          <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-          <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-        </div>
-      </footer>
+                return (
+                  <React.Fragment key={idx}>
+                    <AnimeSection
+                      title={category.title}
+                      data={javData}
+                      href={sectionHref}
+                    />
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="h-72 bg-zinc-100 animate-pulse rounded-[2.5rem]" />
+          )}
+        </main>
+
+        <HowItWorks />
+        <FAQSection />
+      </div>
     </div>
   );
 }

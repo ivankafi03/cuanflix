@@ -32,7 +32,7 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
                     <Link
                         href={href}
                         prefetch={false}
-                        className="text-xs text-zinc-500 hover:text-white flex items-center gap-1 transition-colors"
+                        className="text-xs text-slate-500 hover:text-slate-200 flex items-center gap-1 transition-colors"
                     >
                         View All
                         <ArrowRight className="w-3 h-3" />
@@ -40,7 +40,7 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
                 )}
             </div>
 
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-2 sm:gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-6 md:gap-8">
                 {data.map((anime, index) => (
                     <React.Fragment key={anime.id}>
                         <AnimeCard {...anime} />

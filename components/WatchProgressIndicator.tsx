@@ -101,7 +101,7 @@ export default function WatchProgressIndicator({
                         initial={{ opacity: 0, y: 10, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                        className="bg-primary text-black text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-widest mb-1 flex items-center gap-2"
+                        className="bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-lg shadow-xl uppercase tracking-widest mb-1 flex items-center gap-2"
                     >
                         <span>Menghitung Cuan... {Math.round(progress)}%</span>
                         <span className="bg-black/20 px-1.5 py-0.5 rounded text-[8px]">{completedCycles + 1}/{maxCycles}</span>
@@ -207,13 +207,13 @@ export default function WatchProgressIndicator({
                                 className="absolute inset-0 bg-primary/30 rounded-full blur-xl"
                             />
 
-                            <div className="bg-gradient-to-br from-primary to-amber-500 text-black px-4 py-2 rounded-xl font-black text-[9px] flex items-center gap-1.5 shadow-[0_10px_20px_rgba(251,191,36,0.3)] border border-primary/20 uppercase tracking-widest relative z-10 overflow-hidden group">
+                            <div className="bg-gradient-to-br from-primary to-amber-500 text-white px-4 py-2 rounded-xl font-black text-[9px] flex items-center gap-1.5 shadow-[0_10px_20px_rgba(251,191,36,0.3)] border border-primary/20 uppercase tracking-widest relative z-10 overflow-hidden group">
                                 <motion.div
                                     animate={{ x: ["-100%", "200%"] }}
                                     transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
                                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
                                 />
-                                <CheckCircle2 className="w-3 h-3 fill-black/10" />
+                                <CheckCircle2 className="w-3 h-3 fill-white/30" />
                                 <span>Saldo Ditambahkan</span>
                             </div>
                         </motion.div>

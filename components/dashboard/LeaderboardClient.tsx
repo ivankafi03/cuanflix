@@ -39,7 +39,7 @@ export default function LeaderboardClient({ user }: { user: any }) {
                         <button
                             key={p.id}
                             onClick={() => setRankPeriod(p.id)}
-                            className={`flex-1 sm:flex-none px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-all ${rankPeriod === p.id ? 'bg-white text-black' : 'text-zinc-600 hover:text-white'}`}
+                            className={`flex-1 sm:flex-none px-3 py-1.5 text-[10px] font-semibold rounded-lg transition-all ${rankPeriod === p.id ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-zinc-600 hover:text-white'}`}
                         >
                             {p.label}
                         </button>

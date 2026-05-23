@@ -112,13 +112,13 @@ export default function GoRedirectClient() {
 
             {/* Leaderboard Ad — desktop */}
             <div className="hidden md:block overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50">
-                <p className="text-zinc-700 text-[9px] uppercase tracking-widest text-center pt-2">Sponsor</p>
+                <p className="text-zinc-400 text-[9px] uppercase tracking-widest text-center pt-2">Sponsor</p>
                 <div ref={adRef1} className="flex items-center justify-center min-w-[728px] min-h-[90px]" />
             </div>
 
             {/* Rectangle Ad */}
             <div className="overflow-hidden rounded-xl border border-white/5 bg-zinc-900/50">
-                <p className="text-zinc-700 text-[9px] uppercase tracking-widest text-center pt-2">Sponsor</p>
+                <p className="text-zinc-400 text-[9px] uppercase tracking-widest text-center pt-2">Sponsor</p>
                 <div ref={adRef2} className="flex items-center justify-center min-w-[300px] min-h-[250px]" />
             </div>
 
@@ -136,7 +136,7 @@ export default function GoRedirectClient() {
                 {canSkip ? "Lanjutkan ke Video" : `Tunggu ${countdown} detik...`}
             </button>
 
-            <p className="text-zinc-700 text-xs text-center">
+            <p className="text-zinc-400 text-xs text-center">
                 Akan otomatis diarahkan dalam beberapa detik.
             </p>
         </div>

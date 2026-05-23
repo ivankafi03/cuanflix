@@ -158,7 +158,7 @@ export default async function WatchPrettyPage({
                             </div>
                         </div>
                         <div className="flex items-center gap-2 relative z-10 w-full md:w-auto">
-                            <Link href="/auth/login" className="flex-1 md:flex-none px-4 py-2 bg-primary text-black rounded-lg font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                            <Link href="/auth/login" className="flex-1 md:flex-none px-4 py-2 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
                                 Login
                             </Link>
                             <Link href="/auth/register" className="flex-1 md:flex-none px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">

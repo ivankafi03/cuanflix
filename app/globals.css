@@ -2,19 +2,19 @@
 /* VERSION: 2026-05-13 12:35 TEST MAGENTA */
 
 :root {
-  --background: #121212; /* Material Dark Surface */
-  --foreground: #e0e0e0; /* Material High Emphasis Text */
-  --primary: #f472b6; /* Pastel Pink (Tailwind pink-400) */
-  --primary-foreground: #000000;
-  --secondary: #1e1e1e; /* Material Dark Elevated */
-  --secondary-foreground: #e0e0e0;
-  --muted: #2c2c2c;
-  --muted-foreground: #9e9e9e; /* Material Medium Emphasis Text */
-  --accent: #1e1e1e;
-  --accent-foreground: #e0e0e0;
-  --card: #1e1e1e;
-  --card-foreground: #e0e0e0;
-  --border: #333333;
+  --background: #0a0a0f; /* Deep dark background */
+  --foreground: #f1f5f9; /* Soft white text (Slate-100) */
+  --primary: #0ea5e9; /* Premium Sky Blue */
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a2e; /* Dark elevated surface */
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e1e2e;
+  --muted-foreground: #94a3b8; /* Slate-400 */
+  --accent: #1e1e2e;
+  --accent-foreground: #e2e8f0;
+  --card: #13131f; /* Dark card surface */
+  --card-foreground: #f1f5f9;
+  --border: #ffffff12; /* Subtle white border */
 }
 
 @theme inline {
@@ -50,19 +50,24 @@
     @apply border-border;
   }
 
+  html {
+    background-color: #0a0a0f;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    background-color: #0a0a0f;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 /* Premium Glassmorphism (Apple/Vercel Style) */
 .glass-premium {
-  @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)];
+  @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.4)];
 }
 
 .glass-panel {
-  @apply bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl shadow-xl;
+  @apply bg-white/70 border border-black/5 backdrop-blur-md rounded-2xl shadow-lg;
 }
 
 /* Scrollbar */
@@ -76,13 +81,13 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(244, 114, 182, 0.2);
+  background: rgba(14, 165, 233, 0.2);
   border-radius: 99px;
   transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(244, 114, 182, 0.5);
+  background: rgba(14, 165, 233, 0.5);
 }
 
 /* No scrollbar but scrollable */
@@ -109,16 +114,27 @@
   border-radius: 99px;
 }
 
-/* Batik pattern (used in admin) */
+/* Batik pattern (used in admin & member cards) */
 .bg-batik-modern {
-  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='batikKawung' x='0' y='0' width='80' height='80' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='40' cy='40' r='38' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.3' /%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.2' /%3E%3Cpath d='M40 0v80M0 40h80' stroke='white' stroke-width='0.5' stroke-opacity='0.2' /%3E%3Ccircle cx='0' cy='0' r='20' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.1' /%3E%3Ccircle cx='80' cy='0' r='20' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.1' /%3E%3Ccircle cx='0' cy='80' r='20' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.1' /%3E%3Ccircle cx='80' cy='80' r='20' fill='none' stroke='white' stroke-width='1' stroke-opacity='0.1' /%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23batikKawung)' /%3E%3C/svg%3E");
-  background-size: 80px 80px;
+  background-image: url('/batik-complex.svg');
+  background-size: 120px 120px;
+  background-repeat: repeat;
 }
 
 .bg-batik-pink {
-  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='batikKawungPink' x='0' y='0' width='80' height='80' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='40' cy='40' r='38' fill='none' stroke='%23ff00ff' stroke-width='2' stroke-opacity='0.8' /%3E%3Ccircle cx='40' cy='40' r='20' fill='none' stroke='%23ff00ff' stroke-width='1.5' stroke-opacity='0.6' /%3E%3Cpath d='M40 0v80M0 40h80' stroke='%23ff00ff' stroke-width='1' stroke-opacity='0.4' /%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23batikKawungPink)' /%3E%3C/svg%3E") !important;
-  background-size: 80px 80px !important;
+  background-image: url('/batik-complex.svg') !important;
+  background-size: 120px 120px !important;
   background-repeat: repeat !important;
+}
+
+/* Global Batik visibility boost to make details clearly visible & elegant */
+div[class*="bg-batik-"] {
+  opacity: 0.16 !important;
+  transition: opacity 0.3s ease-in-out !important;
+}
+.group:hover div[class*="bg-batik-"],
+div[class*="bg-batik-"]:hover {
+  opacity: 0.30 !important;
 }
 
 /* Kept for backward compat with existing components */

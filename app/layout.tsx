@@ -144,9 +144,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="id" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} suppressHydrationWarning>
-        <div className="fixed inset-0 bg-dot-grid opacity-20 pointer-events-none z-[-1]" />
+    <html lang="id" className="scroll-smooth" style={{ backgroundColor: "#0a0a0f", colorScheme: "dark" }}>
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: `html,body{background-color:#0a0a0f!important}` }} />
+      </head>
+      <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} style={{ backgroundColor: "#0a0a0f" }} suppressHydrationWarning>
         <Providers>
           <ReferralTracker />
           <NavigationProgressWrapper />

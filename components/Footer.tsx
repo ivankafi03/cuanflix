@@ -49,16 +49,16 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="bg-background pt-16 pb-8 mt-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-dot-grid opacity-10 pointer-events-none" />
+        <footer className="bg-background pt-8 pb-8 mt-6 relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-repeat" style={{ backgroundImage: "url('/batik-complex.svg')", backgroundSize: "120px 120px" }} />
             
             <div className="max-w-7xl mx-auto px-4 md:px-6 relative">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-16">
                     {/* Brand Section */}
                     <div className="col-span-2 lg:col-span-2">
                         <Link href="/" className="flex items-center gap-2 mb-6 group">
-                            <Logo className="w-8 h-8 rounded-xl shadow-lg shadow-primary/20" />
-                            <span className="text-white font-bold text-xl tracking-tight">
+                            <Logo className="w-8 h-8 rounded-xl shadow-lg shadow-primary/20" showText={false} />
+                            <span className="text-slate-100 font-bold text-xl tracking-tight">
                                 Cuan<span className="text-primary">flix</span>
                             </span>
                         </Link>
@@ -67,27 +67,27 @@ export default function Footer() {
                         </p>
                         <div className="flex gap-4">
                             {settings?.xLink && (
-                                <a href={settings.xLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-lg transition-all border border-white/5" title="X (Twitter)">
+                                <a href={settings.xLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/[0.05] hover:bg-primary/10 hover:text-primary rounded-xl transition-all border border-white/[0.08] text-slate-400" title="X (Twitter)">
                                     <Twitter className="w-5 h-5" />
                                 </a>
                             )}
                             {settings?.instagramLink && (
-                                <a href={settings.instagramLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-lg transition-all border border-white/5" title="Instagram">
+                                <a href={settings.instagramLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/[0.05] hover:bg-primary/10 hover:text-primary rounded-xl transition-all border border-white/[0.08] text-slate-400" title="Instagram">
                                     <Instagram className="w-5 h-5" />
                                 </a>
                             )}
                             {settings?.telegramLink && (
-                                <a href={settings.telegramLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-lg transition-all border border-white/5" title="Telegram">
+                                <a href={settings.telegramLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/[0.05] hover:bg-primary/10 hover:text-primary rounded-xl transition-all border border-white/[0.08] text-slate-400" title="Telegram">
                                     <Send className="w-5 h-5" />
                                 </a>
                             )}
                             {settings?.tiktokLink && (
-                                <a href={settings.tiktokLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-lg transition-all border border-white/5" title="TikTok">
+                                <a href={settings.tiktokLink} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/[0.05] hover:bg-primary/10 hover:text-primary rounded-xl transition-all border border-white/[0.08] text-slate-400" title="TikTok">
                                     <Video className="w-5 h-5" />
                                 </a>
                             )}
                             {settings?.supportEmail && (
-                                <a href={`mailto:${settings.supportEmail}`} className="p-2 bg-white/5 hover:bg-primary/20 hover:text-primary rounded-lg transition-all border border-white/5" title="Email Support">
+                                <a href={`mailto:${settings.supportEmail}`} className="p-2 bg-white/[0.05] hover:bg-primary/10 hover:text-primary rounded-xl transition-all border border-white/[0.08] text-slate-400" title="Email Support">
                                     <Mail className="w-5 h-5" />
                                 </a>
                             )}
@@ -97,7 +97,7 @@ export default function Footer() {
                     {/* Links Sections */}
                     {sections.map((section) => (
                         <div key={section.title} className="col-span-1">
-                            <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-6">{section.title}</h4>
+                            <h4 className="text-slate-300 font-bold text-sm uppercase tracking-widest mb-6">{section.title}</h4>
                             <ul className="space-y-4">
                                 {section.links.map((link) => (
                                     <li key={link.name}>
@@ -114,13 +114,13 @@ export default function Footer() {
                     ))}
                 </div>
 
-                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="text-zinc-600 text-xs font-medium">
+                <div className="pt-8 border-t border-white/[0.06] flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="text-slate-500 text-xs font-medium">
                         © {currentYear} Cuanflix. All rights reserved. Premium database.
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                        <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Systems Operational</span>
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Systems Operational</span>
                     </div>
                 </div>
             </div>

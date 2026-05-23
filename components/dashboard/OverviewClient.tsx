@@ -105,62 +105,62 @@ export default function OverviewClient({ user }: { user: any }) {
                 <p className="text-xs text-zinc-500">Pantau performa dan pendapatanmu hari ini.</p>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-4">
-                <div className="flex-1 flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row gap-3 sm:gap-4">
+                <div className="flex-1 flex flex-col gap-3 sm:gap-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {/* Balance Card */}
-                        <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+                        <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-3.5 sm:p-4 flex flex-col gap-3 sm:gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
                             <div className="absolute inset-0 bg-batik-pink opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                             <div className="flex items-center justify-between relative z-10">
-                                <p className="text-zinc-500 text-xs font-medium">Total Net Balance</p>
+                                <p className="text-zinc-500 text-[10px] sm:text-xs font-medium">Total Net Balance</p>
                                 <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/10">
                                     <DollarSign className="w-3.5 h-3.5 text-primary" />
                                 </div>
                             </div>
-                            <h3 className="text-3xl font-bold text-white tracking-tighter">${totalBalance.toFixed(3)}</h3>
-                            <div className="flex gap-6 pt-2 border-t border-white/5">
+                            <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tighter">${totalBalance.toFixed(3)}</h3>
+                            <div className="flex gap-4 sm:gap-6 pt-2 border-t border-white/5">
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[10px] font-medium text-zinc-500">Watch</span>
-                                    <span className="text-sm font-bold text-white tracking-tight">${(user?.balanceWatch || 0).toFixed(3)}</span>
+                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Watch</span>
+                                    <span className="text-xs sm:text-sm font-bold text-white tracking-tight">${(user?.balanceWatch || 0).toFixed(3)}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[10px] font-medium text-zinc-500">Referral</span>
-                                    <span className="text-sm font-bold text-white tracking-tight">${(user?.balanceReferral || 0).toFixed(3)}</span>
+                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Referral</span>
+                                    <span className="text-xs sm:text-sm font-bold text-white tracking-tight">${(user?.balanceReferral || 0).toFixed(3)}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[10px] font-medium text-zinc-500">Bonus</span>
-                                    <span className="text-sm font-bold text-primary tracking-tight">${(user?.balanceBonus || 0).toFixed(3)}</span>
+                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Bonus</span>
+                                    <span className="text-xs sm:text-sm font-bold text-primary tracking-tight">${(user?.balanceBonus || 0).toFixed(3)}</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Rank Card */}
-                        <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-4 flex flex-col gap-4 relative overflow-hidden group hover:border-blue-500/20 transition-all">
+                        <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-3.5 sm:p-4 flex flex-col gap-3 sm:gap-4 relative overflow-hidden group hover:border-blue-500/20 transition-all">
                             <div className="absolute inset-0 bg-batik-pink opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-all" />
                             <div className="flex items-center justify-between relative z-10">
-                                <p className="text-zinc-500 text-xs font-medium">Global Status</p>
+                                <p className="text-zinc-500 text-[10px] sm:text-xs font-medium">Global Status</p>
                                 <div className="w-7 h-7 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/10">
                                     <Trophy className="w-3.5 h-3.5 text-blue-500" />
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5">
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/5 rounded-xl sm:rounded-2xl flex items-center justify-center border border-white/5">
                                     {userRankIdx === 0 ? (
-                                        <Crown className="w-7 h-7 text-yellow-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
+                                        <Crown className="w-5 h-5 sm:w-7 sm:h-7 text-yellow-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" />
                                     ) : userRankIdx === 1 ? (
-                                        <Medal className="w-7 h-7 text-zinc-300 drop-shadow-[0_0_8px_rgba(212,212,216,0.5)]" />
+                                        <Medal className="w-5 h-5 sm:w-7 sm:h-7 text-zinc-300 drop-shadow-[0_0_8px_rgba(212,212,216,0.5)]" />
                                     ) : (
-                                        <Medal className="w-7 h-7 text-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
+                                        <Medal className="w-5 h-5 sm:w-7 sm:h-7 text-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" />
                                     )}
                                 </div>
                                 <div className="flex flex-col">
-                                    <h3 className="text-3xl font-bold text-white tracking-tighter">
+                                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tighter">
                                         #{userRankIdx >= 0 ? userRankIdx + 1 : '--'}
                                     </h3>
-                                    <p className="text-[10px] font-medium text-zinc-500">Global Rank Position</p>
+                                    <p className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Global Rank Position</p>
                                 </div>
                             </div>
-                            <a href="/dashboard/leaderboard" className="w-full py-2 bg-white/5 border border-white/5 rounded-xl text-[10px] font-semibold text-zinc-400 uppercase tracking-widest flex items-center justify-center gap-1.5 hover:bg-white/10 hover:text-white transition-all">
+                            <a href="/dashboard/leaderboard" className="w-full py-1.5 sm:py-2 bg-white/5 border border-white/5 rounded-xl text-[9px] sm:text-[10px] font-semibold text-zinc-400 uppercase tracking-widest flex items-center justify-center gap-1.5 hover:bg-white/10 hover:text-white transition-all">
                                 Lihat Leaderboard <ChevronRight className="w-3 h-3" />
                             </a>
                         </div>
@@ -212,7 +212,7 @@ export default function OverviewClient({ user }: { user: any }) {
                             <button 
                                 onClick={() => handleClaimBroadcast(b.id)}
                                 disabled={claimingBonus}
-                                className="w-full sm:w-auto px-8 py-3 bg-white text-black text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-2xl shadow-white/10 hover:scale-105 active:scale-95 disabled:opacity-50"
+                                className="w-full sm:w-auto px-8 py-3 bg-primary text-white shadow-lg shadow-primary/20 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 hover:scale-105 active:scale-95 disabled:opacity-50"
                             >
                                 {claimingBonus ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -242,7 +242,7 @@ export default function OverviewClient({ user }: { user: any }) {
                             <button 
                                 onClick={handleClaimBonus}
                                 disabled={claimingBonus}
-                                className="w-full sm:w-auto px-8 py-3 bg-white text-black text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-2xl shadow-white/10 hover:scale-105 active:scale-95 disabled:opacity-50"
+                                className="w-full sm:w-auto px-8 py-3 bg-primary text-white shadow-lg shadow-primary/20 text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 hover:scale-105 active:scale-95 disabled:opacity-50"
                             >
                                 {claimingBonus ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />

@@ -45,7 +45,7 @@ export default function PayoutsClient({ user, settings }: { user: any, settings:
                             </div>
                             <button
                                 onClick={() => setIsWithdrawModalOpen(true)}
-                                className="w-full sm:w-auto px-6 py-3 bg-white text-black font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto px-6 py-3 bg-primary text-white shadow-lg shadow-primary/20 font-bold text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
                             >
                                 <Rocket className="w-3.5 h-3.5" /> Withdraw
                             </button>
