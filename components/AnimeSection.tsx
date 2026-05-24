@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import AnimeCard from "./AnimeCard";
+import ViewAllCard from "./ViewAllCard";
+import ViewAllLink from "./ViewAllLink";
 
 interface AnimeData {
     id: number;
@@ -29,14 +29,7 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
                     </h2>
                 )}
                 {href && href !== "#" && (
-                    <Link
-                        href={href}
-                        prefetch={false}
-                        className="text-xs text-slate-500 hover:text-slate-200 flex items-center gap-1 transition-colors"
-                    >
-                        View All
-                        <ArrowRight className="w-3 h-3" />
-                    </Link>
+                    <ViewAllLink href={href} />
                 )}
             </div>
 
@@ -46,6 +39,9 @@ export default function AnimeSection({ title, data, href }: AnimeSectionProps) {
                         <AnimeCard {...anime} />
                     </React.Fragment>
                 ))}
+                {href && href !== "#" && (
+                    <ViewAllCard href={href} />
+                )}
             </div>
         </section>
     );
