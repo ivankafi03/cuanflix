@@ -24,6 +24,7 @@ async function removeVideoFromAllCaches(id: string): Promise<void> {
                 OR: [
                     { key: { startsWith: 'jav_latest_page_' } },
                     { key: { startsWith: 'jav_category_' } },
+                    { key: { startsWith: 'jav_search_' } },
                     { key: 'homepage_categories_v2' },
                 ]
             },
@@ -418,6 +419,38 @@ export interface CategoryResult {
 }
 
 export async function getVideosByCategory(categoryId: string, page: number = 1): Promise<CategoryResult> {
+    const CACHE_KEY = `jav_category_${categoryId}_${page}`;
+    const REVALIDATE_MS = 60 * 60 * 1000; // 1 hour
+
+    try {
+        // 1. Try to get from cache
+        const cached = await prisma.contentCache.findUnique({
+            where: { key: CACHE_KEY }
+        });
+
+        if (cached) {
+            const data = JSON.parse(cached.data) as CategoryResult;
+            const age = Date.now() - new Date(cached.updatedAt).getTime();
+
+            // If fresh, return
+            if (age < REVALIDATE_MS) {
+                return data;
+            }
+
+            // If stale, refresh in background and return stale
+            refreshVideosByCategoryCache(categoryId, page).catch(err => console.error("BG refresh jav category failed:", err));
+            return data;
+        }
+
+        // 2. Fetch fresh
+        return await refreshVideosByCategoryCache(categoryId, page);
+    } catch (error) {
+        console.error('Error in getVideosByCategory with cache:', error);
+        return { videos: [], totalPages: 1, total: 0 };
+    }
+}
+
+async function refreshVideosByCategoryCache(categoryId: string, page: number): Promise<CategoryResult> {
     try {
         const url = page === 1
             ? `${SOURCE_URL}categories/${categoryId}`
@@ -433,21 +466,35 @@ export async function getVideosByCategory(categoryId: string, page: number = 1):
         const totalPages = data?.pagecount || 1;
         const total = data?.total || 0;
 
-        return {
-            videos: list.map((item: any) => ({
-                title: cleanTitle(item.name || ''),
-                image: item.poster_url || item.thumb_url || '',
-                link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
-                episode: item.movie_code || item.type_name || '',
-                rating: '0.0',
-                type: item.type_name || 'JAV',
-                href: `jav/${item.id}`
-            })),
+        const mapped = list.map((item: any) => ({
+            title: cleanTitle(item.name || ''),
+            image: item.poster_url || item.thumb_url || '',
+            link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
+            episode: item.movie_code || item.type_name || '',
+            rating: '0.0',
+            type: item.type_name || 'JAV',
+            href: `jav/${item.id}`
+        }));
+
+        const ids = list.map((item: any) => String(item.id));
+        const badIds = await filterBadIds(ids);
+        const videos = mapped.filter((_: any, i: number) => !badIds.has(String(list[i]?.id)));
+
+        const result = {
+            videos,
             totalPages,
-            total,
+            total: total - badIds.size,
         };
+
+        await prisma.contentCache.upsert({
+            where: { key: `jav_category_${categoryId}_${page}` },
+            update: { data: JSON.stringify(result), updatedAt: new Date() },
+            create: { key: `jav_category_${categoryId}_${page}`, data: JSON.stringify(result) }
+        });
+
+        return result;
     } catch (error) {
-        console.error('Error scraping JAV category:', error);
+        console.error('Error refreshing JAV category:', error);
         return { videos: [], totalPages: 1, total: 0 };
     }
 }
@@ -793,6 +840,34 @@ export function getSlugFromUrl(url: string | undefined): string {
 }
 
 export async function searchJav(query: string, page: number = 1): Promise<SearchResult> {
+    const CACHE_KEY = `jav_search_${query}_${page}`;
+    const REVALIDATE_MS = 60 * 60 * 1000; // 1 hour
+
+    try {
+        const cached = await prisma.contentCache.findUnique({
+            where: { key: CACHE_KEY }
+        });
+
+        if (cached) {
+            const data = JSON.parse(cached.data) as SearchResult;
+            const age = Date.now() - new Date(cached.updatedAt).getTime();
+
+            if (age < REVALIDATE_MS) {
+                return data;
+            }
+
+            refreshSearchJavCache(query, page).catch(err => console.error("BG refresh jav search failed:", err));
+            return data;
+        }
+
+        return await refreshSearchJavCache(query, page);
+    } catch (error) {
+        console.error('Error in searchJav with cache:', error);
+        return { videos: [], totalPages: 1, total: 0 };
+    }
+}
+
+async function refreshSearchJavCache(query: string, page: number): Promise<SearchResult> {
     try {
         const url = page === 1 
             ? `${SOURCE_URL}search?q=${encodeURIComponent(query)}`
@@ -819,7 +894,7 @@ export async function searchJav(query: string, page: number = 1): Promise<Search
         const ids = list.map((item: any) => String(item.id));
         const badIds = await filterBadIds(ids);
 
-        return {
+        const result = {
             videos: list
                 .filter((item: any) => !badIds.has(String(item.id)))
                 .map((item: any) => ({
@@ -832,10 +907,18 @@ export async function searchJav(query: string, page: number = 1): Promise<Search
                     href: `jav/${item.id}`
                 })),
             totalPages,
-            total,
+            total: total - badIds.size,
         };
+
+        await prisma.contentCache.upsert({
+            where: { key: `jav_search_${query}_${page}` },
+            update: { data: JSON.stringify(result), updatedAt: new Date() },
+            create: { key: `jav_search_${query}_${page}`, data: JSON.stringify(result) }
+        });
+
+        return result;
     } catch (error) {
-        console.error('Error searching JAV:', error);
+        console.error('Error refreshing JAV search:', error);
         return { videos: [], totalPages: 1, total: 0 };
     }
 }

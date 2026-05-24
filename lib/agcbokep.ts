@@ -170,6 +170,27 @@ async function scrapeHomepage(): Promise<AgcVideo[]> {
  * Scrape halaman spesifik untuk pagination (View All)
  */
 export async function getAgcPage(page: number = 1): Promise<{ videos: AgcVideo[], totalPages: number }> {
+    const CACHE_KEY = `agc_page_${page}`;
+
+    try {
+        const cached = await prisma.contentCache.findUnique({ where: { key: CACHE_KEY } });
+        if (cached) {
+            const age = Date.now() - new Date(cached.updatedAt).getTime();
+            if (age < CACHE_TTL) {
+                return JSON.parse(cached.data);
+            }
+            // SWR
+            refreshAgcPage(page).catch(() => {});
+            return JSON.parse(cached.data);
+        }
+        return await refreshAgcPage(page);
+    } catch (e) {
+        console.error("Error in getAgcPage:", e);
+        return { videos: [], totalPages: 1 };
+    }
+}
+
+async function refreshAgcPage(page: number): Promise<{ videos: AgcVideo[], totalPages: number }> {
     const url = page === 1 ? SOURCE_URL : `${SOURCE_URL}/page/${page}`;
     const urlFallback = page === 1 ? SOURCE_URL : `${SOURCE_URL}/?page=${page}`;
     
@@ -182,12 +203,22 @@ export async function getAgcPage(page: number = 1): Promise<{ videos: AgcVideo[]
         videos = html ? extractVideosFromHtml(html) : [];
     }
     
-    // Karena kita tidak tahu total halamannya secara pasti, kita asumsikan halamannya ada 100
-    // Jika ada video, berarti halaman tersebut masih valid.
-    return {
+    const result = {
         videos,
         totalPages: videos.length > 0 ? page + 5 : page
     };
+
+    if (videos.length > 0) {
+        try {
+            await prisma.contentCache.upsert({
+                where: { key: `agc_page_${page}` },
+                update: { data: JSON.stringify(result), updatedAt: new Date() },
+                create: { key: `agc_page_${page}`, data: JSON.stringify(result) }
+            });
+        } catch (e) {}
+    }
+
+    return result;
 }
 
 /**
