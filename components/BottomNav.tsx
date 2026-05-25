@@ -42,13 +42,13 @@ export default function BottomNav() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className="relative flex flex-col items-center justify-center w-full h-full text-zinc-500 hover:text-white transition-colors"
+                                className={`relative flex flex-col items-center justify-center w-full h-full transition-colors ${isActive ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                             >
-                                {/* Active indicator top line */}
+                                {/* Active indicator top line - matching dashboard tab style */}
                                 {isActive && (
                                     <motion.div
                                         layoutId="bottom-nav-active-line"
-                                        className="absolute top-0 w-8 h-1 bg-primary rounded-b-full shadow-[0_0_12px_rgba(244,114,182,0.8)]"
+                                        className="absolute top-0 w-full h-[2px] bg-primary"
                                         initial={false}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                     />
@@ -57,31 +57,15 @@ export default function BottomNav() {
                                 {/* Icon & Text Container */}
                                 <motion.div
                                     className="flex flex-col items-center justify-center mt-1"
-                                    animate={isActive ? { y: -3, scale: 1.1 } : { y: 2, scale: 1 }}
+                                    animate={isActive ? { y: -2, scale: 1.05 } : { y: 0, scale: 1 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
-                                    <Icon className={`w-6 h-6 ${isActive ? "text-primary drop-shadow-[0_0_8px_rgba(244,114,182,0.5)]" : ""}`} />
+                                    <Icon className="w-5 h-5" />
                                 </motion.div>
                                 
-                                <AnimatePresence>
-                                    {isActive && (
-                                        <motion.span 
-                                            initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: 10, scale: 0.8 }}
-                                            className="text-[10px] font-bold text-primary tracking-wide absolute bottom-2"
-                                        >
-                                            {item.name}
-                                        </motion.span>
-                                    )}
-                                </AnimatePresence>
-
-                                {/* Default label if not active, smaller */}
-                                {!isActive && (
-                                    <span className="text-[9px] font-semibold text-zinc-500 mt-1">
-                                        {item.name}
-                                    </span>
-                                )}
+                                <span className={`text-[9px] mt-1.5 font-semibold uppercase tracking-wide ${isActive ? "text-white" : "text-zinc-500"}`}>
+                                    {item.name}
+                                </span>
                             </Link>
                         );
                     })}
