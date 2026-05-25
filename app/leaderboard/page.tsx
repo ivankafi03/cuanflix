@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PublicLeaderboardPage() {
     return (
-        <div className="min-h-screen py-10 px-4">
+        <div className="min-h-screen pt-24 pb-24 md:pb-10 px-4">
             <LeaderboardClient />
         </div>
     );
