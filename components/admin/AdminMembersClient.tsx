@@ -174,6 +174,7 @@ export default function AdminMembersClient() {
                                 <th className="px-6 py-4">Network Member</th>
                                 <th className="px-6 py-4">Watch Performance</th>
                                 <th className="px-6 py-4">Referral Power</th>
+                                <th className="px-6 py-4">Bonus Balance</th>
                                 <th className="px-6 py-4">Net Balance</th>
                                 <th className="px-6 py-4">Security Status</th>
                                 <th className="px-6 py-4 text-right">Actions</th>
@@ -182,7 +183,7 @@ export default function AdminMembersClient() {
                         <tbody>
                             {loading ? (
                                 <tr>
-                                    <td colSpan={6} className="py-20 text-center">
+                                    <td colSpan={7} className="py-20 text-center">
                                         <div className="flex flex-col items-center gap-4 opacity-20">
                                             <Loader2 className="w-10 h-10 animate-spin" />
                                             <p className="text-[10px] font-bold uppercase tracking-widest">Synchronizing Member Database...</p>
@@ -191,7 +192,7 @@ export default function AdminMembersClient() {
                                 </tr>
                             ) : filteredMembers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="py-20 text-center">
+                                    <td colSpan={7} className="py-20 text-center">
                                         <div className="flex flex-col items-center gap-4 opacity-20">
                                             <Users className="w-12 h-12" />
                                             <p className="text-[10px] font-bold uppercase tracking-widest">No members match your criteria.</p>
@@ -215,13 +216,16 @@ export default function AdminMembersClient() {
                                         </div>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-sm font-semibold text-white tracking-tight">${member.balanceWatch.toFixed(3)}</span>
+                                        <span className="text-sm font-semibold text-white tracking-tight">${(member.balanceWatch || 0).toFixed(3)}</span>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-sm font-semibold text-white tracking-tight">${member.balanceReferral.toFixed(3)}</span>
+                                        <span className="text-sm font-semibold text-white tracking-tight">${(member.balanceReferral || 0).toFixed(3)}</span>
                                     </td>
                                     <td className="px-6 py-5">
-                                        <span className="text-base font-bold text-primary tracking-tighter shadow-primary/20 shadow-sm">${(member.balanceWatch + member.balanceReferral).toFixed(3)}</span>
+                                        <span className="text-sm font-semibold text-white tracking-tight">${(member.balanceBonus || 0).toFixed(3)}</span>
+                                    </td>
+                                    <td className="px-6 py-5">
+                                        <span className="text-base font-bold text-primary tracking-tighter shadow-primary/20 shadow-sm">${((member.balanceWatch || 0) + (member.balanceReferral || 0) + (member.balanceBonus || 0)).toFixed(3)}</span>
                                     </td>
                                     <td className="px-6 py-5">
                                         <div className="flex flex-col gap-1.5">

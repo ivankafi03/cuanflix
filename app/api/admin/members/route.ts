@@ -24,6 +24,7 @@ export async function GET() {
                 role: true,
                 balanceWatch: true,
                 balanceReferral: true,
+                balanceBonus: true,
                 registrationIp: true,
                 isFlagged: true,
                 flagReason: true,
