@@ -92,24 +92,44 @@ export default async function WatchPrettyPage({
         };
     }
 
-    // Fetch related anime based on a generic category
+    // Fetch related anime based on cached homepage data for fast, randomized recommendations
     let relatedAnime: any[] = [];
     try {
-        const query = path.startsWith('jav/') ? 'School' : 'Asian';
-        const { videos: results } = await searchJav(query); // Default category for related
-        relatedAnime = results.slice(0, 6).map((item, idx) => ({
+        let allVideos: any[] = [];
+        
+        if (path.startsWith('jav/')) {
+            const { getHomepageCategories, getLatestVideos } = await import("@/lib/jav");
+            const cats = await getHomepageCategories();
+            cats.forEach(c => allVideos.push(...c.videos));
+            if (allVideos.length < 10) {
+                const latest = await getLatestVideos(1);
+                allVideos.push(...latest.videos);
+            }
+        } else {
+            const { getAgcCategories } = await import("@/lib/agcbokep");
+            const cats = await getAgcCategories();
+            cats.forEach(c => allVideos.push(...c.videos));
+        }
+
+        // Remove duplicates
+        const uniqueVideos = Array.from(new Map(allVideos.map(item => [item.link || item.href, item])).values());
+        
+        // Remove current video
+        const filtered = uniqueVideos.filter(a => !(a.link || '').includes(path) && !(a.href || '').includes(path));
+
+        // Shuffle
+        const shuffled = filtered.sort(() => 0.5 - Math.random());
+
+        relatedAnime = shuffled.slice(0, 6).map((item, idx) => ({
             id: idx + 1,
             title: item.title,
             image: item.image,
             rating: 0,
             episodes: 1,
             episodeRaw: item.episode,
-            type: item.type || 'JAV',
+            type: item.type || (path.startsWith('jav/') ? 'JAV' : 'Video'),
             href: `/watch/${item.href}`
         }));
-
-        // Remove current anime from related
-        relatedAnime = relatedAnime.filter(a => !(a.link || a.href || '').includes(path)).slice(0, 6);
     } catch (e) {
         console.error("Failed to fetch related", e);
     }
