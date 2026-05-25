@@ -29,6 +29,7 @@ export async function GET(req: Request) {
             },
             select: {
                 id: true,
+                name: true,
                 email: true,
                 image: true,
                 balanceWatch: true,
@@ -42,7 +43,7 @@ export async function GET(req: Request) {
             const totalBalance = (user.balanceWatch || 0) + (user.balanceReferral || 0) + (user.balanceBonus || 0);
             return {
                 id: user.id,
-                name: user.email ? maskEmail(user.email) : "Unknown",
+                name: censorName(user.name || user.email?.split('@')[0] || "Unknown"),
                 image: user.image,
                 totalBalance
             };
@@ -57,10 +58,10 @@ export async function GET(req: Request) {
     }
 }
 
-// Helper to mask email (e.g. cuan***@gmail.com)
-function maskEmail(email: string) {
-    const [name, domain] = email.split('@');
-    if (!name || !domain) return email;
-    if (name.length <= 3) return `${name}***@${domain}`;
-    return `${name.substring(0, 3)}***@${domain}`;
+function censorName(name: string) {
+    if (!name) return "Ano*****m";
+    if (name.length <= 3) return name + "*****";
+    const start = name.substring(0, 3);
+    const end = name.substring(name.length - 1);
+    return `${start}*****${end}`;
 }
