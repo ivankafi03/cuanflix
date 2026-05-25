@@ -86,7 +86,7 @@ export default function WatchlistButton({ anime, variant = "default", size = "de
                 } ${className}`}
         >
             {isSaved ? <Check className={size === "lg" ? "w-4 h-4" : "w-3.5 h-3.5"} /> : <Bookmark className={size === "lg" ? "w-4 h-4" : "w-3.5 h-3.5"} />}
-            {isSaved ? "Tersimpan" : "12.4K Daftar Putar"}
+            {isSaved ? "Tersimpan" : "Tambah ke Daftar"}
         </button>
     );
 }
