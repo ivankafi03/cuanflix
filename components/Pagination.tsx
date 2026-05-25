@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
     currentPage: number;
@@ -10,6 +13,15 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, totalPages, baseUrl, query }: PaginationProps) {
+    const [loadingPage, setLoadingPage] = useState<string | number | null>(null);
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    // Reset loading state when the URL changes (page loaded)
+    useEffect(() => {
+        setLoadingPage(null);
+    }, [pathname, searchParams]);
+
     if (totalPages <= 1) return null;
 
     const getPageNumbers = () => {
@@ -41,9 +53,10 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                 {currentPage > 1 ? (
                     <Link 
                         href={getLink(currentPage - 1)} 
+                        onClick={() => setLoadingPage("prev")}
                         className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-white transition-all border border-white/10 group"
                     >
-                        <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                        {loadingPage === "prev" ? <Loader2 className="w-5 h-5 animate-spin" /> : <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />}
                     </Link>
                 ) : (
                     <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 opacity-30 cursor-not-allowed border border-white/5">
@@ -58,13 +71,20 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                         <Link
                             key={`page-${item}`}
                             href={getLink(item)}
+                            onClick={() => {
+                                if (item !== currentPage) setLoadingPage(item);
+                            }}
                             className={`min-w-[48px] h-12 flex items-center justify-center rounded-2xl px-4 text-sm font-black transition-all border ${
                                 item === currentPage
                                     ? "bg-primary text-white border-primary shadow-[0_10px_30px_rgba(244,114,182,0.3)] scale-110 z-10"
                                     : "bg-white/5 text-zinc-500 border-white/10 hover:bg-white/10 hover:text-white"
                             }`}
                         >
-                            {item}
+                            {loadingPage === item ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                                item
+                            )}
                         </Link>
                     )
                 )}
@@ -72,9 +92,10 @@ export default function Pagination({ currentPage, totalPages, baseUrl, query }: 
                 {currentPage < totalPages ? (
                     <Link 
                         href={getLink(currentPage + 1)} 
+                        onClick={() => setLoadingPage("next")}
                         className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 hover:bg-primary hover:text-white transition-all border border-white/10 group"
                     >
-                        <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                        {loadingPage === "next" ? <Loader2 className="w-5 h-5 animate-spin" /> : <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />}
                     </Link>
                 ) : (
                     <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 opacity-30 cursor-not-allowed border border-white/5">
