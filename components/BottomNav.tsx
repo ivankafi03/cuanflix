@@ -42,7 +42,7 @@ export default function BottomNav() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`relative flex flex-col items-center justify-center w-full h-full transition-colors ${isActive ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+                                className={`relative flex flex-col items-center justify-center gap-1 w-full h-full transition-colors ${isActive ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                             >
                                 {/* Active indicator top line - matching dashboard tab style */}
                                 {isActive && (
@@ -56,14 +56,14 @@ export default function BottomNav() {
                                 
                                 {/* Icon & Text Container */}
                                 <motion.div
-                                    className="flex flex-col items-center justify-center mt-1"
+                                    className="flex flex-col items-center justify-center"
                                     animate={isActive ? { y: -2, scale: 1.05 } : { y: 0, scale: 1 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                 >
                                     <Icon className="w-5 h-5" />
                                 </motion.div>
                                 
-                                <span className={`text-[9px] mt-1.5 font-semibold uppercase tracking-wide ${isActive ? "text-white" : "text-zinc-500"}`}>
+                                <span className={`text-[9px] font-semibold uppercase tracking-wide ${isActive ? "text-white" : "text-zinc-500"}`}>
                                     {item.name}
                                 </span>
                             </Link>
