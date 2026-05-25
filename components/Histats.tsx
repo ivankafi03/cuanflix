@@ -45,7 +45,7 @@ export default function Histats() {
           <img
             src="//sstatic1.histats.com/0.gif?5026321&101"
             alt=""
-            border="0"
+            style={{ border: 0 }}
           />
         </a>
       </noscript>
