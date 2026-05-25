@@ -65,13 +65,13 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-white/[0.05] rounded-full mb-8 shadow-sm"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white/[0.05] rounded-full mb-6 md:mb-8 shadow-sm"
                 >
-                    <span className="relative flex h-2.5 w-2.5">
+                    <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sky-500"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-sky-500"></span>
                     </span>
-                    <span className="text-xs font-semibold text-slate-300 tracking-wide">Platform Video Penghasil Saldo Tercepat</span>
+                    <span className="text-[10px] md:text-xs font-bold text-slate-300 tracking-wide uppercase md:normal-case">Platform Video Penghasil Saldo</span>
                 </motion.div>
  
                 {/* Monumental Typography (FikaDigi/Vercel Style) */}
@@ -79,10 +79,11 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-3xl sm:text-5xl md:text-6xl lg:text-[4.8rem] font-extrabold text-slate-100 tracking-tighter mb-4 sm:mb-8 leading-[1.1] sm:leading-[1.05]"
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.8rem] font-extrabold text-slate-100 tracking-tighter mb-4 sm:mb-8 leading-[1.1] sm:leading-[1.05]"
                 >
                     Dengan Hanya Menonton <br className="hidden md:block" />
-                    Atau Membagikan Link <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 font-serif italic font-medium">Saldo Anda Bertambah.</span>
+                    Atau Membagikan Link <br className="md:hidden" />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-500 font-serif italic font-medium text-3xl sm:text-5xl md:text-6xl lg:text-[4.8rem]">Saldo Bertambah.</span>
                 </motion.h1>
  
                 {/* Monumental Subtitle (Slate-400) */}
@@ -90,9 +91,9 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-sm sm:text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed mb-8 sm:mb-12 font-medium"
+                    className="text-xs sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed md:leading-relaxed mb-10 sm:mb-12 font-medium px-2"
                 >
-                    Ubah aktivitas menonton dan berbagi video Anda menjadi penghasilan riil. Nikmati ribuan koleksi video eksklusif tanpa batas, sebarkan tautan, dan cairkan komisi Anda secara instan.
+                    Ubah aktivitas menonton dan berbagi video Anda menjadi penghasilan riil. Nikmati ribuan koleksi video tanpa batas, sebarkan tautan, dan cairkan komisi Anda secara instan.
                 </motion.p>
  
                 {/* Sleek Minimalist Actions */}
@@ -100,18 +101,18 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-16 sm:mb-24"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 w-full sm:w-auto mb-16 sm:mb-24 px-4 sm:px-0"
                 >
                     <button
                         onClick={handleMulaiNonton}
-                        className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-primary text-white text-sm sm:text-base font-semibold rounded-full hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 cursor-pointer active:scale-95"
+                        className="group flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 md:px-8 md:py-4 bg-primary text-white text-[13px] md:text-base font-bold rounded-full hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 cursor-pointer active:scale-95"
                     >
                         Mulai Nonton & Hasilkan
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                     <button
                         onClick={() => handleScrollToSection("cara-kerja")}
-                        className="group flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/25 text-white text-sm sm:text-base font-semibold rounded-full transition-all duration-300 cursor-pointer active:scale-95 shadow-lg shadow-white/5"
+                        className="group flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3.5 md:px-8 md:py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-[13px] md:text-base font-bold rounded-full transition-all duration-300 cursor-pointer active:scale-95"
                     >
                         Pelajari Cara Cuan
                     </button>
