@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import prisma from "./prisma";
+import { withCache } from "./cache";
 
 const SOURCE_URL = "https://nontonasik.my.id/jav-domain/";
 const BAD_VIDEO_TTL = 12 * 60 * 60 * 1000; // 12 jam sebelum retry
@@ -678,10 +679,13 @@ function deepFindEmbedUrls(obj: any, visited = new Set<any>()): string[] {
 }
 
 export async function getJavWatchData(id: string): Promise<WatchPageData | null> {
-    try {
-        const url = `${SOURCE_URL}videos/${id}`;
-        const html = await fetchWithTimeout(url);
-        if (!html) return null;
+    return withCache(
+        `jav_watch_${id}`,
+        async () => {
+            try {
+                const url = `${SOURCE_URL}videos/${id}`;
+                const html = await fetchWithTimeout(url);
+                if (!html) return null;
 
         const dataObj = extractNuxtObject(html);
         const servers: VideoServer[] = [];
@@ -817,10 +821,13 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
             servers,
             downloads
         };
-    } catch (error) {
-        console.error('Error scraping JAV watch data:', error);
-        return null;
-    }
+            } catch (error) {
+                console.error('Error scraping JAV watch data:', error);
+                return null;
+            }
+        },
+        1800 // cache for 30 minutes
+    );
 }
 
 export interface SearchResult {

@@ -29,6 +29,9 @@ export async function GET() {
                             createdAt: {
                                 gt: date,
                                 lt: nextDate
+                            },
+                            user: {
+                                isBot: false
                             }
                         },
                         _sum: { amount: true }

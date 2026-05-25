@@ -4,18 +4,12 @@ import { getHomepageCategories } from '@/lib/jav';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://cuanflix.site';
 
-  // 1. Static Routes
   const staticRoutes = [
     '',
     '/auth/login',
     '/auth/register',
-    '/categories/1',
-    '/categories/2',
-    '/categories/3',
-    '/categories/4',
-    '/categories/5',
-    '/categories/6',
-    '/categories/7',
+    '/indo',
+    '/jav',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

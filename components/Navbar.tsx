@@ -49,6 +49,7 @@ export default function Navbar() {
         { name: "Home", href: "/" },
         { name: "Explore", href: "/jav" },
         { name: "Categories", href: "/categories" },
+        { name: "Leaderboard", href: "/leaderboard" },
     ];
 
     const is_admin = (session?.user as any)?.role === "ADMIN";

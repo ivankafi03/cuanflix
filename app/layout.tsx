@@ -19,6 +19,7 @@ import RewardNotification from "@/components/RewardNotification";
 import NavigationProgressWrapper from "@/components/NavigationProgressWrapper";
 import ReferralTracker from "@/components/ReferralTracker";
 import { Loader2 } from "lucide-react";
+import Histats from "@/components/Histats";
 
 // Inter — font utama untuk UI, body, label, form
 const inter = Inter({
@@ -162,6 +163,7 @@ export default async function RootLayout({
           <AntiAdBlock />
           <NotificationToast />
           <RewardNotification />
+          <Histats />
           
           {/* Throttle Mode (Slowdown) Visual Indicator */}
           {session?.user && (session.user as any).throttleMode && (
