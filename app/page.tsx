@@ -86,7 +86,7 @@ export default async function Home() {
         </main>
 
         <HowItWorks />
-        <FAQSection />
+        <FAQSection threshold={settings?.withdrawThreshold ?? 5} />
       </div>
     </div>
   );

@@ -4,35 +4,35 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const faqs = [
-    {
-        q: "Bagaimana cara mulai mendapatkan uang di Cuanflix?",
-        a: "Sangat mudah! Anda cukup mendaftar akun gratis, masuk ke dasbor, pilih video yang ingin Anda bagikan, salin link-nya, dan sebarkan. Anda akan mendapatkan saldo otomatis setiap kali ada orang yang menonton video melalui link rujukan Anda."
-    },
-    {
-        q: "Apakah menonton sendiri juga bisa mendapatkan komisi?",
-        a: "Ya! Cuanflix mendukung sistem 'Self-Watch' di mana Anda bisa mengumpulkan saldo tambahan hanya dengan menonton video pilihan Anda sendiri selama minimal 60 detik per tayangan."
-    },
-    {
-        q: "Berapa batas minimum penarikan saldo dan metode apa saja yang didukung?",
-        a: "Batas minimum penarikan saldo sangat terjangkau, yaitu mulai dari $5.00 saja. Anda bisa mencairkan dana secara instan ke berbagai dompet digital populer (DANA, OVO, GOPAY) atau melalui Transfer Bank lokal."
-    },
-    {
-        q: "Bagaimana sistem melacak dan menghitung komisi saya?",
-        a: "Sistem kami menggunakan pelacakan alamat IP yang aman dan transparan. Setiap penonton unik yang menyaksikan video melalui tautan Anda selama minimal 60 detik akan dihitung sebagai kunjungan valid yang otomatis dikonversikan menjadi saldo USD di dasbor Anda."
-    },
-    {
-        q: "Apakah aman membagikan link Cuanflix ke media sosial?",
-        a: "Sangat aman. Seluruh tautan rujukan yang kami sediakan telah dioptimalkan agar ramah media sosial dan bebas dari skrip iklan eksternal berbahaya, sehingga aman disebarkan ke WhatsApp, Telegram, forum, atau sosmed lainnya."
-    },
-    {
-        q: "Apakah ada batasan pembuatan akun di Cuanflix?",
-        a: "Untuk menjaga keadilan sistem bagi semua member, kami membatasi satu akun per perangkat atau alamat IP. Penggunaan bot atau manipulasi ilegal untuk memanipulasi penayangan akan dideteksi oleh sistem anti-fraud kami dan dapat membekukan akun yang melanggar."
-    }
-];
-
-export default function FAQSection() {
+export default function FAQSection({ threshold = 5 }: { threshold?: number }) {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+    const faqs = [
+        {
+            q: "Bagaimana cara mulai mendapatkan uang di Cuanflix?",
+            a: "Sangat mudah! Anda cukup mendaftar akun gratis, masuk ke dasbor, pilih video yang ingin Anda bagikan, salin link-nya, dan sebarkan. Anda akan mendapatkan saldo otomatis setiap kali ada orang yang menonton video melalui link rujukan Anda."
+        },
+        {
+            q: "Apakah menonton sendiri juga bisa mendapatkan komisi?",
+            a: "Ya! Cuanflix mendukung sistem 'Self-Watch' di mana Anda bisa mengumpulkan saldo tambahan hanya dengan menonton video pilihan Anda sendiri selama minimal 60 detik per tayangan."
+        },
+        {
+            q: "Berapa batas minimum penarikan saldo dan metode apa saja yang didukung?",
+            a: `Batas minimum penarikan saldo sangat terjangkau, yaitu mulai dari $${threshold.toFixed(2)} saja. Anda bisa mencairkan dana secara instan ke berbagai dompet digital populer (DANA, OVO, GOPAY) atau melalui Transfer Bank lokal.`
+        },
+        {
+            q: "Bagaimana sistem melacak dan menghitung komisi saya?",
+            a: "Sistem kami menggunakan pelacakan alamat IP yang aman dan transparan. Setiap penonton unik yang menyaksikan video melalui tautan Anda selama minimal 60 detik akan dihitung sebagai kunjungan valid yang otomatis dikonversikan menjadi saldo USD di dasbor Anda."
+        },
+        {
+            q: "Apakah aman membagikan link Cuanflix ke media sosial?",
+            a: "Sangat aman. Seluruh tautan rujukan yang kami sediakan telah dioptimalkan agar ramah media sosial dan bebas dari skrip iklan eksternal berbahaya, sehingga aman disebarkan ke WhatsApp, Telegram, forum, atau sosmed lainnya."
+        },
+        {
+            q: "Apakah ada batasan pembuatan akun di Cuanflix?",
+            a: "Untuk menjaga keadilan sistem bagi semua member, kami membatasi satu akun per perangkat atau alamat IP. Penggunaan bot atau manipulasi ilegal untuk memanipulasi penayangan akan dideteksi oleh sistem anti-fraud kami dan dapat membekukan akun yang melanggar."
+        }
+    ];
 
     return (
         <section id="faq" className="w-full pt-8 pb-4 px-4 md:px-8 border-t border-white/[0.06] bg-transparent relative overflow-hidden">
