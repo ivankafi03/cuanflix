@@ -155,11 +155,11 @@ export default async function RootLayout({
           <ReferralTracker />
           <NavigationProgressWrapper />
           <Navbar />
-          <BottomNav />
           <main className="flex-grow min-h-screen">
             {children}
           </main>
           <Footer />
+          <BottomNav />
           <ChatWidget />
           {!isAdmin && <AdScripts />}
           <AntiAdBlock />
