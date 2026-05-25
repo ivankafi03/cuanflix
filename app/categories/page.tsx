@@ -57,7 +57,7 @@ export default function CategoriesPage() {
                 <div className="absolute inset-0 bg-dot-grid opacity-20" />
             </div>
 
-            <main className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-12 md:gap-20 pt-24 md:pt-32 pb-32 relative">
+            <main className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8 md:gap-16 pt-20 md:pt-28 pb-32 relative">
                 
                 {/* Hero Section / Header */}
                 <div className="flex flex-col items-center text-center gap-4 md:gap-6 max-w-3xl mx-auto">
