@@ -73,7 +73,7 @@ export default function RewardNotification() {
     // 1. Render Promo Tamu (Guest)
     if (guestPromoVisible && status === "unauthenticated") {
         return (
-            <div className="fixed bottom-4 right-4 left-4 md:left-auto md:w-[320px] z-[9999] animate-in fade-in slide-in-from-bottom-8 duration-500">
+            <div className="fixed bottom-24 md:bottom-4 right-4 left-4 md:left-auto md:w-[320px] z-[9999] animate-in fade-in slide-in-from-bottom-8 duration-500">
                 <div className="bg-[#0F0F11]/90 backdrop-blur-md border border-white/5 p-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-3 relative overflow-hidden group">
                     <div className="absolute -inset-1 bg-gradient-to-r from-primary/5 to-purple-500/5 opacity-35 blur-lg" />
                     

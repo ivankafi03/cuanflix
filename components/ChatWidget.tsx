@@ -101,7 +101,7 @@ export default function ChatWidget() {
         ? (mounted && window.innerWidth < 1024 ? (rewardVisible ? "132px" : "60px") : "24px")
         : isDashboard
             ? "96px"
-            : "24px";
+            : (mounted && window.innerWidth < 768 ? "100px" : "24px");
 
     return (
         <div 

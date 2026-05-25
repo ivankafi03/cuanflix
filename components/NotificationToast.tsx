@@ -63,7 +63,7 @@ export default function NotificationToast() {
     };
 
     return (
-        <div className="fixed bottom-6 left-6 z-[9999] animate-in slide-in-from-left-full duration-700 ease-out">
+        <div className="fixed bottom-24 md:bottom-6 left-6 z-[9999] animate-in slide-in-from-left-full duration-700 ease-out">
             <div 
                 onClick={handleToastClick}
                 className={`bg-[#0F0F11]/90 backdrop-blur-xl border border-white/10 p-2.5 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-3 max-w-[250px] relative overflow-hidden group select-none transition-all ${isGuest ? 'cursor-pointer hover:border-emerald-500/40 hover:scale-[1.02] active:scale-95' : ''}`}
