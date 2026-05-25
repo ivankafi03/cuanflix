@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, Menu, X, User } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { LogOut, LayoutDashboard } from "lucide-react";
 import MaintenanceBanner from "./MaintenanceBanner";
@@ -11,6 +12,8 @@ import Logo from "./Logo";
 
 export default function Navbar() {
     const { data: session } = useSession();
+    const pathname = usePathname() || "";
+    const isDashboardOrAdmin = pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -191,21 +194,25 @@ export default function Navbar() {
                     )}
 
                     {/* Mobile User Icon */}
-                    <Link
-                        href={session ? (is_admin ? "/admin" : "/dashboard") : "/auth/login"}
-                        className="md:hidden p-2 text-slate-300 hover:text-primary transition-colors cursor-pointer"
-                        title={session ? "Dashboard" : "Login"}
-                    >
-                        <User className="w-5 h-5" />
-                    </Link>
+                    {isDashboardOrAdmin && (
+                        <Link
+                            href={session ? (is_admin ? "/admin" : "/dashboard") : "/auth/login"}
+                            className="md:hidden p-2 text-slate-300 hover:text-primary transition-colors cursor-pointer"
+                            title={session ? "Dashboard" : "Login"}
+                        >
+                            <User className="w-5 h-5" />
+                        </Link>
+                    )}
 
                     {/* Mobile hamburger */}
-                    <button
-                        className="md:hidden p-2 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
-                        {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                    </button>
+                    {isDashboardOrAdmin && (
+                        <button
+                            className="md:hidden p-2 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        >
+                            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                        </button>
+                    )}
                 </div>
             </div>
 

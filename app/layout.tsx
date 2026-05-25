@@ -3,6 +3,7 @@ import { Inter, Nunito } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import BottomNav from "@/components/BottomNav";
 import Providers from "@/components/Providers";
 import ChatWidget from "@/components/ChatWidget";
 import prisma from "@/lib/prisma";
@@ -154,6 +155,7 @@ export default async function RootLayout({
           <ReferralTracker />
           <NavigationProgressWrapper />
           <Navbar />
+          <BottomNav />
           <main className="flex-grow min-h-screen">
             {children}
           </main>
