@@ -1,6 +1,5 @@
 import Link from "next/link";
 import TagsExplorer from "@/components/TagsExplorer";
-import AdUnit from "@/components/ads/AdUnit";
 import { 
     LayoutGrid, 
     Zap, 
@@ -12,7 +11,8 @@ import {
     TrendingUp,
     ShieldCheck,
     Eye,
-    Globe
+    Globe,
+    Film
 } from "lucide-react";
 
 export const metadata = {
@@ -22,29 +22,53 @@ export const metadata = {
 
 const CATEGORY_GROUPS = [
     {
-        title: "Featured Types",
-        description: "Most popular content classifications",
+        title: "Indonesian Collections",
+        description: "Kategori & genre video Indo terpopuler",
         items: [
-            { id: 1, name: "Censored", icon: ShieldCheck, count: "12k+" },
-            { id: 2, name: "Uncensored", icon: Eye, count: "8k+" },
-            { id: 3, name: "Leaked", icon: Zap, count: "1.2k" },
-            { id: 4, name: "Amateur", icon: Star, count: "5k+" },
-            { id: 5, name: "Chinese AV", icon: Globe, count: "3k+" },
-            { id: 6, name: "Hentai", icon: Flame, count: "2.5k" },
-            { id: 7, name: "English Sub", icon: Layers, count: "4k+" },
+            { id: "indo-all", name: "Bokep Indo", icon: Flame, count: "15k+", href: "/indo" },
+            { id: "indo-viral", name: "Indo Viral", icon: Zap, count: "8k+", href: "/search?q=indo+viral" },
+            { id: "indo-hijab", name: "Indo Hijab", icon: Star, count: "6k+", href: "/search?q=indo+hijab" },
+            { id: "indo-sma", name: "Indo SMA", icon: Compass, count: "4k+", href: "/search?q=indo+sma" },
+            { id: "indo-skandal", name: "Indo Skandal", icon: TrendingUp, count: "5k+", href: "/search?q=indo+skandal" },
+            { id: "indo-amatir", name: "Indo Amatir", icon: Eye, count: "7k+", href: "/search?q=indo+amatir" },
+        ]
+    },
+    {
+        title: "Trending & Streaming Networks",
+        description: "Kategori & genre koleksi streaming pilihan terlengkap",
+        items: [
+            { id: "net-terbaru", name: "Indo Terbaru", icon: Zap, count: "10k+", href: "/search?q=indo+terbaru" },
+            { id: "net-sma", name: "Indo SMA Hot", icon: Compass, count: "7k+", href: "/search?q=sma" },
+            { id: "net-barat", name: "Bokep Barat", icon: Globe, count: "14k+", href: "/search?q=barat" },
+            { id: "net-viralabg", name: "Viral ABG", icon: Flame, count: "9k+", href: "/search?q=viralabg" },
+            { id: "net-bokephub", name: "Bokephub", icon: Layers, count: "5k+", href: "/search?q=bokephub" },
+            { id: "net-avtub", name: "AVTub", icon: Film, count: "6k+", href: "/search?q=avtub" },
+        ]
+    },
+    {
+        title: "JAV & International",
+        description: "Most popular global content classifications",
+        items: [
+            { id: 1, name: "Censored", icon: ShieldCheck, count: "12k+", href: "/categories/1" },
+            { id: 2, name: "Uncensored", icon: Eye, count: "8k+", href: "/categories/2" },
+            { id: 3, name: "Leaked", icon: Zap, count: "1.2k", href: "/categories/3" },
+            { id: 4, name: "Amateur", icon: Star, count: "5k+", href: "/categories/4" },
+            { id: 5, name: "Chinese AV", icon: Globe, count: "3k+", href: "/categories/5" },
+            { id: 6, name: "Hentai", icon: Flame, count: "2.5k", href: "/categories/6" },
+            { id: 7, name: "English Sub", icon: Layers, count: "4k+", href: "/categories/7" },
         ]
     }
 ];
 
 const TRENDING_TAGS = [
+    { name: "Indo Viral", count: "8,920" },
+    { name: "Indo Hijab", count: "6,410" },
+    { name: "Bokep Barat", count: "5,820" },
     { name: "Beautiful Breasts", count: "4,182" },
-    { name: "Creampie", count: "4,162" },
+    { name: "Viral ABG", count: "4,162" },
+    { name: "Indo SMA", count: "3,890" },
     { name: "Blowjob", count: "4,010" },
-    { name: "Slender", count: "3,145" },
-    { name: "Beautiful Girl", count: "2,636" },
-    { name: "Big Boobs", count: "1,782" },
-    { name: "Beautiful Buttocks", count: "1,726" },
-    { name: "Cunnilingus", count: "1,607" },
+    { name: "Indo Skandal", count: "2,980" },
 ];
 
 export default function CategoriesPage() {
@@ -57,7 +81,7 @@ export default function CategoriesPage() {
                 <div className="absolute inset-0 bg-dot-grid opacity-20" />
             </div>
 
-            <main className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8 md:gap-16 pt-20 md:pt-28 pb-32 relative">
+            <main className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col gap-8 md:gap-16 pt-16 md:pt-24 pb-16 md:pb-24 relative">
                 
                 {/* Hero Section / Header */}
                 <div className="flex flex-col items-center text-center gap-4 md:gap-6 max-w-3xl mx-auto">
@@ -75,7 +99,7 @@ export default function CategoriesPage() {
                     </div>
                 </div>
 
-                {/* Sub-Bab 1: Featured Categories */}
+                {/* Sub-Bab 1, 2, 3: Featured Categories */}
                 {CATEGORY_GROUPS.map((group, idx) => (
                     <section key={idx} className="flex flex-col gap-6 md:gap-8">
                         <div className="flex flex-col gap-1">
@@ -86,11 +110,11 @@ export default function CategoriesPage() {
                             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{group.description}</p>
                         </div>
                         
-                        <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-3 md:grid md:grid-cols-4 lg:grid-cols-7 md:gap-4 pb-2">
+                        <div className="flex flex-nowrap overflow-x-auto no-scrollbar gap-3 md:grid md:grid-cols-3 lg:grid-cols-6 md:gap-4 pb-2">
                             {group.items.map((item) => (
                                 <Link
                                     key={item.id}
-                                    href={`/categories/${item.id}`}
+                                    href={item.href || `/categories/${item.id}`}
                                     className="group relative flex flex-col flex-shrink-0 w-[140px] md:w-auto items-center justify-center gap-3 py-6 md:py-8 px-3 md:px-4 rounded-3xl bg-zinc-900/40 border border-white/5 hover:border-primary/40 hover:bg-primary/5 transition-all duration-500 text-center overflow-hidden"
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -110,11 +134,6 @@ export default function CategoriesPage() {
                         </div>
                     </section>
                 ))}
-
-                {/* Banner Iklan Tengah */}
-                <div className="flex justify-center -my-6">
-                    <AdUnit type="leaderboard" />
-                </div>
 
                 {/* Sub-Bab 2: Trending Quick Access */}
                 <section className="flex flex-col gap-6 md:gap-8">
@@ -143,11 +162,6 @@ export default function CategoriesPage() {
                         ))}
                     </div>
                 </section>
-
-                {/* Banner Iklan bawah Trending */}
-                <div className="flex justify-center -my-6">
-                    <AdUnit type="leaderboard" />
-                </div>
 
                 {/* Sub-Bab 3: The Deep Explorer */}
                 <div className="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />

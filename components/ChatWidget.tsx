@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Send, User, ShieldCheck, Loader2, ChevronDown } from "lucide-react";
+import { MessageSquare, X, Send, ShieldCheck, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useWidget } from "./WidgetContext";
-import { usePathname } from "next/navigation";
 
 interface Message {
     id: string;
@@ -20,10 +18,8 @@ interface Message {
 }
 
 export default function ChatWidget() {
-    const pathname = usePathname();
     const { data: session } = useSession();
     const isSuspended = (session?.user as any)?.isSuspended;
-    const { rewardVisible } = useWidget();
 
     if (isSuspended) return null;
     const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +28,7 @@ export default function ChatWidget() {
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [hasNewMessage, setHasNewMessage] = useState(false);
-    const [mounted, setMounted] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     const fetchMessages = async () => {
         try {
@@ -58,8 +49,7 @@ export default function ChatWidget() {
 
     useEffect(() => {
         fetchMessages();
-        // Polling dimatikan total untuk menghentikan loop
-    }, []); 
+    }, []);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -95,19 +85,8 @@ export default function ChatWidget() {
         if (!isOpen) setHasNewMessage(false);
     };
 
-    const isWatchPage = mounted && pathname.startsWith("/watch");
-    const isDashboard = mounted && (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"));
-    const bottomStyle = isWatchPage
-        ? (mounted && window.innerWidth < 1024 ? (rewardVisible ? "132px" : "60px") : "24px")
-        : isDashboard
-            ? "96px"
-            : (mounted && window.innerWidth < 768 ? "100px" : "24px");
-
     return (
-        <div 
-            className="fixed right-6 z-[100] flex flex-col items-end gap-4 pointer-events-none transition-all duration-500 ease-in-out"
-            style={{ bottom: bottomStyle }}
-        >
+        <div className="fixed right-4 md:right-6 bottom-[84px] md:bottom-6 z-[100] flex flex-col items-end gap-4 pointer-events-none transition-all duration-300 ease-in-out">
             {/* Chat Window */}
             {isOpen && (
                 <div className="w-[280px] sm:w-[350px] h-[450px] bg-[#0F0F11]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 pointer-events-auto">
@@ -196,7 +175,7 @@ export default function ChatWidget() {
             {/* Toggle Button */}
             <button
                 onClick={toggleOpen}
-                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all relative pointer-events-auto active:scale-90 hover:scale-105 ${isOpen ? "bg-white/10 text-white rotate-90" : "bg-primary text-white"
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all relative pointer-events-auto active:scale-90 hover:scale-105 ${isOpen ? "bg-white/10 text-white rotate-90" : "bg-primary text-white shadow-[0_0_25px_rgba(244,114,182,0.4)]"
                     }`}
             >
                 {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}

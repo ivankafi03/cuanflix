@@ -90,7 +90,7 @@ export default function Navbar() {
                                     animate={isMobileMenuOpen ? { scale: 1.1, rotate: 360 } : { scale: 1, rotate: 0 }}
                                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                                 >
-                                    <Logo className="w-8 h-8 md:w-9 md:h-9 shadow-lg shadow-primary/20 rounded-xl" showText={false} />
+                                    <Logo className="w-8 h-8 md:w-9 md:h-9" showText={false} />
                                 </motion.div>
                                 {!isScrolled && (
                                     <span className="text-slate-100 font-black text-xl tracking-tight block">

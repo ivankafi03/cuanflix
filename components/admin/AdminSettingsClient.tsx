@@ -39,7 +39,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
         tiktokLink: initialSettings?.tiktokLink || "",
         supportEmail: initialSettings?.supportEmail || "",
         vpsExpiryDate: initialSettings?.vpsExpiryDate ? new Date(initialSettings.vpsExpiryDate).toISOString().split('T')[0] : "",
-        scPromoLink: initialSettings?.scPromoLink || "https://t.me/pongo_official",
+        scPromoLink: initialSettings?.scPromoLink || "https://t.me/cuanflix_site",
         scPromoPrice: initialSettings?.scPromoPrice || "150"
     });
     const [blockedIps, setBlockedIps] = useState(initialBlockedIps);
@@ -169,18 +169,9 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                                 </div>
                             </div>
 
-                             <div className="grid grid-cols-2 gap-8">
+                            <div className="grid grid-cols-1 gap-8">
                                 <div className="flex flex-col gap-3">
-                                    <span className="text-sm font-bold text-zinc-600 ">Watch Yield (Min)</span>
-                                    <input
-                                        type="number" step="0.0001"
-                                        value={settings.watchRate}
-                                        onChange={(e) => setSettings({ ...settings, watchRate: parseFloat(e.target.value) })}
-                                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm font-bold text-white tracking-tight focus:outline-none focus:border-primary/40"
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-3">
-                                    <span className="text-sm font-bold text-zinc-600 ">Threshold (USD)</span>
+                                    <span className="text-sm font-bold text-zinc-600 ">Min Payout Threshold (USD)</span>
                                     <input
                                         type="number" step="1"
                                         value={settings.minWithdrawal}

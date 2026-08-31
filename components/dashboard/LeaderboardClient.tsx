@@ -56,8 +56,7 @@ export default function LeaderboardClient({ user }: { user: any }) {
                         <div className="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:pb-0">
                             {[
                                 { id: "total", label: "Global Points", color: "text-primary", dot: "bg-primary" },
-                                { id: "watch", label: "Watch", color: "text-blue-500", dot: "bg-blue-500" },
-                                { id: "referral", label: "Sharing", color: "text-green-500", dot: "bg-green-500" }
+                                { id: "referral", label: "Sharing & Ref", color: "text-green-500", dot: "bg-green-500" }
                             ].map((cat) => (
                                 <button
                                     key={cat.id}

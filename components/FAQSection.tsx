@@ -13,8 +13,8 @@ export default function FAQSection({ threshold = 5 }: { threshold?: number }) {
             a: "Sangat mudah! Anda cukup mendaftar akun gratis, masuk ke dasbor, pilih video yang ingin Anda bagikan, salin link-nya, dan sebarkan. Anda akan mendapatkan saldo otomatis setiap kali ada orang yang menonton video melalui link rujukan Anda."
         },
         {
-            q: "Apakah menonton sendiri juga bisa mendapatkan komisi?",
-            a: "Ya! Cuanflix mendukung sistem 'Self-Watch' di mana Anda bisa mengumpulkan saldo tambahan hanya dengan menonton video pilihan Anda sendiri selama minimal 60 detik per tayangan."
+            q: "Bagaimana cara kerja komisi Sharelink?",
+            a: "Setiap kali Anda membagikan link video Cuanflix ke media sosial (WhatsApp, Telegram, Facebook, TikTok) dan ada pengunjung yang mengklik link tersebut, sistem akan otomatis menambahkan saldo ke akun Anda secara real-time."
         },
         {
             q: "Berapa batas minimum penarikan saldo dan metode apa saja yang didukung?",

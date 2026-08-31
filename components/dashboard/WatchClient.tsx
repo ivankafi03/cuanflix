@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import {
-    Play, History, Clock, TrendingUp, Eye, DollarSign, Zap, BarChart2
+    Play, History, Clock, TrendingUp, Eye, DollarSign, Zap, BarChart2, ChevronRight
 } from "lucide-react";
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -39,19 +40,25 @@ export default function WatchClient({ user }: { user: any }) {
     const [watchHistory, setWatchHistory] = useState<any[]>([]);
     const [stats, setStats] = useState<any>({ totalWatchtime: 0, avgRetention: 0, todayWatchEarnings: 0 });
     const [analytics, setAnalytics] = useState<any>(null);
+    const [videoList, setVideoList] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [chartTab, setChartTab] = useState<"earning" | "views">("earning");
 
     useEffect(() => {
         const fetchAll = async () => {
-            const [histRes, statsRes, analyticsRes] = await Promise.all([
+            const [histRes, statsRes, analyticsRes, vidRes] = await Promise.all([
                 fetch("/api/history?t=" + Date.now()),
                 fetch("/api/member/stats?t=" + Date.now()),
-                fetch("/api/member/analytics?t=" + Date.now())
+                fetch("/api/member/analytics?t=" + Date.now()),
+                fetch("/api/member/videos?t=" + Date.now())
             ]);
             if (histRes.ok) setWatchHistory(await histRes.json());
             if (statsRes.ok) setStats(await statsRes.json());
             if (analyticsRes.ok) setAnalytics(await analyticsRes.json());
+            if (vidRes.ok) {
+                const vidData = await vidRes.json();
+                if (vidData.videos) setVideoList(vidData.videos.slice(0, 9));
+            }
             setLoading(false);
         };
         fetchAll();
@@ -101,6 +108,8 @@ export default function WatchClient({ user }: { user: any }) {
                     </div>
                 ))}
             </div>
+
+
 
             {/* Chart Section */}
             <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden">

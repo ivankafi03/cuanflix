@@ -3,14 +3,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
     Search, Plus, Check, Loader2, X,
-    ChevronLeft, ChevronRight, BookmarkPlus, Sparkles
+    ChevronLeft, ChevronRight, BookmarkPlus, Sparkles, Info
 } from "lucide-react";
 import { useToast } from "../ToastContext";
-
-// ─── Batik Pink Pattern ────────────────────────────────────────────────────
-const BatikPattern = ({ opacity = 0.06 }: { opacity?: number }) => (
-    <div className="absolute inset-0 bg-batik-pink pointer-events-none overflow-hidden" style={{ opacity }} />
-);
 
 interface Video {
     title: string;
@@ -105,6 +100,15 @@ export default function CariLinkClient({ user }: { user: any }) {
 
     return (
         <div className="flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* TOP INFO BANNER */}
+            <div className="bg-sky-500/10 border border-sky-400/30 rounded-2xl p-4 flex items-center gap-3.5 shadow-lg shadow-sky-500/5">
+                <div className="w-9 h-9 bg-sky-500/20 border border-sky-400/30 rounded-xl flex items-center justify-center shrink-0">
+                    <BookmarkPlus className="w-5 h-5 text-sky-400" />
+                </div>
+                <p className="text-xs sm:text-sm text-sky-100 font-medium leading-relaxed">
+                    Link yang ditambahkan akan muncul di tab <span className="text-sky-300 font-extrabold underline decoration-sky-400/50 underline-offset-2">Koleksi</span>. Dari sana kamu bisa copy semua URL sekaligus dan share ke mana saja.
+                </p>
+            </div>
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -113,14 +117,13 @@ export default function CariLinkClient({ user }: { user: any }) {
                         Cari <span className="text-primary">Link</span>
                     </h2>
                     <p className="text-xs text-zinc-500">
-                        Temukan video dan tambahkan ke koleksi linkmu untuk di-share.
+                        Jelajahi seluruh koleksi video di web kita dan tambahkan ke koleksi linkmu.
                     </p>
                 </div>
                 {/* Collection counter badge */}
-                <div className="flex items-center gap-2 bg-[#0F0F11] border border-white/5 px-4 py-2.5 rounded-2xl shrink-0 relative overflow-hidden">
-                    <BatikPattern opacity={0.08} />
-                    <BookmarkPlus className="w-3.5 h-3.5 text-primary relative z-10" />
-                    <div className="relative z-10">
+                <div className="flex items-center gap-2 bg-[#0F0F11] border border-white/5 px-4 py-2.5 rounded-2xl shrink-0">
+                    <BookmarkPlus className="w-3.5 h-3.5 text-primary" />
+                    <div>
                         <span className="text-xs font-bold text-white">{totalAdded}</span>
                         <span className="text-xs text-zinc-500"> link di koleksi</span>
                     </div>
@@ -134,7 +137,7 @@ export default function CariLinkClient({ user }: { user: any }) {
                     type="text"
                     value={query}
                     onChange={e => handleSearch(e.target.value)}
-                    placeholder="Ketik judul, kode JAV, atau nama aktris..."
+                    placeholder="Ketik judul video atau kata kunci..."
                     className="w-full bg-[#0F0F11] border border-white/8 rounded-2xl pl-11 pr-12 py-3.5 text-sm text-white placeholder:text-zinc-600 outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all"
                 />
                 {query && (
@@ -152,19 +155,16 @@ export default function CariLinkClient({ user }: { user: any }) {
                     <span>
                         {query
                             ? `${videos.length} hasil untuk "${query}"`
-                            : `Menampilkan ${videos.length} video terbaru`}
-                        {totalPages > 1 && ` · Halaman ${page} dari ${totalPages}`}
+                            : `Menampilkan ${videos.length} video (Halaman ${page} dari ${totalPages})`}
                     </span>
                 </div>
             )}
 
             {/* Video List */}
-            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden relative">
-                <BatikPattern opacity={0.03} />
-
+            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden">
                 {/* Loading */}
                 {loading && (
-                    <div className="flex flex-col items-center justify-center py-24 gap-4 relative z-10">
+                    <div className="flex flex-col items-center justify-center py-24 gap-4">
                         <div className="relative w-10 h-10">
                             <div className="absolute inset-0 rounded-full border-2 border-white/10" />
                             <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-primary animate-spin" />
@@ -175,9 +175,9 @@ export default function CariLinkClient({ user }: { user: any }) {
 
                 {/* Empty state */}
                 {!loading && videos.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-24 gap-4 opacity-25 relative z-10">
+                    <div className="flex flex-col items-center justify-center py-24 gap-4 opacity-25 text-center px-6">
                         <Search className="w-10 h-10" />
-                        <div className="text-center">
+                        <div>
                             <p className="text-xs font-black uppercase tracking-widest">Tidak ada hasil</p>
                             <p className="text-[9px] text-zinc-500 mt-1">Coba kata kunci yang berbeda</p>
                         </div>
@@ -188,13 +188,13 @@ export default function CariLinkClient({ user }: { user: any }) {
                 {!loading && videos.length > 0 && (
                     <>
                         {/* Table header */}
-                        <div className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-3 border-b border-white/5 bg-white/[0.02] relative z-10">
+                        <div className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-3 border-b border-white/5 bg-white/[0.02]">
                             <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-6 sm:w-8 text-center shrink-0">#</span>
                             <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] flex-1">Judul Video</span>
                             <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.15em] w-20 sm:w-24 text-right shrink-0">Aksi</span>
                         </div>
 
-                        <div className="divide-y divide-white/[0.03] relative z-10">
+                        <div className="divide-y divide-white/[0.03]">
                             {videos.map((video, idx) => {
                                 const isAdded = addedIds.has(video.videoId);
                                 const isAdding = adding.has(video.videoId);
@@ -260,16 +260,46 @@ export default function CariLinkClient({ user }: { user: any }) {
                         <span className="hidden sm:inline">Sebelumnya</span>
                     </button>
                     <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar py-0.5 justify-center">
-                        {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                            const p = i + 1;
-                            return (
-                                <button key={p} onClick={() => handlePageChange(p)}
-                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-bold transition-all shrink-0 ${p === page ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white"}`}>
-                                    {p}
-                                </button>
-                            );
-                        })}
-                        {totalPages > 5 && <span className="text-zinc-600 text-xs shrink-0 select-none px-1">...</span>}
+                        {(() => {
+                            const WINDOW = 5; // how many page buttons to show
+                            let start = Math.max(1, page - Math.floor(WINDOW / 2));
+                            let end = Math.min(totalPages, start + WINDOW - 1);
+                            // shift start left if end hit the ceiling
+                            if (end - start < WINDOW - 1) {
+                                start = Math.max(1, end - WINDOW + 1);
+                            }
+                            const pages = [];
+                            // leading ellipsis
+                            if (start > 1) {
+                                pages.push(
+                                    <button key={1} onClick={() => handlePageChange(1)}
+                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-bold transition-all shrink-0 bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white">
+                                        1
+                                    </button>
+                                );
+                                if (start > 2) pages.push(<span key="el" className="text-zinc-600 text-xs shrink-0 select-none px-0.5">…</span>);
+                            }
+                            // window
+                            for (let p = start; p <= end; p++) {
+                                pages.push(
+                                    <button key={p} onClick={() => handlePageChange(p)}
+                                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-bold transition-all shrink-0 ${p === page ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white"}`}>
+                                        {p}
+                                    </button>
+                                );
+                            }
+                            // trailing ellipsis
+                            if (end < totalPages) {
+                                if (end < totalPages - 1) pages.push(<span key="er" className="text-zinc-600 text-xs shrink-0 select-none px-0.5">…</span>);
+                                pages.push(
+                                    <button key={totalPages} onClick={() => handlePageChange(totalPages)}
+                                        className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-xs font-bold transition-all shrink-0 bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-white">
+                                        {totalPages}
+                                    </button>
+                                );
+                            }
+                            return pages;
+                        })()}
                     </div>
                     <button
                         onClick={() => handlePageChange(page + 1)}
@@ -281,14 +311,6 @@ export default function CariLinkClient({ user }: { user: any }) {
                     </button>
                 </div>
             )}
-
-            {/* Info banner */}
-            <div className="bg-primary/5 border border-primary/15 rounded-2xl p-4 flex items-center gap-3">
-                <BookmarkPlus className="w-4 h-4 text-primary shrink-0" />
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                    Link yang ditambahkan akan muncul di tab <span className="text-white font-semibold">Koleksi</span>. Dari sana kamu bisa copy semua URL sekaligus dan share ke mana saja.
-                </p>
-            </div>
         </div>
     );
 }

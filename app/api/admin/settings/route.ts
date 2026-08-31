@@ -87,13 +87,13 @@ export async function POST(req: Request) {
                 maintenanceMessage: maintenanceMessage || "Situs sedang dalam pemeliharaan rutin untuk meningkatkan performa.",
                 ...(registrationBonus !== undefined && { registrationBonus: parseFloat(registrationBonus) || 0.1 }),
                 ...(welcomeBonus !== undefined && { welcomeBonus: parseFloat(welcomeBonus) || 1.0 }),
-                telegramLink: telegramLink ?? "https://t.me/cuanflix_official",
+                telegramLink: telegramLink ?? "https://t.me/cuanflix_site",
                 xLink: xLink !== undefined ? xLink : "https://x.com/cuanflix",
                 instagramLink: instagramLink !== undefined ? instagramLink : "https://instagram.com/cuanflix",
                 tiktokLink: tiktokLink !== undefined ? tiktokLink : "https://tiktok.com/@cuanflix",
-                supportEmail: supportEmail !== undefined ? supportEmail : "support@cuanflix.com",
+                supportEmail: supportEmail !== undefined ? supportEmail : "support@cuanflix.site",
                 vpsExpiryDate: vpsExpiryDate ? new Date(vpsExpiryDate) : null,
-                scPromoLink: scPromoLink !== undefined ? scPromoLink : "https://t.me/pongo_official",
+                scPromoLink: scPromoLink !== undefined ? scPromoLink : "https://t.me/cuanflix_site",
                 scPromoPrice: scPromoPrice !== undefined ? scPromoPrice : "150",
             }
         });

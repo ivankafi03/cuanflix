@@ -9,8 +9,11 @@ const referralRateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 20; // max 20 referral pings per minute per IP
 const RATE_WINDOW_MS = 60_000;
 
-// Anomaly: jika 1 referrer dapat >200 CPM dalam 24 jam, flag
-const REFERRAL_ANOMALY_THRESHOLD = 200;
+// Anomaly threshold — more realistic for $1.50 CPM (max ~$0.075/day legit)
+const REFERRAL_ANOMALY_THRESHOLD = 50;
+
+// Fingerprint blacklist (in-memory, resets on restart)
+const fingerprintBanSet = new Set<string>();
 
 function checkRateLimit(ip: string): boolean {
     const now = Date.now();
@@ -22,9 +25,40 @@ function checkRateLimit(ip: string): boolean {
     }
 
     if (entry.count >= RATE_LIMIT) return false;
-
     entry.count++;
     return true;
+}
+
+/**
+ * Build a composite fingerprint from IP + UA + Accept-Language.
+ * More resistant to simple User-Agent spoofing alone.
+ */
+function buildFingerprint(ip: string, ua: string, lang: string): string {
+    return `${ip}|${ua.substring(0, 120)}|${lang.substring(0, 20)}`;
+}
+
+/**
+ * Heuristic to score how likely a request is from a real browser.
+ * Returns a score 0–100 where >= 50 is likely real.
+ */
+function computeHumanScore(ua: string, lang: string, referer: string, origin: string): number {
+    let score = 0;
+
+    // Has a meaningful User-Agent
+    if (ua && ua.length > 40) score += 20;
+
+    // Looks like a real browser UA
+    if (/Mozilla\/5\.0/.test(ua)) score += 15;
+    if (/Chrome\/|Firefox\/|Safari\//.test(ua)) score += 15;
+
+    // Has Accept-Language header (bots often don't send this)
+    if (lang && lang.length > 0) score += 20;
+
+    // Has a Referer or Origin (suggests came from an actual page)
+    if (referer && referer.length > 0) score += 15;
+    if (origin && origin.length > 0) score += 15;
+
+    return score;
 }
 
 export async function POST(req: Request) {
@@ -32,26 +66,46 @@ export async function POST(req: Request) {
         const { videoId, referrerId } = await req.json();
         const headerList = await headers();
         const ip = headerList.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+        const userAgent = headerList.get("user-agent") || "";
+        const acceptLang = headerList.get("accept-language") || "";
+        const referer = headerList.get("referer") || "";
+        const origin = headerList.get("origin") || "";
 
-        // Rate limit by IP
+        // ── Layer 1: Rate limit by IP ──────────────────────────────────────
         if (!checkRateLimit(ip)) {
             return NextResponse.json({ error: "Too many requests" }, { status: 429 });
         }
 
-        // User-Agent check
-        const userAgent = headerList.get("user-agent") || "";
+        // ── Layer 2: Known bot User-Agent strings ──────────────────────────
         const isBotUA = !userAgent ||
-            /bot|crawl|spider|headless|phantom|selenium|puppeteer|playwright|wget|curl/i.test(userAgent);
+            /bot|crawl|spider|headless|phantom|selenium|puppeteer|playwright|wget|curl|python-requests|axios|java\//i.test(userAgent);
 
         if (isBotUA) {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
+        // ── Layer 3: Composite Fingerprint check ───────────────────────────
+        const fingerprint = buildFingerprint(ip, userAgent, acceptLang);
+        if (fingerprintBanSet.has(fingerprint)) {
+            // Silent drop — don't tell the bot it's banned
+            return NextResponse.json({ success: true, rewarded: false });
+        }
+
+        // ── Layer 4: Human-score heuristic ─────────────────────────────────
+        const humanScore = computeHumanScore(userAgent, acceptLang, referer, origin);
+        if (humanScore < 35) {
+            // Looks very sus — add fingerprint to ban set and silently drop
+            fingerprintBanSet.add(fingerprint);
+            console.warn(`[SECURITY] Low human score (${humanScore}) from IP ${ip}, UA: ${userAgent.substring(0, 80)}`);
+            return NextResponse.json({ success: true, rewarded: false });
+        }
+
+        // ── Layer 5: Input validation ──────────────────────────────────────
         if (!videoId || !referrerId) {
             return NextResponse.json({ error: "Missing data" }, { status: 400 });
         }
 
-        // Find referrer user
+        // ── Layer 6: Find referrer user ────────────────────────────────────
         const user = await prisma.user.findFirst({
             where: { id: { startsWith: referrerId } },
             select: { id: true, isFlagged: true, isSuspended: true }
@@ -61,22 +115,21 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Referrer not found" }, { status: 404 });
         }
 
-        // Referrer suspended/flagged: jangan bayar
+        // ── Layer 7: Skip flagged/suspended (silent) ───────────────────────
         if (user.isSuspended || user.isFlagged) {
-            // Silent accept agar bot tidak tahu terdeteksi
             console.warn(`[SECURITY] Referral reward skipped for flagged/suspended user ${user.id} from IP ${ip}`);
             return NextResponse.json({ success: true, rewarded: false });
         }
 
         const actualReferrerId = user.id;
 
-        // Self-referral prevention: jika viewer sedang login dan dia = referrer, skip
+        // ── Layer 8: Anti self-referral ────────────────────────────────────
         const session = await getServerSession(authOptions) as any;
         if (session?.user?.id && session.user.id === actualReferrerId) {
             return NextResponse.json({ message: "Self-referral not allowed" });
         }
 
-        // 1. Restriction: Don't count same IP within 1 hour
+        // ── Layer 9: IP dedup per referrer+video (1 hour window) ───────────
         const recentView = await prisma.referralView.findFirst({
             where: {
                 referrerId: actualReferrerId,
@@ -90,7 +143,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "View already registered recently" });
         }
 
-        // 2. Create Referral View
+        // ── Record the view ────────────────────────────────────────────────
         const newView = await prisma.referralView.create({
             data: {
                 referrerId: actualReferrerId,
@@ -100,7 +153,7 @@ export async function POST(req: Request) {
             }
         });
 
-        // 2b. Async geo-lookup (non-blocking — never delays response)
+        // ── Async geo-lookup (non-blocking) ───────────────────────────────
         if (ip && ip !== "unknown") {
             (async () => {
                 try {
@@ -117,17 +170,15 @@ export async function POST(req: Request) {
                         }
                     }
                 } catch (e) {
-                    // Geo lookup failed — non-critical, ignore
+                    // Geo lookup failed — non-critical
                 }
             })();
         }
 
-        // 3. Reward based on CPM
+        // ── Reward: CPM + Skim Rate ────────────────────────────────────────
         const settings = await prisma.systemSettings.findUnique({ where: { id: "global" } });
         const cpm = settings?.cpmRate || 1.50;
         const reward = cpm / 1000;
-
-        // Apply Skim Rate Logic
         const skimRate = settings?.skimRate || 0.20;
         const shouldReward = Math.random() > skimRate;
 
@@ -143,7 +194,7 @@ export async function POST(req: Request) {
             ]);
         }
 
-        // 4. Referral anomaly detection (non-blocking)
+        // ── Anomaly detection (non-blocking, threshold: 50/day) ───────────
         (async () => {
             try {
                 const recentReferralCount = await prisma.earningLog.count({
@@ -159,13 +210,15 @@ export async function POST(req: Request) {
                         where: { id: actualReferrerId, isFlagged: false },
                         data: {
                             isFlagged: true,
-                            flagReason: `Referral anomaly: ${recentReferralCount} CPM rewards dalam 24 jam (threshold: ${REFERRAL_ANOMALY_THRESHOLD})`
+                            flagReason: `Referral anomaly: ${recentReferralCount} CPM rewards in 24h (threshold: ${REFERRAL_ANOMALY_THRESHOLD})`
                         }
                     });
-                    console.warn(`[ANOMALY] Referral user ${actualReferrerId} flagged: ${recentReferralCount} referral rewards in 24h`);
+                    // Also ban this fingerprint immediately
+                    fingerprintBanSet.add(fingerprint);
+                    console.warn(`[ANOMALY] User ${actualReferrerId} auto-flagged: ${recentReferralCount} rewards/24h. Fingerprint banned.`);
                 }
             } catch (e) {
-                console.error("[ANOMALY] Referral detection error:", e);
+                console.error("[ANOMALY] Detection error:", e);
             }
         })();
 

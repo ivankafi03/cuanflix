@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { Gift, X, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import { Gift, X, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "./ToastContext";
 
@@ -22,7 +22,6 @@ export default function RewardNotification() {
             if (res.ok) {
                 const data = await res.json();
                 if (data.rewards && data.rewards.length > 0) {
-                    // Tampilkan reward pertama yang tersedia
                     setReward(data.rewards[0]);
                     setVisible(true);
                 }
@@ -70,46 +69,44 @@ export default function RewardNotification() {
         }
     };
 
-    // 1. Render Promo Tamu (Guest)
+    // 1. Render Promo Tamu (Guest Promo Card - Simpel & Kecil)
     if (guestPromoVisible && status === "unauthenticated") {
         return (
-            <div className="fixed bottom-24 md:bottom-4 right-4 left-4 md:left-auto md:w-[320px] z-[9999] animate-in fade-in slide-in-from-bottom-8 duration-500">
-                <div className="bg-[#0F0F11]/90 backdrop-blur-md border border-white/5 p-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col gap-3 relative overflow-hidden group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/5 to-purple-500/5 opacity-35 blur-lg" />
-                    
+            <div className="fixed bottom-20 md:bottom-6 right-4 left-4 md:left-auto md:w-[280px] z-[9999] animate-in fade-in slide-in-from-bottom-5 duration-300">
+                <div className="bg-[#0F0F11] border border-white/10 p-3.5 rounded-xl shadow-xl flex flex-col gap-2.5 relative">
                     <button 
                         onClick={() => setGuestPromoVisible(false)}
-                        className="absolute top-2.5 right-2.5 text-zinc-500 hover:text-white transition-colors z-20"
+                        className="absolute top-2.5 right-2.5 text-zinc-500 hover:text-white transition-colors p-1"
                     >
                         <X className="w-3.5 h-3.5" />
                     </button>
                     
-                    <div className="flex gap-3 items-center relative z-10">
-                        <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary border border-primary/20 shrink-0">
-                            <Gift className="w-4 h-4" />
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 bg-primary/10 rounded-lg flex items-center justify-center text-primary border border-primary/20 shrink-0">
+                            <Gift className="w-3.5 h-3.5" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[8px] font-black text-primary uppercase tracking-[0.2em] leading-none mb-1">🎉 WELCOME REWARD</span>
-                            <h4 className="text-xs font-bold text-white tracking-tight leading-none">Klaim $1.00 Pertamamu!</h4>
+                            <span className="text-[8px] font-bold text-primary uppercase tracking-wider">Bonus Baru</span>
+                            <h4 className="text-xs font-bold text-white leading-tight">Dapatkan Saldo $1.00</h4>
                         </div>
                     </div>
 
-                    <p className="text-[10px] text-zinc-400 font-medium leading-normal relative z-10 -mt-1">
-                        Daftar hari ini dan dapatkan saldo awal gratis sebesar $1.00 langsung masuk ke akun Anda.
+                    <p className="text-[10px] text-zinc-400 font-medium leading-tight">
+                        Daftar akun dan klaim saldo gratis $1.00.
                     </p>
 
-                    <div className="flex items-center gap-2 relative z-10 mt-1">
+                    <div className="flex items-center gap-2 pt-0.5">
                         <Link 
                             href="/auth/register"
-                            className="flex-1 bg-primary hover:bg-primary/95 text-white text-[9px] font-black uppercase tracking-widest py-2.5 rounded-lg flex items-center justify-center gap-1 transition-all shadow-md shadow-primary/10 text-center"
+                            className="flex-1 bg-primary hover:bg-primary/90 text-white text-[9px] font-bold uppercase tracking-wider py-2 rounded-lg text-center transition-all"
                         >
-                            AMBIL BONUS SAYA <ArrowRight className="w-3 h-3" />
+                            Daftar & Klaim
                         </Link>
                         <button 
                             onClick={() => setGuestPromoVisible(false)}
-                            className="px-2 py-2 text-zinc-500 hover:text-white text-[8px] font-black uppercase tracking-widest transition-all"
+                            className="px-2 py-2 text-zinc-500 hover:text-white text-[8px] font-bold uppercase tracking-wider"
                         >
-                            Lewati Promo
+                            Tutup
                         </button>
                     </div>
                 </div>
@@ -117,50 +114,37 @@ export default function RewardNotification() {
         );
     }
 
-    // 2. Render Reward Member (Authenticated)
+    // 2. Render Reward Member (Simpel & Ringkas)
     if (!visible || !reward) return null;
 
-    // Remove emojis from title and message if any
-    const cleanTitle = reward.title.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '');
-    const cleanMessage = reward.message.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '');
+    const cleanTitle = reward.title?.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '') || 'Bonus Hadiah';
+    const cleanMessage = reward.message?.replace(/[\u{1F300}-\u{1F9FF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '') || 'Klaim bonus Anda sekarang.';
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-in zoom-in-95 duration-500">
-            <div className="bg-[#0F0F11]/95 border border-primary/30 p-8 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] flex flex-col gap-6 max-w-sm w-full relative overflow-hidden">
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-[100px]" />
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in zoom-in-95 duration-300">
+            <div className="bg-[#0F0F11] border border-white/10 p-5 rounded-2xl shadow-2xl flex flex-col gap-4 max-w-xs w-full text-center">
+                <div className="w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center mx-auto">
+                    <Gift className="w-6 h-6 text-primary" />
+                </div>
                 
-                <div className="flex flex-col items-center text-center gap-4 relative z-10">
-                    <div className="w-20 h-20 bg-primary/10 border border-primary/20 rounded-[2rem] flex items-center justify-center mb-2">
-                        <Gift className="w-10 h-10 text-primary" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Reward Available</span>
-                        <h4 className="text-2xl font-black text-white tracking-tight">
-                            {cleanTitle}
-                        </h4>
-                    </div>
-                    <p className="text-sm text-zinc-400 font-medium leading-relaxed px-4">
-                        {cleanMessage}
-                    </p>
+                <div className="flex flex-col gap-1">
+                    <h4 className="text-sm font-bold text-white">{cleanTitle}</h4>
+                    <p className="text-xs text-zinc-400 font-medium leading-relaxed">{cleanMessage}</p>
                 </div>
 
-                <div className="flex flex-col gap-3 relative z-10">
+                <div className="flex flex-col gap-2 pt-1">
                     <button
                         onClick={handleClaim}
                         disabled={claiming}
-                        className="w-full bg-primary/20 hover:bg-primary/30 border border-primary/30 text-white py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all shadow-2xl disabled:opacity-50"
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-50"
                     >
-                        {claiming ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                        ) : (
-                            <>Klaim Bonus</>
-                        )}
+                        {claiming ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : "Klaim Bonus"}
                     </button>
                     <button 
                         onClick={() => setVisible(false)}
-                        className="w-full py-3 text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
+                        className="w-full py-1.5 text-zinc-500 hover:text-white text-[10px] font-bold uppercase tracking-wider"
                     >
-                        Tutup
+                        Nanti
                     </button>
                 </div>
             </div>

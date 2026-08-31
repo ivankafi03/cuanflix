@@ -227,7 +227,6 @@ export default function MemberDashboard({ user }: { user: any }) {
             <div className="flex border-b border-white/5 overflow-x-auto no-scrollbar">
                 {[
                     { id: "overview", label: "Overview", icon: LayoutDashboard },
-                    { id: "watch", label: "Watch", icon: Play },
                     { id: "share", label: "Share", icon: Share2 },
                     { id: "leaderboard", label: "Ranking", icon: Trophy },
                     { id: "payouts", label: "Payouts", icon: Banknote }
@@ -271,8 +270,8 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         <h3 className="text-4xl font-bold text-white tracking-tighter z-10">${totalBalance.toFixed(3)}</h3>
                                         <div className="flex gap-6 z-10">
                                             <div className="flex flex-col gap-0.5">
-                                                <span className="text-xs font-bold text-zinc-500 ">Watch Reward</span>
-                                                <span className="text-sm font-bold text-white/90 tracking-tight">${(user?.balanceWatch || 0).toFixed(3)}</span>
+                                                <span className="text-xs font-bold text-zinc-500 ">Sharelink & Referral</span>
+                                                <span className="text-sm font-bold text-white/90 tracking-tight">${(user?.balanceReferral || 0).toFixed(3)}</span>
                                             </div>
                                             <div className="flex flex-col gap-0.5">
                                                 <span className="text-xs font-bold text-zinc-500 ">Network Bonus</span>
@@ -502,8 +501,7 @@ export default function MemberDashboard({ user }: { user: any }) {
                                         <div className="flex gap-1.5">
                                             {[
                                                 { id: "total", label: "Global", color: "bg-primary" },
-                                                { id: "watch", label: "Watch", color: "bg-blue-500" },
-                                                { id: "referral", label: "Share", color: "bg-green-500" }
+                                                { id: "referral", label: "Share & Ref", color: "bg-green-500" }
                                             ].map((cat) => (
                                                 <button key={cat.id} onClick={() => setRankType(cat.id)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${rankType === cat.id ? `${cat.color} text-white shadow-lg shadow-primary/20` : 'bg-white/5 text-zinc-400 hover:text-white'}`}>
                                                     {cat.label}

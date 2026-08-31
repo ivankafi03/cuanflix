@@ -10,7 +10,8 @@ import {
     MessageSquare, 
     Settings,
     Ghost,
-    Gift
+    Gift,
+    Link2
 } from "lucide-react";
 
 export default function AdminNav() {
@@ -18,6 +19,7 @@ export default function AdminNav() {
 
     const tabs = [
         { id: "overview",   label: "Overview",   icon: BarChart3,      href: "/admin" },
+        { id: "vanity",     label: "Vanity",     icon: Link2,          href: "/admin/vanity-links" },
         { id: "payouts",    label: "Payouts",    icon: Banknote,       href: "/admin/payouts" },
         { id: "members",    label: "Members",    icon: Users,          href: "/admin/members" },
         { id: "ghosts",     label: "Ghosts",     icon: Ghost,          href: "/admin/ghosts" },

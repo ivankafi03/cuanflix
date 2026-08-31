@@ -9,10 +9,6 @@ import {
 import { useToast } from "../ToastContext";
 import ConfirmModal from "../ConfirmModal";
 
-const BatikPattern = ({ opacity = 0.06 }: { opacity?: number }) => (
-    <div className="absolute inset-0 bg-batik-pink pointer-events-none overflow-hidden" style={{ opacity }} />
-);
-
 interface CollectedLink {
     id: string;
     videoId: string;
@@ -78,7 +74,7 @@ export default function LinkCollectorClient({ user }: { user: any }) {
         }
 
         setCopying(true);
-        const text = linksToCopy.map(l => `${l.videoTitle}: ${l.videoUrl}`).join("\n");
+        const text = linksToCopy.map(l => l.videoUrl).join("\n");
         navigator.clipboard.writeText(text);
         showToast(`Berhasil copy ${linksToCopy.length} link!`, "success");
         setTimeout(() => setCopying(false), 2000);
@@ -127,12 +123,11 @@ export default function LinkCollectorClient({ user }: { user: any }) {
             </div>
 
             {/* Action Card */}
-            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 relative overflow-hidden group">
-                <BatikPattern opacity={0.1} />
+            <div className="bg-[#0F0F11] border border-white/8 rounded-2xl p-5 relative overflow-hidden shadow-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/20">
-                            <BookmarkPlus className="w-5 h-5 text-primary" />
+                        <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/20 shrink-0">
+                            <BookmarkPlus className="w-6 h-6 text-primary" />
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
@@ -142,31 +137,32 @@ export default function LinkCollectorClient({ user }: { user: any }) {
                                     className="p-1 bg-primary/10 border border-primary/20 rounded-lg text-primary hover:bg-primary hover:text-white hover:scale-105 active:scale-95 transition-all shadow-md shadow-primary/5 cursor-pointer"
                                     title="Tambah Koleksi Link"
                                 >
-                                    <Plus className="w-3 h-3 stroke-[3]" />
+                                    <Plus className="w-3.5 h-3.5 stroke-[3]" />
                                 </Link>
                             </div>
-                            <p className="text-[10px] text-zinc-500">
+                            <p className="text-[11px] text-zinc-400 mt-0.5">
                                 {selectedIds.size > 0 ? `${selectedIds.size} dipilih untuk dicopy` : "Copy semua atau pilih beberapa"}
                             </p>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2.5">
                         <button 
                             onClick={copyLinks}
                             disabled={collectedLinks.length === 0}
-                            className="flex-1 sm:flex-none px-5 py-2.5 bg-primary text-white shadow-lg shadow-primary/20 font-black text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-40"
+                            className="flex-1 sm:flex-none px-6 py-3 bg-primary text-white shadow-lg shadow-primary/20 font-black text-xs uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2.5 disabled:opacity-40"
                         >
-                            {copying ? <CheckCheck className="w-4 h-4 stroke-[3]" /> : <Copy className="w-4 h-4" />}
+                            {copying ? <CheckCheck className="w-4.5 h-4.5 stroke-[3]" /> : <Copy className="w-4.5 h-4.5" />}
                             {selectedIds.size > 0 ? `Copy (${selectedIds.size})` : "Copy Semua"}
                         </button>
                         
                         <button 
                             onClick={() => setIsDeleteModalOpen(true)}
                             disabled={collectedLinks.length === 0}
-                            className="p-2.5 bg-red-500/10 border border-red-500/10 text-red-500 rounded-xl hover:bg-red-500/20 transition-all disabled:opacity-40"
+                            className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl hover:bg-red-500/20 transition-all disabled:opacity-40"
+                            title="Hapus Link"
                         >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-4.5 h-4.5" />
                         </button>
                     </div>
                 </div>
@@ -176,60 +172,58 @@ export default function LinkCollectorClient({ user }: { user: any }) {
             <div className="flex items-center justify-between px-1">
                 <button 
                     onClick={toggleSelectAll}
-                    className="text-[10px] font-bold text-zinc-500 hover:text-white uppercase tracking-widest transition-colors"
+                    className="text-[10px] font-bold text-zinc-400 hover:text-white uppercase tracking-widest transition-colors"
                 >
                     {selectedIds.size === collectedLinks.length && collectedLinks.length > 0 ? "Batal Pilih Semua" : "Pilih Semua"}
                 </button>
                 <div className="h-px bg-white/5 flex-1 mx-4" />
-                <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
                     {collectedLinks.length} Item
                 </span>
             </div>
 
             {/* Collection List */}
-            <div className="bg-[#0F0F11] border border-white/5 rounded-2xl overflow-hidden relative">
-                <BatikPattern opacity={0.03} />
-
+            <div className="bg-[#0F0F11] border border-white/8 rounded-2xl overflow-hidden shadow-lg">
                 {loading ? (
-                    <div className="py-20 flex flex-col items-center justify-center gap-3 opacity-30">
+                    <div className="py-20 flex flex-col items-center justify-center gap-3 opacity-40">
                         <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
                         <span className="text-[10px] font-bold uppercase tracking-widest">Memuat koleksi...</span>
                     </div>
                 ) : collectedLinks.length === 0 ? (
-                    <div className="py-24 flex flex-col items-center justify-center gap-4 opacity-20 relative z-10 text-center px-6">
-                        <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-2">
-                            <LinkIcon className="w-8 h-8" />
+                    <div className="py-24 flex flex-col items-center justify-center gap-4 text-center px-6">
+                        <div className="w-16 h-16 bg-white/5 border border-white/5 rounded-full flex items-center justify-center mb-2">
+                            <LinkIcon className="w-8 h-8 text-zinc-500" />
                         </div>
-                        <p className="text-xs font-black uppercase tracking-[0.2em]">Koleksi Kosong</p>
-                        <p className="text-[10px] leading-relaxed max-w-[200px]">
-                            Gunakan tab <span className="text-white">Cari Link</span> untuk mengumpulkan link video kamu.
+                        <p className="text-xs font-black uppercase tracking-[0.2em] text-zinc-300">Koleksi Masih Kosong</p>
+                        <p className="text-xs text-zinc-500 leading-relaxed max-w-[240px]">
+                            Gunakan tab <Link href="/dashboard/carilink" className="text-primary font-bold hover:underline">Cari Link</Link> untuk mengumpulkan link video kamu.
                         </p>
                     </div>
                 ) : (
-                    <div className="divide-y divide-white/[0.03] relative z-10">
+                    <div className="divide-y divide-white/[0.04]">
                         {collectedLinks.map((link, idx) => {
                             const isSelected = selectedIds.has(link.id);
                             return (
                                 <div 
                                     key={link.id}
                                     onClick={() => toggleSelect(link.id)}
-                                    className={`flex items-center gap-4 px-5 py-4 cursor-pointer transition-all ${isSelected ? "bg-primary/5" : "hover:bg-white/[0.02]"}`}
+                                    className={`flex items-center gap-4 px-5 py-4 cursor-pointer transition-all ${isSelected ? "bg-primary/10 border-l-4 border-l-primary" : "hover:bg-white/[0.02]"}`}
                                 >
                                     <div className={`w-5 h-5 rounded-lg border flex items-center justify-center shrink-0 transition-all ${isSelected ? "bg-primary border-primary" : "border-white/10 bg-white/5"}`}>
                                         {isSelected && <Check className="w-3.5 h-3.5 text-white stroke-[4]" />}
                                     </div>
                                     
                                     <div className="flex-1 min-w-0">
-                                        <h4 className={`text-xs font-bold truncate transition-colors ${isSelected ? "text-primary" : "text-zinc-200"}`}>
+                                        <h4 className={`text-xs sm:text-sm font-bold truncate transition-colors ${isSelected ? "text-primary" : "text-zinc-200"}`}>
                                             {link.videoTitle}
                                         </h4>
-                                        <p className="text-[10px] text-zinc-600 font-mono mt-1">
+                                        <p className="text-[10px] sm:text-xs text-zinc-500 font-mono mt-1 truncate">
                                             {origin}/watch/{link.videoId}{user?.id ? `?ref=${user.id.substring(0, 8)}` : ""}
                                         </p>
                                     </div>
 
                                     <div className="text-right shrink-0">
-                                        <div className={`text-[10px] font-black px-2 py-0.5 rounded-md ${link.viewCount && link.viewCount > 0 ? "bg-green-500/10 text-green-500" : "bg-white/5 text-zinc-700"}`}>
+                                        <div className={`text-[10px] font-black px-2.5 py-1 rounded-lg ${link.viewCount && link.viewCount > 0 ? "bg-green-500/10 border border-green-500/20 text-green-400" : "bg-white/5 text-zinc-600"}`}>
                                             {link.viewCount || 0} HITS
                                         </div>
                                     </div>
@@ -242,10 +236,9 @@ export default function LinkCollectorClient({ user }: { user: any }) {
 
             {/* Preview Box */}
             {collectedLinks.length > 0 && (
-                <div className="bg-[#0F0F11] border border-white/5 rounded-2xl p-5 relative overflow-hidden">
-                    <BatikPattern opacity={0.05} />
-                    <h4 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3 relative z-10">Preview Format Copy</h4>
-                    <div className="bg-black/60 border border-white/5 rounded-xl p-4 font-mono text-[10px] text-zinc-400 leading-relaxed max-h-40 overflow-y-auto no-scrollbar relative z-10">
+                <div className="bg-[#0F0F11] border border-white/8 rounded-2xl p-5 shadow-lg">
+                    <h4 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-3">Preview Format Copy</h4>
+                    <div className="bg-black/60 border border-white/5 rounded-xl p-4 font-mono text-[10px] sm:text-xs text-zinc-300 leading-relaxed max-h-40 overflow-y-auto no-scrollbar">
                         {(selectedIds.size > 0 
                             ? collectedLinks.filter(l => selectedIds.has(l.id))
                             : collectedLinks

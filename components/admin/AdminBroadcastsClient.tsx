@@ -115,7 +115,7 @@ export default function AdminBroadcastsClient() {
                                 <label className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Notification Title</label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. Bonus Weekend! 🎁"
+                                    placeholder="e.g. Bonus Weekend!"
                                     value={newBroadcast.title}
                                     onChange={(e) => setNewBroadcast({ ...newBroadcast, title: e.target.value })}
                                     className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm font-semibold text-white focus:outline-none focus:border-primary/50 transition-all"

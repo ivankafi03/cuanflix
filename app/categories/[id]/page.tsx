@@ -1,17 +1,16 @@
 import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { getVideosByCategory } from "@/lib/jav";
-import AdUnit from "@/components/ads/AdUnit";
 import Pagination from "@/components/Pagination";
 
-const GENRES: Record<string, { name: string; emoji: string }> = {
-    "1": { name: "Censored", emoji: "🔒" },
-    "2": { name: "Uncensored", emoji: "🔓" },
-    "3": { name: "Uncensored Leaked", emoji: "💧" },
-    "4": { name: "Amateur", emoji: "📹" },
-    "5": { name: "Chinese AV", emoji: "🇨🇳" },
-    "6": { name: "Hentai", emoji: "✨" },
-    "7": { name: "English Subtitle", emoji: "🌐" },
+const GENRES: Record<string, { name: string }> = {
+    "1": { name: "Censored" },
+    "2": { name: "Uncensored" },
+    "3": { name: "Uncensored Leaked" },
+    "4": { name: "Amateur" },
+    "5": { name: "Chinese AV" },
+    "6": { name: "Hentai" },
+    "7": { name: "English Subtitle" },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -63,7 +62,6 @@ export default async function CategoryPage({
 
                 {/* Header */}
                 <div className="flex items-center gap-3">
-                    {genre && <span className="text-3xl">{genre.emoji}</span>}
                     <div>
                         <h1 className="text-2xl font-bold text-white">{genre?.name ?? `Genre ${id}`}</h1>
                         <p className="text-slate-400 text-sm mt-0.5">
@@ -72,17 +70,13 @@ export default async function CategoryPage({
                     </div>
                 </div>
 
-                {/* Banner Iklan */}
-                <div className="flex justify-center -mb-4">
-                    <AdUnit type="leaderboard" />
-                </div>
+
 
                 {/* Video Grid */}
                 {javData.length > 0 ? (
                     <AnimeSection title="" data={javData} />
                 ) : (
                     <div className="flex flex-col items-center justify-center py-20 gap-3 text-zinc-600">
-                        <span className="text-4xl">📭</span>
                         <p className="text-sm">No videos found for this category.</p>
                     </div>
                 )}

@@ -63,7 +63,7 @@ export default function AdUnit({ type, className = "" }: AdUnitProps) {
             const adScript = `
                 <html>
                     <body style="margin:0;padding:0;display:flex;justify-content:center;align-items:center;">
-                        <script async="async" data-cfasync="false" src="https://downconvenientmagnetic.com/${finalKey}/invoke.js"></script>
+                        <script async="async" data-cfasync="false" src="https://pl29429652.effectivecpmnetwork.com/${finalKey}/invoke.js"></script>
                         <div id="container-${finalKey}"></div>
                     </body>
                 </html>

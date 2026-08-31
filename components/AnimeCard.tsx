@@ -115,10 +115,19 @@ export default function AnimeCard({ id, title, image, rating, episodes, episodeR
             {/* Title and Metadata */}
             <div className="px-1 mt-1 flex flex-col gap-1" onClick={handleClick} onMouseEnter={handleMouseEnter}>
                 <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] leading-none mb-0.5">
-                    {type}
+                    {type === "Doodstream" ? "HD Video" : (type || "Video")}
                 </span>
                 <h3 className="text-xs sm:text-sm font-bold text-slate-100 line-clamp-1 group-hover:text-primary transition-colors leading-snug drop-shadow-sm cursor-pointer">
-                    {title}
+                    {title
+                        .replace(/[-|_|\s]*vidlx\.fun/gi, '')
+                        .replace(/[-|_|\s]*vidlx/gi, '')
+                        .replace(/[-|_|\s]*bokepindo/gi, '')
+                        .replace(/[-|_|\s]*nontonasik/gi, '')
+                        .replace(/[-|_|\s]*videy\.co/gi, '')
+                        .replace(/[-|_|\s]*[a-zA-Z0-9-]+\.(fun|com|co|net|org|xyz|site|club|vip|my\.id)/gi, '')
+                        .replace(/^[\s\-_:=]+|[\s\-_:=]+$/g, '')
+                        .trim()
+                    }
                 </h3>
                 <span className="text-[10px] text-slate-500 font-medium leading-none">
                     {epLabel}

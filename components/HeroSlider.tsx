@@ -71,7 +71,7 @@ export default function HeroSlider({ videos }: { videos: VideoData[] }) {
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-sky-500"></span>
                     </span>
-                    <span className="text-[10px] md:text-xs font-bold text-slate-300 tracking-wide uppercase md:normal-case">Platform Video Penghasil Saldo</span>
+                    <span className="text-[10px] md:text-xs font-bold text-rose-400 tracking-wide uppercase md:normal-case">Platform Microtask Video Dewasa 18+</span>
                 </motion.div>
  
                 {/* Monumental Typography (FikaDigi/Vercel Style) */}

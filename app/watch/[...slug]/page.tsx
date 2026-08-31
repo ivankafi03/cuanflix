@@ -5,6 +5,8 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getJavWatchData, searchJav, getSlugFromUrl } from "@/lib/jav";
 import { getAgcWatchData } from "@/lib/agcbokep";
+import { getXNXXWatchData } from "@/lib/xnxx";
+import { getVidlxWatchData } from "@/lib/vidlx";
 import WatchActions from "@/components/WatchActions";
 import HistoryLogger from "@/components/HistoryLogger";
 import { getServerSession } from "next-auth";
@@ -27,6 +29,12 @@ export async function generateMetadata({
     } else if (path.startsWith('agc/')) {
         const slug = path.replace('agc/', '');
         watchData = await getAgcWatchData(slug);
+    } else if (path.startsWith('xnxx/')) {
+        const xnxxId = path.replace('xnxx/', '');
+        watchData = await getXNXXWatchData(xnxxId);
+    } else if (path.startsWith('vidlx/')) {
+        const vidlxSlug = path.replace('vidlx/', '');
+        watchData = await getVidlxWatchData(vidlxSlug);
     } else if (path.startsWith('dood/')) {
         return {
             title: `Watch Video Online - Cuanflix`,
@@ -64,7 +72,7 @@ export default async function WatchPrettyPage({
         }
     }
 
-    if (!path.startsWith('jav/') && !path.startsWith('agc/') && !path.startsWith('dood/')) {
+    if (!path.startsWith('jav/') && !path.startsWith('agc/') && !path.startsWith('dood/') && !path.startsWith('xnxx/') && !path.startsWith('vidlx/')) {
         redirect('/');
     }
 
@@ -76,6 +84,12 @@ export default async function WatchPrettyPage({
     } else if (path.startsWith('agc/')) {
         const slug = path.replace('agc/', '');
         watchData = await getAgcWatchData(slug);
+    } else if (path.startsWith('xnxx/')) {
+        const xnxxId = path.replace('xnxx/', '');
+        watchData = await getXNXXWatchData(xnxxId);
+    } else if (path.startsWith('vidlx/')) {
+        const vidlxSlug = path.replace('vidlx/', '');
+        watchData = await getVidlxWatchData(vidlxSlug);
     } else if (path.startsWith('dood/')) {
         // Doodstream embed
         watchData = {
@@ -105,6 +119,10 @@ export default async function WatchPrettyPage({
                 const latest = await getLatestVideos(1);
                 allVideos.push(...latest.videos);
             }
+        } else if (path.startsWith('vidlx/')) {
+            const { getVidlxCategories } = await import("@/lib/vidlx");
+            const cats = await getVidlxCategories();
+            cats.forEach(c => allVideos.push(...c.videos));
         } else {
             const { getAgcCategories } = await import("@/lib/agcbokep");
             const cats = await getAgcCategories();
@@ -163,25 +181,25 @@ export default async function WatchPrettyPage({
                 videoUrl={`/watch/${path}`}
             />
 
-            <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-[80px] md:pt-[100px] flex flex-col gap-4">
-                {/* Guest Call to Action Banner - Smaller & More Elegant */}
+            <div className="max-w-[1400px] mx-auto px-4 md:px-6 pt-[68px] md:pt-[100px] flex flex-col gap-2 md:gap-4">
+                {/* Guest Call to Action Banner - Ultra Compact on Mobile */}
                 {!session && (
-                    <div className="mb-4 bg-white/5 border border-white/10 rounded-2xl p-3 md:p-4 flex flex-col md:flex-row items-center justify-between gap-4 overflow-hidden relative group backdrop-blur-sm">
+                    <div className="mb-2 md:mb-4 bg-white/5 border border-white/10 rounded-xl md:rounded-2xl p-2.5 md:p-4 flex flex-row items-center justify-between gap-3 overflow-hidden relative group backdrop-blur-sm">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 -translate-y-1/2 translate-x-1/4 rounded-full blur-2xl" />
-                        <div className="flex items-center gap-4 relative z-10">
-                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
-                                <Sparkles className="w-5 h-5 text-primary" />
+                        <div className="flex items-center gap-2.5 md:gap-4 relative z-10">
+                            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20">
+                                <Sparkles className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                             </div>
                             <div className="flex flex-col">
-                                <h2 className="text-sm md:text-base font-black text-white leading-none">Cuanflix Premium</h2>
-                                <p className="text-zinc-500 font-medium text-[10px] md:text-xs">Login untuk simpan video & hilangkan sebagian iklan.</p>
+                                <h2 className="text-xs md:text-base font-black text-white leading-none">Cuanflix Premium</h2>
+                                <p className="text-zinc-500 font-medium text-[9px] md:text-xs mt-0.5">Login untuk simpan video favorit & dapatkan saldo.</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 relative z-10 w-full md:w-auto">
-                            <Link href="/auth/login" className="flex-1 md:flex-none px-4 py-2 bg-primary text-white rounded-lg font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
+                        <div className="flex items-center gap-1.5 relative z-10 shrink-0">
+                            <Link href="/auth/login" className="px-3 md:px-4 py-1.5 md:py-2 bg-primary text-white rounded-lg font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:scale-105 transition-all">
                                 Login
                             </Link>
-                            <Link href="/auth/register" className="flex-1 md:flex-none px-4 py-2 bg-white/5 border border-white/10 text-white rounded-lg font-black text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">
+                            <Link href="/auth/register" className="px-3 md:px-4 py-1.5 md:py-2 bg-white/5 border border-white/10 text-white rounded-lg font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-white/10 transition-all">
                                 Daftar
                             </Link>
                         </div>
@@ -199,15 +217,19 @@ export default async function WatchPrettyPage({
                             {/* Header Section */}
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border pb-5">
                                 <div className="flex flex-col gap-1.5">
-                                    <h1 className="text-xl md:text-2xl font-bold text-foreground leading-tight tracking-tight">{watchData.title}</h1>
+                                    <h1 className="text-xl md:text-2xl font-bold text-foreground leading-tight tracking-tight">
+                                        {watchData.title
+                                            ?.replace(/[-|_|\s]*vidlx\.fun/gi, '')
+                                            ?.replace(/[-|_|\s]*vidlx/gi, '')
+                                            ?.replace(/[-|_|\s]*bokepindo/gi, '')
+                                            ?.replace(/[-|_|\s]*nontonasik/gi, '')
+                                            ?.replace(/[-|_|\s]*videy\.co/gi, '')
+                                            ?.replace(/[-|_|\s]*[a-zA-Z0-9-]+\.(fun|com|co|net|org|xyz|site|club|vip|my\.id)/gi, '')
+                                            ?.replace(/^[\s\-_:=]+|[\s\-_:=]+$/g, '')
+                                            ?.trim() || watchData.title}
+                                    </h1>
                                     <div className="flex items-center gap-3">
                                         <p className="text-primary font-semibold text-xs tracking-wide">Streaming Ultra HD • Global Node</p>
-                                        {!session && (
-                                            <Link href="/auth/login" className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 border border-primary/20 rounded-md group hover:bg-primary/20 transition-all">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                                                <span className="text-[10px] font-bold text-primary uppercase tracking-wider">Ad-Lite Available</span>
-                                            </Link>
-                                        )}
                                     </div>
                                 </div>
                                 <WatchActions
@@ -239,12 +261,6 @@ export default async function WatchPrettyPage({
                                         <p className="text-white/60 text-[10px] font-medium italic max-w-xs leading-tight">
                                             Switch servers if loading is slow. Rewards are counted automatically.
                                         </p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-center gap-2">
-                                    <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-zinc-400 text-[10px] font-bold uppercase tracking-widest">
-                                        Server: {watchData.servers[0]?.name || "Auto"}
                                     </div>
                                 </div>
                             </div>

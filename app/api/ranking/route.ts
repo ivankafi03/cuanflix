@@ -28,12 +28,22 @@ const getEndOfDay = (date: Date) => {
 const getStartOfWeek = (date: Date) => {
     const d = new Date(date);
     const day = d.getDay(); // 0 is Sunday, 1 is Monday...
-    // Adjust to Monday start
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);
     const start = new Date(d.setDate(diff));
     start.setHours(0, 0, 0, 0);
     return start;
 };
+
+// Seeded pseudo-random generator for consistent daily/weekly bot earnings
+function pseudoRandom(seedStr: string): number {
+    let hash = 0;
+    for (let i = 0; i < seedStr.length; i++) {
+        hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+        hash |= 0;
+    }
+    const x = Math.sin(hash++) * 10000;
+    return x - Math.floor(x);
+}
 
 export async function GET(req: Request) {
     try {
@@ -41,13 +51,28 @@ export async function GET(req: Request) {
         const period = searchParams.get("period") || "alltime"; // daily, weekly, alltime
         const type = searchParams.get("type") || "total"; // total, watch, referral
 
-        const cacheKey = `ranking:${period}:${type}`;
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        
+        // Calculate week number of year
+        const startOfYear = new Date(year, 0, 1);
+        const pastDaysOfYear = (now.getTime() - startOfYear.getTime()) / 86400000;
+        const weekNum = Math.ceil((pastDaysOfYear + startOfYear.getDay() + 1) / 7);
+        
+        const dateKey = period === "daily" 
+            ? `${year}-${month}-${day}` 
+            : period === "weekly" 
+            ? `${year}-W${weekNum}` 
+            : "alltime";
+
+        const cacheKey = `ranking:${period}:${type}:${dateKey}`;
 
         const ranking = await withCache(
             cacheKey,
             async () => {
                 let dateFilter: any = {};
-                const now = new Date();
 
                 if (period === "daily") {
                     dateFilter.createdAt = {
@@ -60,88 +85,107 @@ export async function GET(req: Request) {
                     };
                 }
 
-                // Add type filter for EarningLog if not 'total'
                 if (type !== "total") {
-                    dateFilter.type = type.toUpperCase(); // WATCH or REFERRAL
+                    dateFilter.type = type.toUpperCase();
                 }
 
-                let result: any[] = [];
+                // 1. Fetch all Ghost Bots
+                const bots = await prisma.user.findMany({
+                    where: { isBot: true },
+                    select: { id: true, name: true, balanceWatch: true, balanceReferral: true, isBot: true }
+                });
 
+                // 2. Fetch real member aggregated earnings for period
+                let memberEarnings: { userId: string; amount: number }[] = [];
+                
                 if (period === "alltime") {
-                    const topUsers = await prisma.user.findMany({
-                        where: { 
-                            OR: [
-                                { role: "MEMBER" },
-                                { isBot: true }
-                            ]
-                        },
-                        select: {
-                            id: true,
-                            name: true,
-                            balanceWatch: true,
-                            balanceReferral: true,
-                            isBot: true
-                        },
-                        take: 50 // Fetch more to sort accurately if type is total
+                    const realMembers = await prisma.user.findMany({
+                        where: { role: "MEMBER", isBot: false },
+                        select: { id: true, name: true, balanceWatch: true, balanceReferral: true, isBot: true }
                     });
-
-                    const sortedUsers = topUsers.map(user => ({
-                        id: user.id,
-                        name: censorName(user.name),
-                        watch: user.balanceWatch,
-                        ref: user.balanceReferral,
-                        total: user.balanceWatch + user.balanceReferral,
-                        isBot: user.isBot
-                    })).sort((a, b) => {
-                        if (type === "watch") return b.watch - a.watch;
-                        if (type === "referral") return b.ref - a.ref;
-                        return b.total - a.total;
-                    }).slice(0, 20);
-
-                    result = sortedUsers.map((user, index) => ({
-                        rank: index + 1,
-                        name: user.name,
-                        earning: type === "watch" ? user.watch : type === "referral" ? user.ref : user.total,
-                        isVerified: !user.isBot,
-                        isBot: user.isBot
+                    
+                    memberEarnings = realMembers.map(m => ({
+                        userId: m.id,
+                        amount: m.balanceReferral + m.balanceWatch
                     }));
                 } else {
-                    // For Daily/Weekly, aggregate EarningsLog
-                    const aggregatedEarnings = await prisma.earningLog.groupBy({
+                    const aggregated = await prisma.earningLog.groupBy({
                         by: ['userId'],
                         where: dateFilter,
-                        _sum: {
-                            amount: true
-                        },
-                        orderBy: {
-                            _sum: {
-                                amount: 'desc'
-                            }
-                        },
-                        take: 20
+                        _sum: { amount: true }
                     });
-
-                    const userIds = aggregatedEarnings.map(item => item.userId);
-                    const users = await prisma.user.findMany({
-                        where: { id: { in: userIds } },
-                        select: { id: true, name: true, isBot: true }
-                    });
-
-                    result = aggregatedEarnings.map((item, index) => {
-                        const user = users.find(u => u.id === item.userId);
-                        return {
-                            rank: index + 1,
-                            name: censorName(user?.name || "Member"),
-                            earning: item._sum.amount || 0,
-                            isVerified: user ? !user.isBot : true,
-                            isBot: user?.isBot || false
-                        };
-                    });
+                    
+                    memberEarnings = aggregated.map(a => ({
+                        userId: a.userId,
+                        amount: a._sum.amount || 0
+                    }));
                 }
 
-                return result;
+                // Fetch real members details
+                const realMemberIds = memberEarnings.map(m => m.userId);
+                const realUsers = realMemberIds.length > 0 ? await prisma.user.findMany({
+                    where: { id: { in: realMemberIds }, isBot: false },
+                    select: { id: true, name: true, isBot: true }
+                }) : [];
+
+                const combinedList: { name: string; earning: number; isVerified: boolean; isBot: boolean }[] = [];
+
+                // Add real members
+                for (const me of memberEarnings) {
+                    const user = realUsers.find(u => u.id === me.userId);
+                    if (user && me.amount > 0) {
+                        combinedList.push({
+                            name: censorName(user.name),
+                            earning: me.amount,
+                            isVerified: true,
+                            isBot: false
+                        });
+                    }
+                }
+
+                // Generate dynamic realistic earnings for Ghost Bots
+                bots.forEach((bot, idx) => {
+                    const randSeed = pseudoRandom(`${bot.id}:${dateKey}`);
+                    let botEarning = 0;
+
+                    if (period === "daily") {
+                        // Daily bot earning: range $0.45 to $8.80 (Realistic daily sharelink earnings)
+                        const baseEarning = 0.45 + (randSeed * 3.85);
+                        const tierBoost = (idx % 5 === 0) ? 4.20 : (idx % 3 === 0) ? 2.10 : 0.50;
+                        botEarning = baseEarning + (randSeed * tierBoost);
+                    } else if (period === "weekly") {
+                        // Weekly bot earning: range $2.50 to $38.50
+                        const baseEarning = 2.50 + (randSeed * 18.50);
+                        const tierBoost = (idx % 5 === 0) ? 16.50 : (idx % 3 === 0) ? 8.20 : 1.50;
+                        botEarning = baseEarning + (randSeed * tierBoost);
+                    } else {
+                        // All-Time bot earning: range $8.50 to $125.00
+                        const baseEarning = (bot.balanceReferral + bot.balanceWatch);
+                        const calculated = baseEarning > 5 ? baseEarning : 8.50 + (randSeed * 115.00);
+                        botEarning = calculated;
+                    }
+
+                    combinedList.push({
+                        name: censorName(bot.name),
+                        earning: parseFloat(botEarning.toFixed(2)),
+                        isVerified: false,
+                        isBot: true
+                    });
+                });
+
+                // Sort by earnings descending
+                combinedList.sort((a, b) => b.earning - a.earning);
+
+                // Take top 20 and assign rank
+                return combinedList.slice(0, 20).map((item, index) => ({
+                    rank: index + 1,
+                    name: item.name,
+                    earning: item.earning,
+                    isVerified: item.isVerified,
+                    isBot: item.isBot
+                }));
             },
-            300 // 5 menit
+            60 // Refresh cache every 60 seconds
         );
 
         return NextResponse.json(ranking);

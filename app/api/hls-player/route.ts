@@ -31,11 +31,12 @@ export async function GET(req: NextRequest) {
 <body>
 <video id="video" controls autoplay playsinline></video>
 <div id="error">
-  <svg width="40" height="40" fill="none" stroke="#f472b6" stroke-width="2" viewBox="0 0 24 24">
+  <svg width="36" height="36" fill="none" stroke="#f472b6" stroke-width="2" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
     <line x1="12" y1="16" x2="12.01" y2="16"/>
   </svg>
-  <span>Video tidak tersedia</span>
+  <span style="font-size: 13px; font-weight: 600; color: #f472b6;">Video tidak tersedia</span>
+  <span style="font-size: 11px; color: #a1a1aa; max-width: 85%; text-align: center; line-height: 1.4;">Silakan coba pilih server lain pada tombol di bawah player.</span>
 </div>
 <script>
   const src = ${JSON.stringify(url)};

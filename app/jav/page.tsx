@@ -3,7 +3,6 @@ import Link from "next/link";
 import AnimeSection from "@/components/AnimeSection";
 import { getLatestVideos } from "@/lib/jav";
 import { Compass, Database, ChevronLeft } from "lucide-react";
-import AdUnit from "@/components/ads/AdUnit";
 import Pagination from "@/components/Pagination";
 
 export const metadata = {
@@ -55,7 +54,7 @@ async function JavContent({ searchParams }: { searchParams: Promise<{ page?: str
     return (
         <div className="flex flex-col w-full relative z-10">
             {/* Header Area (Transparent) */}
-            <div className="max-w-7xl mx-auto px-4 md:px-8 w-full pt-20 md:pt-28 pb-4 md:pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 w-full pt-16 md:pt-24 pb-4 md:pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2 px-3 py-1 bg-white/[0.05] border border-white/[0.08] rounded-full w-fit">
                         <Database className="w-3.5 h-3.5 text-primary" />
@@ -79,13 +78,10 @@ async function JavContent({ searchParams }: { searchParams: Promise<{ page?: str
             </div>
 
             {/* Dark Content Wrapper */}
-            <div className="bg-[#0a0a0f] relative z-20 w-full border-t border-white/[0.06] flex-grow pb-32">
+            <div className="bg-[#0a0a0f] relative z-20 w-full border-t border-white/[0.06] flex-grow pb-16 md:pb-24">
                 <div className="max-w-7xl mx-auto px-4 md:px-8 pt-4 md:pt-8 pb-12 flex flex-col gap-6 md:gap-8">
                     
-                    {/* Banner Iklan */}
-                    <div className="flex justify-center -mt-4 mb-4">
-                        <AdUnit type="leaderboard" />
-                    </div>
+
 
                     {/* Video Grid */}
                     <div className="min-h-[50vh]">

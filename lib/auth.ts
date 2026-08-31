@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "./prisma";
 import bcrypt from "bcryptjs";
@@ -9,6 +10,11 @@ import { verifyTurnstile } from "./security";
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+            allowDangerousEmailAccountLinking: true,
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -73,10 +79,22 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
+        async signIn({ user, account }) {
+            if (account?.provider === "google" && user.email) {
+                const existingUser = await prisma.user.findUnique({
+                    where: { email: user.email },
+                    select: { isSuspended: true }
+                });
+                if (existingUser?.isSuspended) {
+                    return "/auth/login?error=SUSPENDED";
+                }
+            }
+            return true;
+        },
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
-                token.role = (user as any).role;
+                token.role = (user as any).role || "MEMBER";
                 token.isSuspended = false;
                 token.throttleMode = false;
                 token.internalAdMode = false;

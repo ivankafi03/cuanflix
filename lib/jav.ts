@@ -1,6 +1,7 @@
 import * as cheerio from 'cheerio';
 import prisma from "./prisma";
 import { withCache } from "./cache";
+import { encryptStreamToken } from "./token";
 
 const SOURCE_URL = "https://nontonasik.my.id/jav-domain/";
 const BAD_VIDEO_TTL = 12 * 60 * 60 * 1000; // 12 jam sebelum retry
@@ -180,7 +181,7 @@ async function getFallbackServers(movieCode: string): Promise<VideoServer[]> {
 export interface AnimeLatest {
     title: string;
     image: string;
-    link: string;
+    link?: string; // intentionally optional — not sent to browser
     episode: string;
     rating?: string;
     type: string;
@@ -385,7 +386,6 @@ async function refreshLatestVideosCache(page: number): Promise<SearchResult> {
         const mapped = list.map((item: any) => ({
             title: cleanTitle(item.name || ''),
             image: item.poster_url || item.thumb_url || '',
-            link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
             episode: item.movie_code || '',
             rating: '0.0',
             type: 'JAV',
@@ -470,7 +470,6 @@ async function refreshVideosByCategoryCache(categoryId: string, page: number): P
         const mapped = list.map((item: any) => ({
             title: cleanTitle(item.name || ''),
             image: item.poster_url || item.thumb_url || '',
-            link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
             episode: item.movie_code || item.type_name || '',
             rating: '0.0',
             type: item.type_name || 'JAV',
@@ -812,13 +811,18 @@ export async function getJavWatchData(id: string): Promise<WatchPageData | null>
             });
         }
 
+        const maskedServers = servers.map((s, idx) => ({
+            name: s.name.startsWith('Server') ? s.name : `Server ${idx + 1}`,
+            iframe: `/embed-player/${encryptStreamToken(s.iframe)}`
+        }));
+
         return {
             title: cleanTitle(video?.name || video?.title || `JAV ${id}`),
             poster: video?.poster_url || video?.thumb_url || video?.cover || '',
             rating: '0.0',
             episode: video?.movie_code || id,
             type: 'JAV',
-            servers,
+            servers: maskedServers,
             downloads
         };
             } catch (error) {
@@ -907,7 +911,6 @@ async function refreshSearchJavCache(query: string, page: number): Promise<Searc
                 .map((item: any) => ({
                     title: cleanTitle(item.name || ''),
                     image: item.poster_url || item.thumb_url || '',
-                    link: `https://nontonasik.my.id/jav-domain/videos/${item.id}`,
                     episode: item.movie_code || item.type_name || '',
                     rating: '0.0',
                     type: item.type_name || 'JAV',

@@ -383,12 +383,11 @@ export default function AdminDashboard({ data }: { data: any }) {
                                     </h3>
                                 </div>
 
-                                {/* Category Switcher */}
+                                 {/* Category Switcher */}
                                 <div className="flex gap-2">
                                     {[
-                                        { id: 'total', label: 'All', color: 'bg-primary' },
-                                        { id: 'watch', label: 'Watch', color: 'bg-blue-500' },
-                                        { id: 'referral', label: 'Ref', color: 'bg-green-500' }
+                                        { id: 'total', label: 'All Earners', color: 'bg-primary' },
+                                        { id: 'referral', label: 'Sharelink / Ref', color: 'bg-green-500' }
                                     ].map(cat => (
                                         <button
                                             key={cat.id}

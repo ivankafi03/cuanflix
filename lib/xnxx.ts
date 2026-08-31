@@ -1,10 +1,9 @@
 import * as cheerio from 'cheerio';
 import prisma from "./prisma";
 import { SearchResult, HomepageCategory, AnimeLatest, WatchPageData, VideoServer } from './jav';
+import { encryptStreamToken } from './token';
 
 const SOURCE_URL = "https://www.xnxx.com";
-
-// We will use the same interfaces exported by jav.ts
 
 /**
  * Fetch HTML with retries and timeout
@@ -33,9 +32,8 @@ async function fetchWithTimeout(url: string, options: any = {}) {
         } catch (error: any) {
             clearTimeout(id);
             
-            // If it's a fetch failure (likely blocked), don't spam retries if we know it's blocked
             if (error.message === 'fetch failed' || error.name === 'TypeError') {
-                console.warn(`[XNXX] Access blocked by ISP for ${url}. This is normal on local dev without VPN.`);
+                console.warn(`[XNXX] Access blocked by ISP for ${url}.`);
                 return null;
             }
 
@@ -64,11 +62,8 @@ function parseXNXXListing(html: string): AnimeLatest[] {
         let link = $a.attr('href');
         if (!link) return;
         
-        // Example: /video-12345/some_title
-        // Extract the ID and construct our internal slug: xnxx/12345
         let idMatch = link.match(/\/video-([a-zA-Z0-9]+)\//);
         if (!idMatch && link.startsWith('/video')) {
-            // Alternative matching
             const parts = link.split('/');
             const videoPart = parts.find(p => p.startsWith('video'));
             if (videoPart) {
@@ -80,25 +75,34 @@ function parseXNXXListing(html: string): AnimeLatest[] {
         if (!videoId) return;
 
         let title = $el.find('.thumb-under p.title a').text().trim() 
+                 || $el.find('p.title a').text().trim()
+                 || $el.find('a[title]').attr('title')
                  || $img.attr('title') 
                  || $img.attr('alt') 
-                 || 'Unknown Title';
+                 || '';
+
+        if (!title || title === 'Unknown Title') {
+            const slugTitle = link.split('/video-')[1]?.split('/')[1];
+            if (slugTitle) {
+                title = slugTitle.replace(/_/g, ' ').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            } else {
+                title = `Video ${videoId}`;
+            }
+        }
                  
         let image = $img.attr('data-src') || $img.attr('src') || '';
         if (image && image.startsWith('/')) {
             image = SOURCE_URL + image;
         }
 
-        // Duration or Quality tag
         let duration = $el.find('.metadata').text().trim() || $el.find('.video-hd').text().trim() || '';
 
         videos.push({
             title: title.length > 60 ? title.substring(0, 60) + '...' : title,
             image,
-            link: SOURCE_URL + link,
-            episode: duration || 'XNXX',
+            episode: duration || 'HD',
             rating: '0.0',
-            type: 'XNXX',
+            type: 'Video',
             href: `xnxx/${videoId}`
         });
     });
@@ -110,7 +114,7 @@ function parseXNXXListing(html: string): AnimeLatest[] {
  * Get categories for Homepage
  */
 export async function getXNXXCategories(): Promise<HomepageCategory[]> {
-    const CACHE_KEY = "homepage_categories_xnxx";
+    const CACHE_KEY = "homepage_categories_xnxx_v2";
     const REVALIDATE_MS = 60 * 60 * 1000; // 1 hour
 
     try {
@@ -137,9 +141,9 @@ export async function getXNXXCategories(): Promise<HomepageCategory[]> {
 
 async function refreshHomepageCache(): Promise<HomepageCategory[]> {
     const categories = [
-        { name: "Best Videos", path: "/best" },
-        { name: "Asian", path: "/search/asian" },
-        { name: "Amateur", path: "/search/amateur" },
+        { name: "Video Terpopuler", path: "/best" },
+        { name: "Koleksi Asia", path: "/search/asian" },
+        { name: "Koleksi Amatir", path: "/search/amateur" },
     ];
 
     try {
@@ -151,9 +155,9 @@ async function refreshHomepageCache(): Promise<HomepageCategory[]> {
                     const videos = parseXNXXListing(html);
                     if (videos.length > 0) {
                         return {
-                            id: idx + 100, // Offset to avoid collision with JAV
-                            title: `XNXX ${cat.name}`,
-                            videos: videos.slice(0, 15) // Keep buffer
+                            id: idx + 100,
+                            title: cat.name,
+                            videos: videos.slice(0, 12)
                         };
                     }
                 }
@@ -167,13 +171,13 @@ async function refreshHomepageCache(): Promise<HomepageCategory[]> {
         
         if (fetchedCategories.length > 0) {
             await prisma.contentCache.upsert({
-                where: { key: "homepage_categories_xnxx" },
+                where: { key: "homepage_categories_xnxx_v2" },
                 update: {
                     data: JSON.stringify(fetchedCategories),
                     updatedAt: new Date()
                 },
                 create: {
-                    key: "homepage_categories_xnxx",
+                    key: "homepage_categories_xnxx_v2",
                     data: JSON.stringify(fetchedCategories)
                 }
             });
@@ -196,8 +200,6 @@ export async function searchXNXX(query: string, page: number = 1): Promise<Searc
         if (!html) return { videos: [], totalPages: 1, total: 0 };
 
         const videos = parseXNXXListing(html);
-        
-        // Extremely rough estimate since XNXX pagination varies
         const totalPages = videos.length > 0 ? page + 2 : page; 
         
         return {
@@ -212,17 +214,11 @@ export async function searchXNXX(query: string, page: number = 1): Promise<Searc
 }
 
 /**
- * Get Watch Page Data (Servers and Details)
+ * Get Watch Page Data (Servers and Details) with Masked Encrypted Tokens
  */
 export async function getXNXXWatchData(id: string): Promise<WatchPageData | null> {
     try {
-        // XNXX allows direct embedding if we know the video ID. 
-        // e.g., https://www.xnxx.com/embed/12345
-        
-        // We can fetch the actual video page to get the title and poster if we want,
-        // or just construct a generic player and fetch details on the fly.
-        // Let's try to fetch the real page to get metadata.
-        const url = `${SOURCE_URL}/video-${id}/cuanflix`; // The slug part doesn't matter for routing
+        const url = `${SOURCE_URL}/video-${id}/cuanflix`;
         let html;
         try {
             html = await fetchWithTimeout(url);
@@ -230,7 +226,7 @@ export async function getXNXXWatchData(id: string): Promise<WatchPageData | null
             console.warn("[XNXX] Could not fetch detail page, using fallback player generation.");
         }
 
-        let title = `XNXX Video ${id}`;
+        let title = `Video ${id}`;
         let poster = '';
         
         if (html) {
@@ -238,19 +234,19 @@ export async function getXNXXWatchData(id: string): Promise<WatchPageData | null
             title = $('meta[property="og:title"]').attr('content') || $('title').text() || title;
             poster = $('meta[property="og:image"]').attr('content') || '';
             
-            // Clean up XNXX branding from title
             title = title.replace(/- XNXX\.COM/i, '').trim();
         }
 
-        // XNXX allows direct embedding. We use a mirror to bypass local ISP blocks for the player.
-        const embedUrl = `https://www.xnxx.health/embed/${id}`;
+        const rawServer1 = `https://www.xnxx.com/embedframe/${id}`;
+        const rawServer2 = `https://www.xnxx.tv/embedframe/${id}`;
+        const rawServer3 = `https://www.xnxx.com.es/embedframe/${id}`;
+        const rawServer4 = `https://www.xvideos.com/embedframe/${id}`;
 
         const servers: VideoServer[] = [
-            { name: "XNXX Premium", iframe: embedUrl },
-            { name: "XNXX Backup", iframe: `https://www.xnxx3.com/embed/${id}` },
-            { name: "XVideo Mirror (Fast)", iframe: `https://www.xvideos.red/embedframe/${id}` },
-            { name: "XVideo Backup", iframe: `https://www.xvideos.com/embedframe/${id}` },
-            { name: "Google Proxy (Anti-Blokir)", iframe: `https://www-xnxx-com.translate.goog/embed/${id}?_x_tr_sl=auto&_x_tr_tl=en&_x_tr_hl=en&_x_tr_pto=wapp` }
+            { name: "Server HD (Utama)", iframe: `/embed-player/${encryptStreamToken(rawServer1)}` },
+            { name: "Server HD (Cadangan)", iframe: `/embed-player/${encryptStreamToken(rawServer2)}` },
+            { name: "Server HD (Server 3)", iframe: `/embed-player/${encryptStreamToken(rawServer3)}` },
+            { name: "Server HD (Server 4)", iframe: `/embed-player/${encryptStreamToken(rawServer4)}` }
         ];
 
         return {
@@ -258,7 +254,7 @@ export async function getXNXXWatchData(id: string): Promise<WatchPageData | null
             poster,
             rating: '0.0',
             episode: id,
-            type: 'XNXX',
+            type: 'Video',
             servers,
             downloads: []
         };

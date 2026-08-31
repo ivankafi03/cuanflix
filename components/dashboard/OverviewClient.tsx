@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { 
     DollarSign, 
     Trophy, 
@@ -12,12 +13,13 @@ import {
     Send,
     MessageCircle,
     Loader2,
-    Gift
+    Gift,
+    Play
 } from "lucide-react";
 import { useToast } from "../ToastContext";
-import { proxyImage } from "@/lib/proxy-image";
-
-export default function OverviewClient({ user }: { user: any }) {
+import SharePromoBanner from "../SharePromoBanner";
+export default function OverviewClient({ user, videos = [] }: { user: any; videos?: any[] }) {
+    const [videoList, setVideoList] = useState<any[]>(videos);
     const [rankingData, setRankingData] = useState<any[]>([]);
     const [watchHistory, setWatchHistory] = useState<any[]>([]);
     const [settings, setSettings] = useState<any>(null);
@@ -28,16 +30,29 @@ export default function OverviewClient({ user }: { user: any }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const [rankRes, histRes, settRes, broadRes] = await Promise.all([
+            const [rankRes, histRes, settRes, broadRes, vidRes] = await Promise.all([
                 fetch("/api/ranking?period=daily&type=total"),
                 fetch("/api/history?limit=5"),
                 fetch("/api/admin/settings"),
-                fetch("/api/member/broadcasts")
+                fetch("/api/member/broadcasts"),
+                fetch("/api/member/videos")
             ]);
             if (rankRes.ok) setRankingData(await rankRes.json());
             if (histRes.ok) setWatchHistory(await histRes.json());
             if (settRes.ok) setSettings(await settRes.json());
             if (broadRes.ok) setAvailableBroadcasts(await broadRes.json());
+            if (vidRes.ok) {
+                const vidData = await vidRes.json();
+                if (vidData.videos && vidData.videos.length > 0) {
+                    setVideoList(vidData.videos.slice(0, 9).map((v: any) => ({
+                        id: v.id,
+                        title: v.title,
+                        image: v.image,
+                        href: v.videoUrl,
+                        duration: v.duration
+                    })));
+                }
+            }
         };
         fetchData();
         setOrigin(window.location.origin);
@@ -120,11 +135,7 @@ export default function OverviewClient({ user }: { user: any }) {
                             <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tighter">${totalBalance.toFixed(3)}</h3>
                             <div className="flex gap-4 sm:gap-6 pt-2 border-t border-white/5">
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Watch</span>
-                                    <span className="text-xs sm:text-sm font-bold text-white tracking-tight">${(user?.balanceWatch || 0).toFixed(3)}</span>
-                                </div>
-                                <div className="flex flex-col gap-0.5">
-                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Referral</span>
+                                    <span className="text-[9px] sm:text-[10px] font-medium text-zinc-500">Sharelink & Referral</span>
                                     <span className="text-xs sm:text-sm font-bold text-white tracking-tight">${(user?.balanceReferral || 0).toFixed(3)}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
@@ -166,6 +177,8 @@ export default function OverviewClient({ user }: { user: any }) {
                         </div>
 
 
+                        <SharePromoBanner className="sm:col-span-2 my-2" />
+
                         {/* Telegram Community Banner */}
                         <div className="sm:col-span-2 bg-gradient-to-r from-blue-600/10 to-primary/5 border border-blue-500/10 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-6 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-batik-pink opacity-[0.06] pointer-events-none group-hover:opacity-[0.12] transition-all" />
@@ -182,7 +195,7 @@ export default function OverviewClient({ user }: { user: any }) {
                             </div>
 
                             <a 
-                                href={settings?.telegramLink || "https://t.me/cuanflix_official"} 
+                                href={settings?.telegramLink || "https://t.me/cuanflix_site"} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="w-full sm:w-auto px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-black rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:scale-105 active:scale-95"
@@ -281,6 +294,8 @@ export default function OverviewClient({ user }: { user: any }) {
                             </div>
                         </div>
                     </div>
+
+
                 </div>
 
                 {/* Sidebar */}

@@ -1,59 +1,59 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Compass, PlayCircle, Coins, Wallet, Link, Send, TrendingUp, DollarSign } from "lucide-react";
-
-const watchSteps = [
-    {
-        id: 1,
-        title: "Temukan Video Menarik",
-        desc: "Jelajahi database Cuanflix yang luas dan pilih video favorit yang ingin Anda tonton.",
-        icon: <Compass className="w-5 h-5 text-sky-400" />
-    },
-    {
-        id: 2,
-        title: "Putar & Nikmati",
-        desc: "Tonton video pilihan Anda selama minimal 60 detik tanpa jeda untuk validasi sistem.",
-        icon: <PlayCircle className="w-5 h-5 text-sky-400" />
-    },
-    {
-        id: 3,
-        title: "Saldo Terkumpul",
-        desc: "Saldo nonton (watch balance) Anda akan langsung bertambah secara otomatis ke akun Anda.",
-        icon: <Coins className="w-5 h-5 text-sky-400" />
-    },
-    {
-        id: 4,
-        title: "Tarik ke Dompet Digital",
-        desc: "Cairkan pendapatan Anda kapan saja setelah saldo terkumpul mencapai batas minimum.",
-        icon: <Wallet className="w-5 h-5 text-sky-400" />
-    }
-];
+import { Link, Send, TrendingUp, DollarSign, Users, Award, ShieldCheck, Zap } from "lucide-react";
 
 const shareSteps = [
     {
         id: 1,
-        title: "Salin Link Khusus",
-        desc: "Buka halaman detail video pilihan Anda, lalu salin tautan rujukan unik Anda dengan satu klik.",
-        icon: <Link className="w-5 h-5 text-indigo-400" />
+        title: "Salin Link Video",
+        desc: "Pilih video favorit Anda di Cuanflix, lalu klik tombol Copy Link untuk mengambil tautan rujukan Anda.",
+        icon: <Link className="w-5 h-5 text-sky-400" />
     },
     {
         id: 2,
-        title: "Sebarkan Tautan",
-        desc: "Bagikan link tersebut ke WhatsApp, Telegram, grup media sosial, atau forum favorit Anda.",
-        icon: <Send className="w-5 h-5 text-indigo-400" />
+        title: "Sebarkan ke Sosmed",
+        desc: "Bagikan link tersebut ke WhatsApp, Telegram, Facebook, TikTok, atau grup komunitas Anda.",
+        icon: <Send className="w-5 h-5 text-sky-400" />
     },
     {
         id: 3,
-        title: "Dapatkan Komisi",
-        desc: "Dapatkan saldo dolar otomatis untuk setiap penonton unik yang menonton video lewat link Anda.",
-        icon: <TrendingUp className="w-5 h-5 text-indigo-400" />
+        title: "Dapatkan Komisi CPM",
+        desc: "Setiap penonton yang membuka link Anda akan menambahkan saldo dolar secara instan ke dasbor Anda.",
+        icon: <TrendingUp className="w-5 h-5 text-sky-400" />
     },
     {
         id: 4,
         title: "Cairkan Pendapatan",
-        desc: "Tarik komisi rujukan Anda secara instan ke e-wallet (DANA, OVO, GOPAY) atau rekening bank.",
-        icon: <DollarSign className="w-5 h-5 text-indigo-400" />
+        desc: "Tarik saldo Anda kapan saja secara cepat ke E-Wallet (DANA, OVO, GOPAY) atau Transfer Bank.",
+        icon: <DollarSign className="w-5 h-5 text-sky-400" />
+    }
+];
+
+const referralSteps = [
+    {
+        id: 1,
+        title: "Undang Teman Bergabung",
+        desc: "Bagikan link referral unik akun Anda kepada teman atau pengikut media sosial Anda.",
+        icon: <Users className="w-5 h-5 text-indigo-400" />
+    },
+    {
+        id: 2,
+        title: "Bonus Pendaftaran",
+        desc: "Setiap teman yang mendaftar melalui link Anda akan langsung memberi Anda bonus saldo referral.",
+        icon: <Zap className="w-5 h-5 text-indigo-400" />
+    },
+    {
+        id: 3,
+        title: "Komisi Berkelanjutan",
+        desc: "Dapatkan persentase komisi pasif dari setiap pendapatan sharelink yang dihasilkan referral Anda.",
+        icon: <Award className="w-5 h-5 text-indigo-400" />
+    },
+    {
+        id: 4,
+        title: "Penarikan Tanpa Potongan",
+        desc: "Kumpulkan komisi referral dan cairkan bersamaan dengan saldo sharelink utama Anda.",
+        icon: <ShieldCheck className="w-5 h-5 text-indigo-400" />
     }
 ];
 
@@ -93,37 +93,37 @@ export default function HowItWorks() {
                         transition={{ duration: 0.8, delay: 0.1 }}
                         className="text-zinc-500 mt-4 text-sm sm:text-base max-w-xl mx-auto leading-relaxed"
                     >
-                        Dua jalan mudah untuk mulai mengumpulkan pundi-pundi saldo bersama Cuanflix.
+                        Dua langkah mudah untuk menghasilkan uang dari membagikan video & mengundang teman di Cuanflix.
                     </motion.p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start mt-8">
-                    {/* Path 1: Self-Watch */}
+                    {/* Path 1: Share Link */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="bg-white/[0.03] backdrop-blur-md rounded-none p-6 sm:p-10 border border-white/[0.06] shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:border-sky-500/30 hover:shadow-xl transition-all duration-300 relative group"
+                        className="bg-white/[0.03] backdrop-blur-md rounded-2xl p-6 sm:p-10 border border-white/[0.06] shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:border-sky-500/30 hover:shadow-xl transition-all duration-300 relative group"
                     >
                         <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-bl-[100px] group-hover:bg-sky-500/10 transition-colors duration-300 pointer-events-none" />
                         
                         <div className="relative z-10">
-                            <span className="px-3 py-1 rounded-full bg-sky-500/10 text-[10px] font-bold text-sky-500 uppercase tracking-widest border border-sky-500/20">
-                                Jalur Nonton Mandiri
+                            <span className="px-3 py-1 rounded-full bg-sky-500/10 text-[10px] font-bold text-sky-400 uppercase tracking-widest border border-sky-500/20">
+                                Fitur Utama
                             </span>
                             
                             <h3 className="text-xl sm:text-3xl font-extrabold text-foreground mt-4 mb-8">
-                                Cuan dari Nonton Video
+                                Cuan dari Share Link
                             </h3>
 
                             <div className="grid grid-cols-2 gap-4">
-                                {watchSteps.map((step) => {
-                                    const isSmall = step.id > 2; // Step 3 & 4 are smaller boxes
+                                {shareSteps.map((step) => {
+                                    const isSmall = step.id > 2;
                                     return (
                                         <div 
                                             key={step.id} 
-                                            className={`flex flex-col gap-3.5 rounded-none bg-white/[0.02] border border-white/[0.06] hover:border-sky-500/30 hover:bg-sky-500/[0.04] transition-all duration-300 group/item relative overflow-hidden ${isSmall ? 'p-4' : 'p-5 sm:p-6'}`}
+                                            className={`flex flex-col gap-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-sky-500/30 hover:bg-sky-500/[0.04] transition-all duration-300 group/item relative overflow-hidden ${isSmall ? 'p-4' : 'p-5 sm:p-6'}`}
                                         >
                                             <div className={`rounded-xl bg-white/[0.04] border border-white/[0.08] text-foreground flex items-center justify-center shrink-0 group-hover/item:border-sky-500/30 group-hover/item:bg-sky-500/10 transition-all duration-300 shadow-sm ${isSmall ? 'w-9 h-9' : 'w-11 h-11'}`}>
                                                 {step.icon}
@@ -143,49 +143,47 @@ export default function HowItWorks() {
                         </div>
                     </motion.div>
 
-                    {/* Path 2: Share Link */}
+                    {/* Path 2: Referral Member */}
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="bg-white/[0.03] backdrop-blur-md rounded-none p-6 sm:p-10 border border-white/[0.06] shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 relative group"
+                        className="bg-white/[0.03] backdrop-blur-md rounded-2xl p-6 sm:p-10 border border-white/[0.06] shadow-[0_15px_40px_rgba(0,0,0,0.3)] hover:border-indigo-500/30 hover:shadow-xl transition-all duration-300 relative group"
                     >
                         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-[100px] group-hover:bg-indigo-500/10 transition-colors duration-300 pointer-events-none" />
                         
                         <div className="relative z-10">
-                            <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-[10px] font-bold text-indigo-500 uppercase tracking-widest border border-indigo-500/20">
-                                Jalur Bagikan Tautan
+                            <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-[10px] font-bold text-indigo-400 uppercase tracking-widest border border-indigo-500/20">
+                                Komisi Tambahan
                             </span>
                             
                             <h3 className="text-xl sm:text-3xl font-extrabold text-foreground mt-4 mb-8">
-                                Cuan dari Share Link
+                                Cuan dari Undang Teman
                             </h3>
 
-                            <div className="relative">
-                                <div className="grid grid-cols-2 gap-4">
-                                    {shareSteps.map((step) => {
-                                        const isSmall = step.id > 2; // Step 3 & 4 are smaller boxes
-                                        return (
-                                            <div 
-                                                key={step.id} 
-                                                className={`flex flex-col gap-3.5 rounded-none bg-white/[0.02] border border-white/[0.06] hover:border-indigo-500/30 hover:bg-indigo-500/[0.04] transition-all duration-300 group/item relative overflow-hidden ${isSmall ? 'p-4' : 'p-5 sm:p-6'}`}
-                                            >
-                                                <div className={`rounded-xl bg-white/[0.04] border border-white/[0.08] text-foreground flex items-center justify-center shrink-0 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300 shadow-sm ${isSmall ? 'w-9 h-9' : 'w-11 h-11'}`}>
-                                                    {step.icon}
-                                                </div>
-                                                <div className="flex flex-col gap-1">
-                                                    <h4 className={`font-black text-foreground group-hover/item:text-indigo-400 transition-colors leading-tight ${isSmall ? 'text-xs' : 'text-sm sm:text-base'}`}>
-                                                        {step.id}. {step.title}
-                                                    </h4>
-                                                    <p className={`text-zinc-500 leading-relaxed font-light ${isSmall ? 'text-[10px]' : 'text-xs'}`}>
-                                                        {step.desc}
-                                                    </p>
-                                                </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                {referralSteps.map((step) => {
+                                    const isSmall = step.id > 2;
+                                    return (
+                                        <div 
+                                            key={step.id} 
+                                            className={`flex flex-col gap-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-indigo-500/30 hover:bg-indigo-500/[0.04] transition-all duration-300 group/item relative overflow-hidden ${isSmall ? 'p-4' : 'p-5 sm:p-6'}`}
+                                        >
+                                            <div className={`rounded-xl bg-white/[0.04] border border-white/[0.08] text-foreground flex items-center justify-center shrink-0 group-hover/item:border-indigo-500/30 group-hover/item:bg-indigo-500/10 transition-all duration-300 shadow-sm ${isSmall ? 'w-9 h-9' : 'w-11 h-11'}`}>
+                                                {step.icon}
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                            <div className="flex flex-col gap-1">
+                                                <h4 className={`font-black text-foreground group-hover/item:text-indigo-400 transition-colors leading-tight ${isSmall ? 'text-xs' : 'text-sm sm:text-base'}`}>
+                                                    {step.id}. {step.title}
+                                                </h4>
+                                                <p className={`text-zinc-500 leading-relaxed font-light ${isSmall ? 'text-[10px]' : 'text-xs'}`}>
+                                                    {step.desc}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </motion.div>

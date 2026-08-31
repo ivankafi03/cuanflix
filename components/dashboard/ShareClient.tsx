@@ -16,15 +16,15 @@ import ConfirmModal from "../ConfirmModal";
 // ─── Country flag emoji helper ─────────────────────────────────────────────
 function countryToFlag(country: string): string {
     const flags: Record<string, string> = {
-        "Indonesia": "🇮🇩", "United States": "🇺🇸", "Malaysia": "🇲🇾",
-        "Singapore": "🇸🇬", "Philippines": "🇵🇭", "Thailand": "🇹🇭",
-        "Japan": "🇯🇵", "South Korea": "🇰🇷", "India": "🇮🇳",
-        "Australia": "🇦🇺", "United Kingdom": "🇬🇧", "Germany": "🇩🇪",
-        "France": "🇫🇷", "Netherlands": "🇳🇱", "Canada": "🇨🇦",
-        "Brazil": "🇧🇷", "Vietnam": "🇻🇳", "China": "🇨🇳",
-        "Taiwan": "🇹🇼", "Unknown": "🌍"
+        "Indonesia": "[ID]", "United States": "[US]", "Malaysia": "[MY]",
+        "Singapore": "[SG]", "Philippines": "[PH]", "Thailand": "[TH]",
+        "Japan": "[JP]", "South Korea": "[KR]", "India": "[IN]",
+        "Australia": "[AU]", "United Kingdom": "[UK]", "Germany": "[DE]",
+        "France": "[FR]", "Netherlands": "[NL]", "Canada": "[CA]",
+        "Brazil": "[BR]", "Vietnam": "[VN]", "China": "[CN]",
+        "Taiwan": "[TW]", "Unknown": "[GLOBAL]"
     };
-    return flags[country] || "🌍";
+    return flags[country] || "[GLOBAL]";
 }
 
 // ─── Batik Pink Pattern ────────────────────────────────────────────────────
@@ -302,7 +302,7 @@ export default function ShareClient({ user }: { user: any }) {
                                     </div>
                                     <div className="text-right">
                                         <div className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${i === 0 ? "bg-primary/20 text-primary" : "bg-white/5 text-zinc-500"}`}>
-                                            🔥 Hot
+                                            Hot
                                         </div>
                                     </div>
                                 </div>
@@ -323,7 +323,7 @@ export default function ShareClient({ user }: { user: any }) {
                         </div>
                         <div>
                             <h4 className="text-sm font-bold text-white">Link Referral Kamu</h4>
-                            <p className="text-[10px] text-primary/70 font-medium">Setiap klik = cuan masuk 💰</p>
+                            <p className="text-[10px] text-primary/70 font-medium">Setiap klik = reward saldo otomatis</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 bg-black/50 border border-white/10 rounded-xl p-1.5 pl-4">

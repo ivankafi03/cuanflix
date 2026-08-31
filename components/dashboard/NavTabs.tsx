@@ -10,7 +10,8 @@ import {
     Trophy, 
     Banknote,
     BookmarkPlus,
-    Search
+    Search,
+    Link2
 } from "lucide-react";
 
 export default function NavTabs() {
@@ -18,9 +19,9 @@ export default function NavTabs() {
 
     const tabs = [
         { id: "overview",   label: "Overview",  icon: LayoutDashboard, href: "/dashboard" },
-        { id: "watch",      label: "Watch",     icon: Play,            href: "/dashboard/watch" },
         { id: "share",      label: "Share",     icon: Share2,          href: "/dashboard/share" },
         { id: "collector",  label: "Collection",icon: BookmarkPlus,    href: "/dashboard/collector" },
+        { id: "customlink", label: "Custom Link",icon: Link2,          href: "/dashboard/custom-link" },
         { id: "leaderboard",label: "Rankings",  icon: Trophy,          href: "/dashboard/leaderboard" },
         { id: "payouts",    label: "Payouts",   icon: Banknote,        href: "/dashboard/payouts" },
         { id: "carilink",   label: "Cari Link", icon: Search,          href: "/dashboard/carilink" },

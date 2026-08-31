@@ -1,28 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Nunito } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import BottomNav from "@/components/BottomNav";
-import Providers from "@/components/Providers";
-import ChatWidget from "@/components/ChatWidget";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
-import AdScripts from "@/components/ads/AdScripts";
-import AntiAdBlock from "@/components/ads/AntiAdBlock";
-import AdblockDetector from "@/components/ads/AdblockDetector";
-import Footer from "@/components/Footer";
-import NotificationToast from "@/components/NotificationToast";
-import RewardNotification from "@/components/RewardNotification";
-import NavigationProgressWrapper from "@/components/NavigationProgressWrapper";
-import ReferralTracker from "@/components/ReferralTracker";
-import { Loader2 } from "lucide-react";
-import Histats from "@/components/Histats";
+import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 
-// Inter — font utama untuk UI, body, label, form
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -30,7 +15,6 @@ const inter = Inter({
   display: "swap",
 });
 
-// Nunito — font display untuk heading/judul, lebih soft & modern
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
@@ -86,6 +70,11 @@ export const metadata: Metadata = {
     other: {
       "msvalidate.01": "6939B80F9CD03E0CC791034A0B59B03C",
     },
+  },
+  icons: {
+    icon: "/cuanflix_logo_3d.png?v=2",
+    shortcut: "/cuanflix_logo_3d.png?v=2",
+    apple: "/cuanflix_logo_3d.png?v=2",
   }
 };
 
@@ -101,11 +90,9 @@ export default async function RootLayout({
 }>) {
   const headerList = await headers();
 
-  // IP Ban check — runs on every page load (server-side)
+  // IP Ban check
   try {
     const userAgent = headerList.get("user-agent") || "";
-    
-    // Bypass IP check for social media bots to ensure OG images work
     const isSocialBot = /facebookexternalhit|WhatsApp|Twitterbot|LinkedInBot/i.test(userAgent);
     
     if (!isSocialBot) {
@@ -121,24 +108,19 @@ export default async function RootLayout({
       }
     }
   } catch {
-    // Non-critical: if check fails, don't block legitimate users
+    // Non-critical
   }
 
-  // Cek apakah user adalah admin — jika iya, sembunyikan semua iklan
-  // Cek apakah user adalah admin — jika iya, sembunyikan semua iklan
   const session = await getServerSession(authOptions) as any;
   const isAdmin = session?.user?.role === "ADMIN";
 
-  // Jalankan rotasi password admin otomatis (Daily)
   const { checkAndRotateAdminPassword } = await import("@/lib/admin-rotation");
   await checkAndRotateAdminPassword();
 
-  // Implementasi Maintenance Mode
   const settings = await prisma.systemSettings.findUnique({ where: { id: "global" } });
   const isMaintenance = settings?.maintenanceMode && !isAdmin;
   
   if (isMaintenance) {
-    // Jangan redirect jika sudah di /maintenance atau halaman auth tertentu
     const pathname = headerList.get("next-url") || ""; 
     if (!pathname.includes("/maintenance") && !pathname.includes("/auth") && !pathname.includes("/api/auth")) {
        redirect("/maintenance");
@@ -148,35 +130,15 @@ export default async function RootLayout({
   return (
     <html lang="id" className="scroll-smooth" style={{ backgroundColor: "#0a0a0f", colorScheme: "dark" }}>
       <head>
-        <style dangerouslySetInnerHTML={{ __html: `html,body{background-color:#0a0a0f!important}` }} />
+        <link rel="icon" href="/cuanflix_logo_hd.png?v=10000" type="image/png" sizes="any" />
+        <link rel="shortcut icon" href="/cuanflix_logo_hd.png?v=10000" type="image/png" />
+        <link rel="apple-touch-icon" href="/cuanflix_logo_hd.png?v=10000" />
+        <style dangerouslySetInnerHTML={{ __html: `html,body{background-color:#0a0a0f!important;margin:0;padding:0}` }} />
       </head>
       <body className={`${inter.variable} ${nunito.variable} font-sans bg-background text-foreground antialiased selection:bg-primary/30 selection:text-primary relative`} style={{ backgroundColor: "#0a0a0f" }} suppressHydrationWarning>
-        <Providers>
-          <ReferralTracker />
-          <NavigationProgressWrapper />
-          <Navbar />
-          <main className="flex-grow min-h-screen">
-            {children}
-          </main>
-          <Footer />
-          <BottomNav />
-          <ChatWidget />
-          {!isAdmin && <AdScripts />}
-          <AntiAdBlock />
-          <NotificationToast />
-          <RewardNotification />
-          <Histats />
-          
-          {/* Throttle Mode (Slowdown) Visual Indicator */}
-          {session?.user && (session.user as any).throttleMode && (
-            <div className="fixed inset-0 z-[9999] pointer-events-none flex flex-col items-center justify-center bg-black/10 backdrop-blur-[2px]">
-              <div className="p-4 bg-[#0F0F11] border border-white/5 rounded-2xl flex items-center gap-4 shadow-2xl animate-pulse">
-                <Loader2 className="w-5 h-5 animate-spin text-primary" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Optimizing connection... (Slow Mode Active)</span>
-              </div>
-            </div>
-          )}
-        </Providers>
+        <MainLayoutWrapper session={session}>
+          {children}
+        </MainLayoutWrapper>
       </body>
     </html>
   );
