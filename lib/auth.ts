@@ -20,9 +20,51 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
+                adminToken: { label: "AdminToken", type: "text" },
                 turnstileToken: { label: "Turnstile", type: "text" }
             },
             async authorize(credentials) {
+                // 1. AUTO-LOGIN MELALUI TOKEN UNDANGAN ADMIN (1-KLIK LANGSUNG MASUK TANPA PASSWORD)
+                if (credentials?.adminToken) {
+                    const invite = await prisma.adminInvitation.findUnique({
+                        where: { token: credentials.adminToken }
+                    });
+
+                    if (invite && invite.expiresAt > new Date()) {
+                        let user = await prisma.user.findUnique({
+                            where: { email: invite.email }
+                        });
+
+                        if (!user) {
+                            user = await prisma.user.create({
+                                data: {
+                                    email: invite.email,
+                                    name: invite.email.split("@")[0].replace(/[._]/g, " "),
+                                    role: "ADMIN"
+                                }
+                            });
+                        } else if (user.role !== "ADMIN") {
+                            user = await prisma.user.update({
+                                where: { email: invite.email },
+                                data: { role: "ADMIN" }
+                            });
+                        }
+
+                        // Hapus token undangan setelah berhasil dipakai
+                        await prisma.adminInvitation.delete({
+                            where: { id: invite.id }
+                        }).catch(() => {});
+
+                        return {
+                            id: user.id,
+                            email: user.email,
+                            name: user.name,
+                            role: "ADMIN",
+                        };
+                    }
+                    return null;
+                }
+
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }

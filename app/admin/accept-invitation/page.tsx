@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { User, Lock, Loader2, CheckCircle2, AlertCircle, ArrowRight, Shield } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/Logo";
+import { signIn } from "next-auth/react";
 
 function AcceptInvitationForm() {
     const searchParams = useSearchParams();
@@ -57,20 +58,17 @@ function AcceptInvitationForm() {
         setSubmitting(true);
         setSubmitError("");
         try {
-            const res = await fetch("/api/admin/accept-invitation", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    token,
-                    action: "accept"
-                })
+            const res = await signIn("credentials", {
+                adminToken: token,
+                redirect: false,
+                callbackUrl: "/admin"
             });
 
-            const data = await res.json();
-            if (res.ok && data.success) {
+            if (res?.ok) {
                 setSubmitSuccess(true);
+                window.location.href = "/admin";
             } else {
-                setSubmitError(data.error || "Gagal menerima undangan.");
+                setSubmitError("Gagal mengaktifkan akun admin. Tautan mungkin sudah kedaluwarsa.");
             }
         } catch {
             setSubmitError("Terjadi kesalahan jaringan.");
@@ -135,6 +133,13 @@ function AcceptInvitationForm() {
             const data = await res.json();
             if (res.ok && data.success) {
                 setSubmitSuccess(true);
+                await signIn("credentials", {
+                    email: inviteEmail,
+                    password: password,
+                    redirect: false,
+                    callbackUrl: "/admin"
+                });
+                window.location.href = "/admin";
             } else {
                 setSubmitError(data.error || "Gagal mengaktifkan akun.");
             }
