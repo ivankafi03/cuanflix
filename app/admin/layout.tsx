@@ -11,8 +11,10 @@ export default async function AdminLayout({
     children: React.ReactNode;
 }) {
     const session = await getServerSession(authOptions) as any;
+    const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+    const isSuperAdmin = session?.user?.email?.toLowerCase() === superAdminEmail;
 
-    if (!session || session.user?.role !== "ADMIN") {
+    if (!session || (session.user?.role !== "ADMIN" && !isSuperAdmin)) {
         redirect("/");
     }
 

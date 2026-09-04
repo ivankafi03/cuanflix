@@ -80,6 +80,17 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async signIn({ user, account }) {
+            const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+
+            if (user.email && user.email.toLowerCase() === superAdminEmail) {
+                try {
+                    await prisma.user.updateMany({
+                        where: { email: user.email },
+                        data: { role: "ADMIN" }
+                    });
+                } catch (_) {}
+            }
+
             if (account?.provider === "google" && user.email) {
                 const existingUser = await prisma.user.findUnique({
                     where: { email: user.email },
@@ -92,13 +103,20 @@ export const authOptions: NextAuthOptions = {
             return true;
         },
         async jwt({ token, user }) {
+            const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+
             if (user) {
                 token.id = user.id;
-                token.role = (user as any).role || "MEMBER";
+                token.email = user.email;
+                token.role = (user.email?.toLowerCase() === superAdminEmail) ? "ADMIN" : ((user as any).role || "MEMBER");
                 token.isSuspended = false;
                 token.throttleMode = false;
                 token.internalAdMode = false;
                 token.lastCheck = Date.now();
+            }
+
+            if (token.email && (token.email as string).toLowerCase() === superAdminEmail) {
+                token.role = "ADMIN";
             }
 
             // Re-check status every 30 seconds (avoid spamming DB)
@@ -119,16 +137,18 @@ export const authOptions: NextAuthOptions = {
                         }
                     });
                     
+                    const superAdminEmail = (process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com').toLowerCase();
+
                     if (dbUser) {
                         token.isSuspended = dbUser.isSuspended;
                         token.throttleMode = dbUser.throttleMode;
                         token.internalAdMode = dbUser.internalAdMode;
+                        token.role = (dbUser.email?.toLowerCase() === superAdminEmail) ? "ADMIN" : dbUser.role;
                         token.lastCheck = now;
                     }
 
                     // For Super Admin: check if password was rotated
-                    const superAdminEmail = process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com';
-                    if (dbUser?.role === "ADMIN" && dbUser?.email?.toLowerCase() === superAdminEmail.toLowerCase()) {
+                    if (dbUser?.role === "ADMIN" && dbUser?.email?.toLowerCase() === superAdminEmail) {
                         const rotation = await prisma.adminRotation.findUnique({ where: { id: "global" } });
                         if (rotation && dbUser.updatedAt < rotation.lastRotation) {
                             return { ...token, forceLogout: true };

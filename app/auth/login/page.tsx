@@ -13,7 +13,10 @@ export default async function LoginPage() {
 
     // Jika sudah login, cek statusnya secara REAL-TIME ke database
     if (session) {
-        if ((session.user as any).role === "ADMIN") {
+        const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+        const isSuperAdmin = (session.user as any)?.email?.toLowerCase() === superAdminEmail;
+
+        if ((session.user as any).role === "ADMIN" || isSuperAdmin) {
             redirect("/admin");
         }
         

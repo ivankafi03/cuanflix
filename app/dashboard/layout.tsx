@@ -19,12 +19,14 @@ export default async function DashboardLayout({
     children: React.ReactNode;
 }) {
     const session = await getServerSession(authOptions) as any;
+    const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+    const isSuperAdmin = session?.user?.email?.toLowerCase() === superAdminEmail;
 
     if (!session) {
         redirect("/login");
     }
 
-    if (session.user?.role === "ADMIN") {
+    if (session.user?.role === "ADMIN" || isSuperAdmin) {
         redirect("/admin");
     }
 
