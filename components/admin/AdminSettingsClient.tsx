@@ -19,9 +19,11 @@ import {
     Video,
     Mail,
     Calendar,
-    ShoppingCart
+    ShoppingCart,
+    Users
 } from "lucide-react";
 import { useToast } from "../ToastContext";
+import AdminTeamManager from "./AdminTeamManager";
 
 export default function AdminSettingsClient({ initialSettings, initialBlockedIps }: { initialSettings: any, initialBlockedIps: any[] }) {
     const [settings, setSettings] = useState(initialSettings || {
@@ -43,6 +45,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
         scPromoPrice: initialSettings?.scPromoPrice || "150"
     });
     const [blockedIps, setBlockedIps] = useState(initialBlockedIps);
+    const [settingsTab, setSettingsTab] = useState<"system" | "team">("system");
     const [saving, setSaving] = useState(false);
     const { showToast } = useToast();
 
@@ -96,7 +99,36 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                 <p className="text-sm text-zinc-500 font-medium">Global Rates, Security Protocols & Access Control.</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Settings Tab Selector */}
+            <div className="flex items-center gap-2 border-b border-white/5 pb-3">
+                <button
+                    type="button"
+                    onClick={() => setSettingsTab("system")}
+                    className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                        settingsTab === "system"
+                            ? "bg-primary text-white shadow-lg shadow-primary/20"
+                            : "bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white"
+                    }`}
+                >
+                    <Settings className="w-4 h-4" /> Pengaturan Sistem
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setSettingsTab("team")}
+                    className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                        settingsTab === "team"
+                            ? "bg-primary text-white shadow-lg shadow-primary/20"
+                            : "bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white"
+                    }`}
+                >
+                    <Users className="w-4 h-4" /> Tim Administrator
+                </button>
+            </div>
+
+            {settingsTab === "team" ? (
+                <AdminTeamManager />
+            ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Configuration Panel */}
                 <div className="flex flex-col gap-8">
                     <div className="bg-[#0F0F11] border border-white/5 rounded-[2.5rem] p-10 flex flex-col gap-8 shadow-2xl relative overflow-hidden group">
@@ -404,6 +436,7 @@ export default function AdminSettingsClient({ initialSettings, initialBlockedIps
                     </div>
                 </div>
             </div>
+            )}
         </div>
     );
 }

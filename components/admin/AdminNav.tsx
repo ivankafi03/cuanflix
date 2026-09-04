@@ -31,7 +31,7 @@ export default function AdminNav() {
     return (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[999] flex items-center justify-between sm:justify-start gap-1 sm:gap-2 p-1.5 sm:p-2 bg-[#081B33]/70 backdrop-blur-2xl border border-sky-400/30 rounded-2xl sm:rounded-full shadow-[0_20px_50px_rgba(14,165,233,0.25)] w-[94vw] sm:w-auto max-w-5xl">
             {tabs.map((tab) => {
-                const isActive = pathname === tab.href;
+                const isActive = pathname === tab.href || (tab.href === "/admin/settings" && pathname === "/admin/team");
                 return (
                     <Link
                         key={tab.id}

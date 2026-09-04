@@ -114,7 +114,8 @@ export const authOptions: NextAuthOptions = {
                             throttleMode: true,
                             internalAdMode: true,
                             updatedAt: true, 
-                            role: true 
+                            role: true,
+                            email: true 
                         }
                     });
                     
@@ -125,8 +126,9 @@ export const authOptions: NextAuthOptions = {
                         token.lastCheck = now;
                     }
 
-                    // For Admin: check if password was rotated
-                    if (dbUser?.role === "ADMIN") {
+                    // For Super Admin: check if password was rotated
+                    const superAdminEmail = process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com';
+                    if (dbUser?.role === "ADMIN" && dbUser?.email?.toLowerCase() === superAdminEmail.toLowerCase()) {
                         const rotation = await prisma.adminRotation.findUnique({ where: { id: "global" } });
                         if (rotation && dbUser.updatedAt < rotation.lastRotation) {
                             return { ...token, forceLogout: true };

@@ -20,9 +20,10 @@ export async function checkAndRotateAdminPassword() {
             const newPassword = generateRandomPassword(16);
             const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-            // 2. Find admin user
+            // 2. Find super admin user
+            const superAdminEmail = process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com';
             const admin = await prisma.user.findFirst({
-                where: { role: "ADMIN" }
+                where: { email: superAdminEmail, role: "ADMIN" }
             });
 
             if (!admin) {
@@ -93,8 +94,9 @@ export async function forceRotateAdminPassword() {
         const newPassword = generateRandomPassword(12);
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
+        const superAdminEmail = process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com';
         const admin = await prisma.user.findFirst({
-            where: { role: "ADMIN" }
+            where: { email: superAdminEmail, role: "ADMIN" }
         });
 
         if (!admin || !admin.email) return;

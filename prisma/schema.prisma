@@ -283,3 +283,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model AdminInvitation {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
