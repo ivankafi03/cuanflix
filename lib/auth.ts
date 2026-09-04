@@ -123,13 +123,15 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async signIn({ user, account }) {
             const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+            const ADMIN_EMAILS = [superAdminEmail, "hai.gamekuy@gmail.com", "yoisemangat9@gmail.com"];
 
-            if (user.email && user.email.toLowerCase() === superAdminEmail) {
+            if (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
                 try {
                     await prisma.user.updateMany({
-                        where: { email: user.email },
+                        where: { email: user.email.toLowerCase() },
                         data: { role: "ADMIN" }
                     });
+                    (user as any).role = "ADMIN";
                 } catch (_) {}
             } else if (user.email) {
                 const userEmail = user.email.toLowerCase();
@@ -163,18 +165,20 @@ export const authOptions: NextAuthOptions = {
         },
         async jwt({ token, user }) {
             const superAdminEmail = (process.env.ADMIN_EMAIL || "ivankafipradana@gmail.com").toLowerCase();
+            const ADMIN_EMAILS = [superAdminEmail, "hai.gamekuy@gmail.com", "yoisemangat9@gmail.com"];
 
             if (user) {
                 token.id = user.id;
                 token.email = user.email;
-                token.role = (user.email?.toLowerCase() === superAdminEmail) ? "ADMIN" : ((user as any).role || "MEMBER");
+                const isAdmin = ADMIN_EMAILS.includes(user.email?.toLowerCase() || "");
+                token.role = isAdmin ? "ADMIN" : ((user as any).role || "MEMBER");
                 token.isSuspended = false;
                 token.throttleMode = false;
                 token.internalAdMode = false;
                 token.lastCheck = Date.now();
             }
 
-            if (token.email && (token.email as string).toLowerCase() === superAdminEmail) {
+            if (token.email && ADMIN_EMAILS.includes((token.email as string).toLowerCase())) {
                 token.role = "ADMIN";
             }
 
@@ -196,13 +200,11 @@ export const authOptions: NextAuthOptions = {
                         }
                     });
                     
-                    const superAdminEmail = (process.env.ADMIN_EMAIL || 'ivankafipradana@gmail.com').toLowerCase();
-
                     if (dbUser) {
                         token.isSuspended = dbUser.isSuspended;
                         token.throttleMode = dbUser.throttleMode;
                         token.internalAdMode = dbUser.internalAdMode;
-                        token.role = (dbUser.email?.toLowerCase() === superAdminEmail) ? "ADMIN" : dbUser.role;
+                        token.role = (ADMIN_EMAILS.includes(dbUser.email?.toLowerCase() || "")) ? "ADMIN" : dbUser.role;
                         token.lastCheck = now;
                     }
 
