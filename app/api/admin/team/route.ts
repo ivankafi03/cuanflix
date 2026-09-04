@@ -78,18 +78,31 @@ export async function POST(req: Request) {
                 create: { email, token, expiresAt }
             });
 
+            let emailSent = true;
+            let emailNote = "";
             try {
-                await sendAdminInvitationEmail(email, token);
-            } catch (mailErr) {
+                if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+                    await sendAdminInvitationEmail(email, token);
+                } else {
+                    emailSent = false;
+                    emailNote = "SMTP belum diatur di Vercel, Anda dapat menyalin link undangan langsung.";
+                }
+            } catch (mailErr: any) {
                 console.error("Failed to send invitation email:", mailErr);
-                return NextResponse.json({ 
-                    error: "Undangan tersimpan, namun gagal mengirim email SMTP. Periksa konfigurasi SMTP email Anda." 
-                }, { status: 500 });
+                emailSent = false;
+                emailNote = "Gagal kirim email otomatis. Anda dapat menyalin link undangan langsung.";
             }
+
+            const appUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://cuanflix.vercel.app";
+            const inviteLink = `${appUrl}/admin/accept-invitation?token=${token}`;
 
             return NextResponse.json({
                 success: true,
-                message: `Undangan berhasil dikirim ke ${email}.`,
+                message: emailSent 
+                    ? `Undangan berhasil dikirim ke email ${email}.` 
+                    : `Undangan berhasil dibuat! ${emailNote}`,
+                emailSent,
+                inviteLink,
                 invitation
             });
         }
