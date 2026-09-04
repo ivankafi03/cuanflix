@@ -34,14 +34,10 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { token, name, password } = body;
+        const { token, action, name, password } = body;
 
-        if (!token || !name || !password) {
-            return NextResponse.json({ error: "Semua kolom wajib diisi." }, { status: 400 });
-        }
-
-        if (password.length < 8) {
-            return NextResponse.json({ error: "Password harus minimal 8 karakter." }, { status: 400 });
+        if (!token) {
+            return NextResponse.json({ error: "Token tidak ditemukan." }, { status: 400 });
         }
 
         const invite = await prisma.adminInvitation.findUnique({
@@ -54,40 +50,63 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Jika user memilih untuk menolak undangan
+        if (action === "reject") {
+            await prisma.adminInvitation.delete({
+                where: { token }
+            });
+            return NextResponse.json({ 
+                success: true, 
+                rejected: true,
+                message: "Undangan telah ditolak." 
+            });
+        }
+
+        // Jika user menerima undangan (action === "accept" atau submit form)
+        const defaultName = invite.email.split("@")[0].replace(/[._]/g, " ");
+        const finalName = (name || "").trim() || defaultName;
 
         const existingUser = await prisma.user.findUnique({
             where: { email: invite.email }
         });
 
+        let passwordToSet = existingUser?.password;
+        if (password && password.trim().length >= 8) {
+            passwordToSet = await bcrypt.hash(password.trim(), 10);
+        } else if (!passwordToSet) {
+            // Jika akun baru dan tidak isi password (misal login via Google), set default hash aman
+            const randomSecret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            passwordToSet = await bcrypt.hash(randomSecret, 10);
+        }
+
         if (existingUser) {
             await prisma.user.update({
                 where: { email: invite.email },
                 data: {
-                    name,
-                    password: hashedPassword,
+                    name: finalName,
+                    password: passwordToSet,
                     role: "ADMIN"
                 }
             });
         } else {
             await prisma.user.create({
                 data: {
-                    name,
+                    name: finalName,
                     email: invite.email,
-                    password: hashedPassword,
+                    password: passwordToSet,
                     role: "ADMIN"
                 }
             });
         }
 
-        // Hapus token setelah digunakan
+        // Hapus token setelah berhasil diterima
         await prisma.adminInvitation.delete({
             where: { token }
         });
 
         return NextResponse.json({ 
             success: true, 
-            message: "Pendaftaran administrator berhasil! Silakan login ke dashboard." 
+            message: "Selamat! Anda resmi menjadi Administrator Cuanflix." 
         });
     } catch (error) {
         console.error("Error accepting invitation:", error);

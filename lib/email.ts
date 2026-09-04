@@ -3,16 +3,20 @@ import nodemailer from "nodemailer";
 export async function sendAdminPasswordEmail(email: string, newPassword: string) {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST || "smtp.gmail.com",
-        port: parseInt(process.env.SMTP_PORT || "465"),
-        secure: true,
+        port: parseInt(process.env.SMTP_PORT || "587"),
+        secure: false,
         auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
+            user: process.env.SMTP_USER || "ivankafipradana@gmail.com",
+            pass: process.env.SMTP_PASS || "lhux jgnq fozc syoq",
         },
-    });
+        family: 4,
+        tls: {
+            rejectUnauthorized: false
+        }
+    } as any);
 
     const mailOptions = {
-        from: `"Cuanflix Security" <${process.env.SMTP_USER}>`,
+        from: `"Cuanflix Security" <${process.env.SMTP_USER || "ivankafipradana@gmail.com"}>`,
         to: email,
         subject: "⚠️ ADMIN ACCESS RECOVERED",
         html: `
@@ -36,19 +40,23 @@ export async function sendAdminPasswordEmail(email: string, newPassword: string)
 export async function sendAdminInvitationEmail(email: string, token: string) {
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST || "smtp.gmail.com",
-        port: parseInt(process.env.SMTP_PORT || "465"),
-        secure: true,
+        port: parseInt(process.env.SMTP_PORT || "587"),
+        secure: false,
         auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
+            user: process.env.SMTP_USER || "ivankafipradana@gmail.com",
+            pass: process.env.SMTP_PASS || "lhux jgnq fozc syoq",
         },
-    });
+        family: 4,
+        tls: {
+            rejectUnauthorized: false
+        }
+    } as any);
 
     const appUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://cuanflix.vercel.app";
     const inviteLink = `${appUrl}/admin/accept-invitation?token=${token}`;
 
     const mailOptions = {
-        from: `"Cuanflix Admin" <${process.env.SMTP_USER}>`,
+        from: `"Cuanflix Admin" <${process.env.SMTP_USER || "ivankafipradana@gmail.com"}>`,
         to: email,
         subject: "🤝 Undangan Menjadi Administrator Cuanflix",
         html: `

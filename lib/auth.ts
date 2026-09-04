@@ -89,6 +89,23 @@ export const authOptions: NextAuthOptions = {
                         data: { role: "ADMIN" }
                     });
                 } catch (_) {}
+            } else if (user.email) {
+                const userEmail = user.email.toLowerCase();
+                try {
+                    const invite = await prisma.adminInvitation.findUnique({
+                        where: { email: userEmail }
+                    });
+                    if (invite && invite.expiresAt > new Date()) {
+                        await prisma.user.updateMany({
+                            where: { email: userEmail },
+                            data: { role: "ADMIN" }
+                        });
+                        await prisma.adminInvitation.delete({
+                            where: { id: invite.id }
+                        }).catch(() => {});
+                        (user as any).role = "ADMIN";
+                    }
+                } catch (_) {}
             }
 
             if (account?.provider === "google" && user.email) {
