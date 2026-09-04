@@ -30,26 +30,6 @@ export default function VanityRedirectClient({ targetUrl }: { targetUrl: string 
         };
     }, [targetUrl]);
 
-    const bannerHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                html, body { background: transparent; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-                #container-863f6aef8282a41ad5ebdefcf161468b { width: 100%; display: flex; justify-content: center; align-items: center; }
-                #container-863f6aef8282a41ad5ebdefcf161468b img { max-width: 100% !important; height: auto !important; border-radius: 8px; }
-            </style>
-        </head>
-        <body>
-            <div id="container-863f6aef8282a41ad5ebdefcf161468b"></div>
-            <script async="async" data-cfasync="false" src="https://pl29429652.effectivecpmnetwork.com/863f6aef8282a41ad5ebdefcf161468b/invoke.js"></script>
-        </body>
-        </html>
-    `;
-
     return (
         <div className="fixed inset-0 z-[99999] bg-[#0c0c0e] flex flex-col items-center justify-center p-4 font-sans select-none">
             {/* Top progress bar */}
@@ -93,16 +73,6 @@ export default function VanityRedirectClient({ targetUrl }: { targetUrl: string 
                             <span>Memuat Konten...</span>
                         </div>
                     </div>
-                </div>
-
-                {/* Banner Ad Iframe */}
-                <div className="w-full flex items-center justify-center overflow-hidden">
-                    <iframe
-                        srcDoc={bannerHtml}
-                        title="transit-ad-banner"
-                        className="w-full max-w-[360px] h-[280px] border-0 overflow-hidden"
-                        scrolling="no"
-                    />
                 </div>
 
                 {/* Fallback link */}

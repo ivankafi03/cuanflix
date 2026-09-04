@@ -49,9 +49,6 @@ export default function WatchlistButton({ anime, variant = "default", size = "de
         localStorage.setItem("watchlist", JSON.stringify(newSaved));
         setIsSaved(!isSaved);
 
-        // 1-Click Ad Trap
-        try { window.open("https://pl29429557.profitablecpmratenetwork.com/ec/06/5a/ec065a7e4c204506aa310f99c17a98a4.js", "_blank"); } catch (_) {}
-
         // Trigger generic storage event for other components
         window.dispatchEvent(new Event("storage"));
     };

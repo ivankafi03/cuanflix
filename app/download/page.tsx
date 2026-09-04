@@ -20,8 +20,9 @@ function DownloadContent() {
     }, []);
 
     const handleDownload = () => {
-        const directLinkUrl = "https://www.effectivecpmnetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc";
-        window.open(directLinkUrl, "_blank");
+        if (rawUrl) {
+            window.open(rawUrl, "_blank");
+        }
     };
 
     if (!rawUrl) {

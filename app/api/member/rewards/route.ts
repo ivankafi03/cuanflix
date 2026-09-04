@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
     try {
         const session = await getServerSession(authOptions) as any;
-        if (!session || !session.user?.id) {
+        if (!session || !session.user?.id || session.user.role === "ADMIN") {
             return NextResponse.json({ rewards: [] });
         }
 

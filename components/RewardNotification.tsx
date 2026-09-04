@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { Gift, X, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "./ToastContext";
 
 export default function RewardNotification() {
     const { data: session, status } = useSession();
+    const pathname = usePathname() || "";
+    const isAdmin = (session?.user as any)?.role === "ADMIN" || pathname.startsWith("/admin");
     const [reward, setReward] = useState<any>(null);
     const [visible, setVisible] = useState(false);
     const [claiming, setClaiming] = useState(false);
@@ -15,7 +18,7 @@ export default function RewardNotification() {
     const { showToast } = useToast();
 
     const fetchRewards = async () => {
-        if (status !== "authenticated") return;
+        if (status !== "authenticated" || isAdmin) return;
         
         try {
             const res = await fetch("/api/member/rewards");
@@ -68,6 +71,8 @@ export default function RewardNotification() {
             setClaiming(false);
         }
     };
+
+    if (isAdmin) return null;
 
     // 1. Render Promo Tamu (Guest Promo Card - Simpel & Kecil)
     if (guestPromoVisible && status === "unauthenticated") {

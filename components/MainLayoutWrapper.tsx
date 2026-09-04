@@ -47,7 +47,7 @@ export default function MainLayoutWrapper({
             <BottomNav />
             <ChatWidget />
             <NotificationToast />
-            <RewardNotification />
+            {!pathname.startsWith("/admin") && <RewardNotification />}
             <Histats />
             <AdScripts />
             

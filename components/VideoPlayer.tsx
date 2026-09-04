@@ -22,21 +22,6 @@ export default function VideoPlayer({ servers, downloads = [], onPlay }: VideoPl
     const isAdmin = (session?.user as any)?.role === "ADMIN";
 
     const handleStart = () => {
-        // Trigger 1x Direct Link Ad PER VIDEO for Non-Admin visitors
-        if (!isAdmin) {
-            try {
-                const videoAdKey = `cuanflix_play_ad_${pathname}`;
-                const alreadyTriggered = sessionStorage.getItem(videoAdKey);
-
-                if (!alreadyTriggered) {
-                    sessionStorage.setItem(videoAdKey, "true");
-                    window.open("https://www.effectivecpmnetwork.com/xzgfq5xkc8?key=55406436bb6e7d868ad1a2c1d9a3f4fc", "_blank");
-                }
-            } catch (e) {
-                console.error("Ad trigger error:", e);
-            }
-        }
-
         setIsStarted(true);
         if (onPlay) onPlay();
     };
