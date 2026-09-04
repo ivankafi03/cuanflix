@@ -329,111 +329,51 @@ export default function AdminTeamManager() {
                     </form>
                 )}
 
-                {latestInvite && (
-                    <div className="mt-2 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex flex-col gap-3">
-                        <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
-                                <CheckCircle2 className="w-4 h-4" />
-                                <span>Undangan untuk {latestInvite.email} siap!</span>
-                            </div>
-                            <span className="text-[10px] text-zinc-400 font-mono">Berlaku 24 jam</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="text"
-                                readOnly
-                                value={latestInvite.link}
-                                className="flex-1 bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-[11px] text-zinc-300 font-mono focus:outline-none select-all"
-                            />
-                            <button
-                                type="button"
-                                onClick={() => copyToClipboard(latestInvite.link, "latest")}
-                                className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
-                            >
-                                {copiedToken === "latest" ? (
-                                    <>
-                                        <Check className="w-3.5 h-3.5" />
-                                        <span>Tersalin!</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Copy className="w-3.5 h-3.5" />
-                                        <span>Salin Link</span>
-                                    </>
-                                )}
-                            </button>
-                        </div>
-                        <p className="text-[11px] text-zinc-400">
-                            {latestInvite.emailSent 
-                                ? "Email notifikasi juga telah dikirim ke penerima." 
-                                : "Bisa langsung salin dan kirim link di atas via WhatsApp / Chat ke calon admin."}
-                        </p>
-                    </div>
-                )}
-
                 <p className="text-[11px] text-zinc-500">
-                    Undangan via email otomatis membuat link aman yang berlaku selama 24 jam untuk mendaftarkan akun administrator.
+                    Email undangan resmi akan dikirimkan langsung ke inbox penerima. Penerima cukup klik tombol konfirmasi di emailnya untuk otomatis aktif menjadi Administrator.
                 </p>
             </div>
 
             {/* List Undangan Pending */}
             {invitations.length > 0 && (
                 <div className="bg-[#0f0f12] border border-amber-500/20 rounded-2xl p-5 md:p-6 flex flex-col gap-4">
-                    <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
-                        <Clock className="w-4 h-4 animate-spin" style={{ animationDuration: "4s" }} />
-                        <span>Undangan Pending ({invitations.length})</span>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
+                            <Clock className="w-4 h-4" />
+                            <span>Undangan Terkirim ({invitations.length})</span>
+                        </div>
+                        <span className="text-[11px] text-zinc-500">Menunggu konfirmasi penerima</span>
                     </div>
 
                     <div className="divide-y divide-white/5 border border-white/5 rounded-xl overflow-hidden">
-                        {invitations.map((inv) => {
-                            const inviteUrl = typeof window !== "undefined"
-                                ? `${window.location.origin}/admin/accept-invitation?token=${inv.token}`
-                                : `/admin/accept-invitation?token=${inv.token}`;
-
-                            return (
-                                <div key={inv.id} className="p-3.5 bg-black/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div className="flex flex-col gap-0.5">
-                                        <span className="text-xs font-bold text-white">{inv.email}</span>
-                                        <span className="text-[10px] text-zinc-500">
-                                            Dikirim: {new Date(inv.createdAt).toLocaleString("id-ID")} • Berlaku s/d: {new Date(inv.expiresAt).toLocaleTimeString("id-ID")}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-2 self-end sm:self-auto">
-                                        <button
-                                            type="button"
-                                            onClick={() => copyToClipboard(inviteUrl, inv.id)}
-                                            className="px-2.5 py-1.5 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                                            title="Salin Link Undangan"
-                                        >
-                                            {copiedToken === inv.id ? (
-                                                <>
-                                                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                                    <span className="text-emerald-400">Tersalin</span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Copy className="w-3.5 h-3.5 text-zinc-400" />
-                                                    <span>Salin Link</span>
-                                                </>
-                                            )}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => handleRevokeInvite(inv.id, inv.email)}
-                                            disabled={deletingId === inv.id}
-                                            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                                            title="Tarik / Batalkan Undangan"
-                                        >
-                                            {deletingId === inv.id ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (
-                                                <Trash2 className="w-4 h-4" />
-                                            )}
-                                        </button>
-                                    </div>
+                        {invitations.map((inv) => (
+                            <div key={inv.id} className="p-3.5 bg-black/20 flex items-center justify-between gap-3">
+                                <div className="flex flex-col gap-0.5">
+                                    <span className="text-xs font-bold text-white">{inv.email}</span>
+                                    <span className="text-[10px] text-zinc-500">
+                                        Email terkirim: {new Date(inv.createdAt).toLocaleString("id-ID")}
+                                    </span>
                                 </div>
-                            );
-                        })}
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRevokeInvite(inv.id, inv.email)}
+                                        disabled={deletingId === inv.id}
+                                        className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                                        title="Tarik / Batalkan Undangan"
+                                    >
+                                        {deletingId === inv.id ? (
+                                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                        ) : (
+                                            <>
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                                <span>Batalkan</span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

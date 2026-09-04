@@ -12,4 +12,5 @@ const prisma = globalThis.prisma ?? prismaClientSingleton();
 
 export default prisma;
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = prisma;
+// Always preserve singleton in both production and development to prevent connection leaks in serverless lambdas
+globalThis.prisma = prisma;

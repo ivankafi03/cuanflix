@@ -21,8 +21,19 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const settings = await prisma.systemSettings.findFirst();
-  const javCategories = await getHomepageCategories();
+  let settings: any = null;
+  try {
+    settings = await prisma.systemSettings.findFirst();
+  } catch (e) {
+    console.error("Error fetching system settings:", e);
+  }
+
+  let javCategories: any[] = [];
+  try {
+    javCategories = await getHomepageCategories();
+  } catch (e) {
+    console.error("Error fetching homepage categories:", e);
+  }
   
   let vidlxCategories: any[] = [];
   try {
